@@ -363,6 +363,62 @@ body:not(.is-lead) .need-lead{display:none!important}
 .board.in-dlg{grid-template-columns:repeat(3,minmax(0,1fr));margin:0;padding:0;overflow:visible}
 .dlg .box.wide{max-width:1100px}
 @media (max-width:860px){ .board.in-dlg{grid-template-columns:minmax(0,1fr)} .pstats{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.seg{display:inline-flex;background:var(--card);border-radius:999px;padding:4px;box-shadow:var(--shadow-card);gap:2px}
+.phead > .seg,.calbar .seg{flex-direction:row;gap:2px}
+.cal.week .ev{width:100%}
+.cal .dn .m{font-weight:500;margin-left:3px}
+@media (max-width:860px){ .cal .dn .m{display:none} }
+.seg button{all:unset;cursor:pointer;padding:7px 16px;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--btn-hover);color:var(--text)}
+.seg button:focus-visible{outline:2px solid var(--ink)}
+.calbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.caltitle{margin:0;font-size:30px;font-weight:800;letter-spacing:-.02em;margin-right:auto}
+.caltitle span{font-weight:400;color:var(--muted)}
+.calnav{display:flex;gap:6px}
+.calnav .icon{width:36px;padding:0;font-size:18px}
+.calfilters{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-top:14px}
+.calsel{flex:0 1 260px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);padding-bottom:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.t-install{background:#2f6fd0} .t-repair{background:var(--sc-orange)} .t-maint{background:#3aa66a} .t-dead{background:var(--red)}
+.cal{margin-top:12px;background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);overflow:hidden}
+.cal .dow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-bottom:1px solid var(--border)}
+.cal .dow div{padding:10px 12px;text-align:right;font-size:14px;font-weight:600;color:var(--muted)}
+.cal .wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.cal .wk + .wk{border-top:1px solid var(--border)}
+.cal .day{min-height:132px;padding:6px 6px 8px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:3px;min-width:0;cursor:pointer}
+.cal .day:first-child{border-left:0}
+.cal .day.we{background:var(--card-2)}
+.cal .day.out .dn{color:var(--muted);opacity:.55}
+.cal .day:hover{background:var(--row-hover,var(--btn-hover))}
+.cal .dn{align-self:flex-end;min-width:28px;height:28px;padding:0 6px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.cal .day.today .dn{background:var(--red);color:#fff}
+.cal.week .day{min-height:420px}
+.ev{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:6px;align-items:center;padding:2px 4px;border-radius:6px;font-size:12.5px;line-height:1.35}
+.ev:hover{background:var(--btn-hover)}
+.ev:focus-visible{outline:2px solid var(--ink)}
+.ev .c{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.ev .p{color:var(--muted);font-size:11.5px;white-space:nowrap;max-width:76px;overflow:hidden;text-overflow:ellipsis}
+.ev.done .c{text-decoration:line-through;opacity:.6}
+.cal.week .ev{grid-template-columns:10px minmax(0,1fr);padding:6px;background:var(--card-2);border-radius:8px}
+.cal.week .ev .p{grid-column:2;max-width:none}
+.cal.week .ev .k{grid-column:2;font-size:11px;color:var(--muted)}
+.ev .k{display:none}
+.more{font-size:12px;font-weight:600;color:var(--muted);padding:1px 4px}
+.dlist{display:flex;flex-direction:column;gap:8px}
+@media (max-width:860px){
+  .caltitle{font-size:24px;width:100%}
+  .cal .dow div{text-align:center;padding:8px 2px;font-size:12px}
+  .cal .day{min-height:64px;padding:4px 2px;gap:2px;align-items:center}
+  .cal .dn{align-self:center;font-size:13px;min-width:24px;height:24px}
+  .cal.month .ev{grid-template-columns:8px;padding:0;justify-content:center;pointer-events:none}
+  .cal.month .ev .c,.cal.month .ev .p{display:none}
+  .cal.month .evs{display:flex;flex-wrap:wrap;gap:3px;justify-content:center}
+  .cal.month .more{font-size:10px;padding:0}
+  .cal.week{overflow-x:auto}
+  .cal.week .dow,.cal.week .wk{min-width:840px}
+}
 .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
 .bcol{background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--ink)}
 .bcol:nth-child(2){border-top-color:var(--sc-orange)}
@@ -576,7 +632,21 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="staff" hidden>
     <header class="phead">
       <div><p class="eyebrow">Nhân sự</p><h1 class="hero">Ai đang làm gì. <span class="dim">Đến hạn khi nào.</span></h1></div>
+      <div class="seg" id="sMode" role="tablist"><button type="button" data-m="cards" aria-pressed="true">Thẻ nhân sự</button><button type="button" data-m="cal" aria-pressed="false">Lịch</button></div>
     </header>
+    <div id="calWrap" hidden>
+      <div class="calbar">
+        <h2 class="caltitle" id="calTitle"></h2>
+        <div class="seg" id="calView"><button type="button" data-v="week" aria-pressed="false">Tuần</button><button type="button" data-v="month" aria-pressed="true">Tháng</button></div>
+        <div class="calnav"><button class="btn sm icon" type="button" data-cal="prev" aria-label="Trước">‹</button><button class="btn sm" type="button" data-cal="today">Hôm nay</button><button class="btn sm icon" type="button" data-cal="next" aria-label="Sau">›</button></div>
+      </div>
+      <div class="calfilters">
+        <label class="calsel">Nhân sự<select id="calWho"><option value="">Tất cả</option></select></label>
+        <div class="legend"><span><i class="dot t-install"></i>Lắp đặt</span><span><i class="dot t-repair"></i>Sửa chữa</span><span><i class="dot t-maint"></i>Bảo trì</span><span><i class="dot t-dead"></i>Deadline</span></div>
+      </div>
+      <div class="cal" id="calGrid"></div>
+    </div>
+    <div id="cardsWrap" style="display:contents">
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="sSearch" type="search" placeholder="Tìm theo tên…" aria-label="Tìm nhân sự"></label>
@@ -584,6 +654,7 @@ body:not(.is-lead) .need-lead{display:none!important}
     <div class="filters"><div class="chips" id="sFilter" role="group" aria-label="Lọc nhân sự"></div></div>
     <p class="hint">Lắp đặt: hồ sơ chưa hoàn tất người đó phụ trách. Sửa chữa: phiếu chưa hoàn thành người đó phụ trách hoặc tham gia. Bảo trì: lịch chưa làm do người đó lên lịch.</p>
     <div class="pgrid" id="staffList"></div>
+    </div>
   </section>
 
   <!-- THÀNH VIÊN (chỉ Super Admin) -->
@@ -650,7 +721,7 @@ const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'
 const REMIND_DAYS = 14;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], members:[], sf:'technician', customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
+const S = {me:null, staff:[], members:[], sf:'technician', smode:'cards', calView:'month', calDate:null, customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -825,6 +896,14 @@ $('#iSearch').addEventListener('input', renderInstalls);
 $('#eSearch').addEventListener('input', renderEquipment);
 $('#cSearch').addEventListener('input', renderCustomers);
 $('#sSearch').addEventListener('input', renderStaff);
+$('#sMode').addEventListener('click', ev=>{ const b=ev.target.closest('[data-m]'); if(!b) return; S.smode=b.dataset.m; renderStaff(); });
+$('#calView').addEventListener('click', ev=>{ const b=ev.target.closest('[data-v]'); if(!b) return; S.calView=b.dataset.v; renderCalendar(); });
+$('.calnav').addEventListener('click', ev=>{ const b=ev.target.closest('[data-cal]'); if(!b) return;
+  const d = new Date((S.calDate||today())+'T00:00:00Z');
+  if(b.dataset.cal==='today') S.calDate = today();
+  else { const k = b.dataset.cal==='next'?1:-1; if(S.calView==='month'){ d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth()+k); } else d.setUTCDate(d.getUTCDate()+7*k); S.calDate = d.toISOString().slice(0,10); }
+  renderCalendar(); });
+$('#calWho').addEventListener('change', renderCalendar);
 
 function chipGroup(el, items, cur, onPick){
   el.innerHTML = items.map(([k,l,n])=>`<button type="button" class="chip-f" data-k="${k}" aria-pressed="${k===cur}">${esc(l)}${n!=null?` <span class="n">${n}</span>`:''}</button>`).join('');
@@ -1612,8 +1691,90 @@ function workOf(uid){
     + S.maint.filter(m=>m.done_by===uid && String(m.done_date).startsWith(ym)).length;
   return {inst, lead, part, maint, over, soon, doneMonth, total: inst.length + lead.length + part.length + maint.length};
 }
+function calEvents(){
+  const ev = [];
+  const custName = id => custById(id)?.name || '—';
+  for(const x of S.installs){
+    const base = {type:'install', cust:custName(x.customer_id), who:x.owner_id, whoName:staffName(x.owner_id, x.owner_name), open:()=>openInstallDetail(x.id), sub:[x.machine_name, x.brand, x.model].filter(Boolean).join(' · ')};
+    if(x.planned_date) ev.push({...base, date:x.planned_date, kind:'Lắp đặt dự kiến', done: installStage(x)!==1});
+    if(x.handover_date) ev.push({...base, date:x.handover_date, kind:'Ký giao nhận', done:true});
+    for(const t of (x.tests||[])) if(x.test_dates?.[t]) ev.push({...base, date:x.test_dates[t], kind:'Hoàn thành '+t, done:true});
+    if(x.acceptance_date) ev.push({...base, date:x.acceptance_date, kind:'Ký nghiệm thu', done:true});
+  }
+  for(const v of repairs()){
+    const e = eqById(v.equipment_id);
+    const base = {cust: e ? custName(e.customer_id) : '—', who:v.assignee_id, whoName:staffName(v.assignee_id, v.assignee_name), parts:v.participant_ids||[], open:()=>openVisitDetail(v.id), sub:eqLabel(e)};
+    ev.push({...base, type:'repair', date:v.visit_date, kind:'Sửa chữa', done:!isOpen(v)});
+    if(v.deadline && isOpen(v)) ev.push({...base, type:'dead', date:v.deadline, kind:'Deadline sửa chữa', done:false});
+  }
+  for(const s of maintItems()){
+    const m = s.rec, e = s.eq, who = m.done_by || m.created_by;
+    ev.push({type:'maint', cust: e ? custName(e.customer_id) : '—', who, whoName:staffName(who, m.done_by_name || m.created_by_name), date: m.done_date || m.due_date, kind: m.done_date ? 'Đã bảo trì' : 'Bảo trì', done:!!m.done_date, open:()=>openEquipmentDetail(m.equipment_id), sub:eqLabel(e)});
+  }
+  return ev;
+}
+function shortName(n){ const parts = String(n||'').trim().split(/\s+/); return parts.length>1 ? parts.slice(-1)[0] : (parts[0]||''); }
+function renderCalendar(){
+  if(!S.calDate) S.calDate = today();
+  const who = $('#calWho').value;
+  const all = calEvents().filter(e=>!who || e.who===who || (e.parts||[]).includes(who));
+  const byDay = {}; for(const e of all) (byDay[e.date] ||= []).push(e);
+  const order = {dead:0, repair:1, install:2, maint:3};
+  Object.values(byDay).forEach(l=>l.sort((a,b)=>(a.done-b.done) || (order[a.type]-order[b.type]) || a.cust.localeCompare(b.cust)));
+  $$('#calView [data-v]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.v===S.calView));
+  const cur = new Date(S.calDate+'T00:00:00Z');
+  const iso = d => d.toISOString().slice(0,10);
+  const mondayOf = d => { const x = new Date(d); const wd = (x.getUTCDay()+6)%7; x.setUTCDate(x.getUTCDate()-wd); return x; };
+  let start, weeks;
+  if(S.calView==='month'){
+    const first = new Date(Date.UTC(cur.getUTCFullYear(), cur.getUTCMonth(), 1));
+    start = mondayOf(first);
+    const last = new Date(Date.UTC(cur.getUTCFullYear(), cur.getUTCMonth()+1, 0));
+    weeks = Math.ceil((((last - start)/86400000) + 1)/7);
+    $('#calTitle').innerHTML = `Tháng ${cur.getUTCMonth()+1} <span>${cur.getUTCFullYear()}</span>`;
+  } else {
+    start = mondayOf(cur); weeks = 1;
+    const end = new Date(start); end.setUTCDate(end.getUTCDate()+6);
+    $('#calTitle').innerHTML = `${fmtDate(iso(start)).slice(0,5)} – ${fmtDate(iso(end))}`;
+  }
+  const maxShow = S.calView==='month' ? 4 : 99;
+  const t = today(), month = cur.getUTCMonth();
+  let html = '<div class="dow">' + ['Th 2','Th 3','Th 4','Th 5','Th 6','Th 7','CN'].map(d=>`<div>${d}</div>`).join('') + '</div>';
+  for(let w=0; w<weeks; w++){
+    html += '<div class="wk">';
+    for(let i=0; i<7; i++){
+      const d = new Date(start); d.setUTCDate(start.getUTCDate() + w*7 + i);
+      const k = iso(d), list = byDay[k] || [];
+      const cls = ['day', i>=5?'we':'', k===t?'today':'', S.calView==='month' && d.getUTCMonth()!==month ? 'out':''].join(' ');
+      const label = d.getUTCDate()===1 && S.calView==='month' ? `${d.getUTCDate()}<span class="m">Th${d.getUTCMonth()+1}</span>` : d.getUTCDate();
+      html += `<div class="${cls}" data-day="${k}"><span class="dn">${label}</span><div class="evs">${list.slice(0,maxShow).map((e,j)=>`<button type="button" class="ev ${e.done?'done':''}" data-day="${k}" data-i="${j}" title="${esc(e.kind+' · '+e.cust+' · '+(e.whoName||'—'))}"><i class="dot t-${e.type}"></i><span class="c">${esc(e.cust)}</span><span class="p">${esc(S.calView==='week'?(e.whoName||'—'):shortName(e.whoName)||'—')}</span><span class="k">${esc(e.kind)}</span></button>`).join('')}${list.length>maxShow?`<span class="more">+${list.length-maxShow} việc</span>`:''}</div></div>`;
+    }
+    html += '</div>';
+  }
+  const grid = $('#calGrid'); grid.className = 'cal ' + S.calView; grid.innerHTML = html;
+  grid.querySelectorAll('.ev').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); byDay[b.dataset.day][+b.dataset.i].open(); });
+  grid.querySelectorAll('.day').forEach(c=>c.onclick=()=>openDayList(c.dataset.day, byDay[c.dataset.day]||[]));
+}
+function openDayList(day, list){
+  const names = {install:'Lắp đặt', repair:'Sửa chữa', maint:'Bảo trì', dead:'Deadline'};
+  modal('Lịch', new Date(day+'T00:00:00Z').toLocaleDateString('vi-VN',{weekday:'long', day:'2-digit', month:'2-digit', year:'numeric', timeZone:'UTC'}), `
+    <div class="dlist">${list.map((e,i)=>`<button type="button" class="kcard" data-i="${i}">
+      <span class="kt"><p class="ttl">${esc(e.cust)}</p><span class="chips-row"><span class="chip"><i class="dot t-${e.type}" style="margin-right:6px"></i>${esc(names[e.type])}</span>${e.done?'<span class="chip ok">Xong</span>':''}</span></span>
+      <p class="sub">${esc(e.kind)}${e.sub?' · '+esc(e.sub):''}</p>
+      <p class="sub">Phụ trách <b style="color:var(--text)">${esc(e.whoName||'—')}</b></p>
+    </button>`).join('') || '<div class="empty">Không có việc trong ngày này.</div>'}</div>`, (w, close)=>{
+    w.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{ close(); list[+b.dataset.i].open(); });
+  });
+}
 function renderStaff(){
   if(!isLead()) return;
+  $$('#sMode [data-m]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.m===S.smode));
+  $('#calWrap').hidden = S.smode!=='cal';
+  $('#cardsWrap').style.display = S.smode==='cal' ? 'none' : 'contents';
+  const curWho = $('#calWho').value;
+  $('#calWho').innerHTML = '<option value="">Tất cả</option>' + S.staff.map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('');
+  $('#calWho').value = curWho;
+  if(S.smode==='cal') renderCalendar();
   const roleOrder = {technician:0, cto_coo:1, ceo:2, super_admin:3};
   const people = S.staff.slice().sort((a,b)=>(roleOrder[a.role]-roleOrder[b.role]) || (a.full_name||a.username).localeCompare(b.full_name||b.username));
   const n = k => k==='all' ? people.length : people.filter(p=>p.role==='technician').length;
@@ -1641,7 +1802,9 @@ function openStaffDetail(uid){
       ${col('Lắp đặt', w.inst.length, w.inst.map(kInstall).join(''), 'Không phụ trách lắp đặt nào đang dở.')}
       ${col('Sửa chữa', w.lead.length + w.part.length, (w.lead.length?'<p class="eyebrow" style="margin:2px 2px 0">Phụ trách</p>'+w.lead.map(kRepair).join(''):'') + (w.part.length?'<p class="eyebrow" style="margin:8px 2px 0">Tham gia</p>'+w.part.map(kRepair).join(''):''), 'Không có phiếu sửa chữa đang mở.')}
       ${col('Bảo trì', w.maint.length, w.maint.map(kMaint).join(''), 'Không có lịch bảo trì chờ làm.')}
-    </div>`, (wr, close)=>{ wr.querySelector('.box').classList.add('wide'); bindK(wr, close); });
+    </div>
+    <div class="acts"><button class="btn" type="button" data-cal-person>Xem lịch của ${esc(nm)}</button></div>`, (wr, close)=>{ wr.querySelector('.box').classList.add('wide'); bindK(wr, close);
+      wr.querySelector('[data-cal-person]').onclick = ()=>{ close(); S.smode='cal'; renderStaff(); $('#calWho').value = uid; renderCalendar(); window.scrollTo(0,0); }; });
 }
 
 /* ===== THÀNH VIÊN (chỉ Super Admin) ===== */

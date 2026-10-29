@@ -14,7 +14,7 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 - **Sửa chữa** (`svc_visits`): Đợt 1 vấn đề, khắc phục, vấn đề còn lại, hướng giải quyết tiếp theo → Đợt 2 deadline. Có người phụ trách, kỹ thuật tham gia, bàn giao.
 - **Bảo trì** (`svc_maintenance`, `005_bao_tri_tu_dien.sql`): kỹ thuật tự lên lịch cho từng máy (một hoặc nhiều ngày), app nhắc trong app khi còn 14 ngày và khi quá hạn; ghi nhận "Đã bảo trì". Thời gian và chu kỳ bảo trì trong hồ sơ lắp đặt chỉ để tham khảo.
 - **Chốt hoàn thành** (`006_chot_hoan_thanh.sql`): CEO (và Super Admin) bấm "Hoàn thành & chốt" trên phiếu sửa chữa hoặc hồ sơ lắp đặt đủ 3 đợt. Bản ghi đã chốt bị khoá ở database: không sửa, không xoá. Máy gặp sự cố lại thì tạo "bản ghi tiếp nối" gắn với phiếu cũ.
-- **Nhân sự** (Super Admin, CEO, CTO/COO): mỗi thành viên một thẻ tóm tắt việc đang có (lắp đặt phụ trách, sửa chữa phụ trách / tham gia, bảo trì chờ làm), số việc quá hạn, sắp đến hạn, xong trong tháng; bấm vào xem chi tiết theo 3 cụm.
+- **Nhân sự** (Super Admin, CEO, CTO/COO): mỗi thành viên một thẻ tóm tắt việc đang có (lắp đặt phụ trách, sửa chữa phụ trách / tham gia, bảo trì chờ làm), số việc quá hạn, sắp đến hạn, xong trong tháng; bấm vào xem chi tiết theo 3 cụm. Chế độ **Lịch** (Tuần / Tháng): mỗi ngày liệt kê việc (lắp đặt dự kiến, giao nhận, phép thử, nghiệm thu, sửa chữa, deadline, bảo trì) với khách hàng và người phụ trách, lọc theo nhân sự.
 - **Máy đã lắp, Khách hàng, Thành viên** như trước.
 
 ## Quyền
