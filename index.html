@@ -393,7 +393,7 @@ body:not(.is-lead) .need-lead{display:none!important}
 .cal .day.out .dn{color:var(--muted);opacity:.55}
 .cal .day:hover{background:var(--row-hover,var(--btn-hover))}
 .cal .dn{align-self:flex-end;min-width:28px;height:28px;padding:0 6px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
-.cal .day.today .dn{background:var(--red);color:#fff}
+.cal .day.today .dn{background:var(--red);color:#fff;opacity:1!important}
 .cal.week .day{min-height:420px}
 .ev{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:6px;align-items:center;padding:2px 4px;border-radius:6px;font-size:12.5px;line-height:1.35}
 .ev:hover{background:var(--btn-hover)}
@@ -1697,9 +1697,10 @@ function calEvents(){
   for(const x of S.installs){
     const base = {type:'install', cust:custName(x.customer_id), who:x.owner_id, whoName:staffName(x.owner_id, x.owner_name), open:()=>openInstallDetail(x.id), sub:[x.machine_name, x.brand, x.model].filter(Boolean).join(' · ')};
     if(x.planned_date) ev.push({...base, date:x.planned_date, kind:'Lắp đặt dự kiến', done: installStage(x)!==1});
-    if(x.handover_date) ev.push({...base, date:x.handover_date, kind:'Ký giao nhận', done:true});
-    for(const t of (x.tests||[])) if(x.test_dates?.[t]) ev.push({...base, date:x.test_dates[t], kind:'Hoàn thành '+t, done:true});
-    if(x.acceptance_date) ev.push({...base, date:x.acceptance_date, kind:'Ký nghiệm thu', done:true});
+    const past = d => d <= today();
+    if(x.handover_date) ev.push({...base, date:x.handover_date, kind: past(x.handover_date)?'Ký giao nhận':'Ký giao nhận (dự kiến)', done:past(x.handover_date)});
+    for(const t of (x.tests||[])) if(x.test_dates?.[t]) ev.push({...base, date:x.test_dates[t], kind: past(x.test_dates[t])?'Hoàn thành '+t:t+' (dự kiến)', done:past(x.test_dates[t])});
+    if(x.acceptance_date) ev.push({...base, date:x.acceptance_date, kind: past(x.acceptance_date)?'Ký nghiệm thu':'Ký nghiệm thu (dự kiến)', done:past(x.acceptance_date)});
   }
   for(const v of repairs()){
     const e = eqById(v.equipment_id);
