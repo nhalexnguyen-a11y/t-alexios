@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>T-Alexios</title>
+<link rel="icon" href="https://alex-workspace.pages.dev/alexios-logo.png">
+<link rel="apple-touch-icon" href="https://alex-workspace.pages.dev/alexios-logo.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#fff; --text:#1d2433; --muted:#6b7385; --line:#e3e7ee;
+  --primary:#1f3a5f; --primary-2:#2d5487; --accent:#e8eef7;
+  --ok:#1e7d4f; --ok-bg:#e3f4ea; --warn:#a15c00; --warn-bg:#fdf1dc; --bad:#b3261e; --bad-bg:#fbe5e3;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.hidden{display:none!important}
+/* Top bar */
+header{position:sticky;top:0;z-index:20;background:var(--primary);color:#fff;display:flex;align-items:center;gap:16px;padding:10px 16px}
+header .brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.06em}
+header .brand img{width:28px;height:28px;border-radius:6px;background:#fff}
+header nav{display:flex;gap:4px;margin-left:12px}
+header nav button{background:none;border:0;color:#cfdbec;padding:8px 12px;border-radius:8px;cursor:pointer}
+header nav button.active{background:rgba(255,255,255,.14);color:#fff}
+header .user{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:14px}
+header .user button{background:rgba(255,255,255,.12);border:0;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+.bottom-nav{display:none}
+main{max-width:1100px;margin:0 auto;padding:16px 16px 96px}
+h2{font-size:20px;margin:4px 0 14px}
+h3{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.grid{display:grid;gap:12px}
+.stats{grid-template-columns:repeat(4,1fr)}
+.stat .n{font-size:26px;font-weight:700}
+.stat .l{color:var(--muted);font-size:13px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.toolbar input,.toolbar select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;min-width:0}
+.toolbar .grow{flex:1 1 220px}
+.btn{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{background:var(--primary-2)}
+.btn.danger{color:var(--bad);border-color:#f0c6c2}
+.btn.sm{padding:5px 10px;font-size:13px}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;cursor:pointer}
+.item:hover{border-color:#c9d3e2}
+.item .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.item .title{font-weight:600}
+.item .sub{color:var(--muted);font-size:13px;margin-top:2px}
+.item .desc{margin-top:6px;font-size:14px;white-space:pre-wrap}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--accent);color:var(--primary);white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok)} .tag.warn{background:var(--warn-bg);color:var(--warn)} .tag.bad{background:var(--bad-bg);color:var(--bad)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.empty{color:var(--muted);text-align:center;padding:28px 10px}
+.fab{position:fixed;right:20px;bottom:24px;z-index:25;background:var(--primary);color:#fff;border:0;border-radius:99px;padding:14px 20px;font-weight:600;box-shadow:0 6px 18px rgba(31,58,95,.35);cursor:pointer}
+/* Modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(15,23,42,.45);display:flex;align-items:flex-start;justify-content:center;padding:24px 12px;overflow:auto}
+.sheet{background:#fff;border-radius:14px;width:100%;max-width:680px;padding:18px}
+.sheet .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sheet .head h3{margin:0}
+.x{background:none;border:0;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.form .full{grid-column:1/-1}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.form input,.form select,.form textarea{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);width:100%}
+.form textarea{min-height:76px;resize:vertical}
+.form .check{flex-direction:row;align-items:center;gap:8px;color:var(--text)}
+.form .check input{width:auto}
+.inline{display:flex;gap:6px}
+.inline > *:first-child{flex:1;min-width:0}
+.parts-row{display:grid;grid-template-columns:1fr 110px 64px 32px;gap:6px;margin-bottom:6px}
+.parts-row input{padding:7px 8px;border:1px solid var(--line);border-radius:8px}
+.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap}
+.actions .left{margin-right:auto}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;white-space:pre-wrap}
+.timeline{border-left:2px solid var(--line);margin-left:6px;padding-left:14px;display:flex;flex-direction:column;gap:12px}
+.timeline .t{position:relative}
+.timeline .t::before{content:"";position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--primary)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#1d2433;color:#fff;padding:10px 16px;border-radius:8px;z-index:60;font-size:14px}
+/* Login */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.login .card{width:100%;max-width:360px;padding:24px}
+.login .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.06em;font-size:18px;margin-bottom:4px}
+.login .logo img{width:36px;height:36px;border-radius:8px}
+.login p{color:var(--muted);margin:0 0 18px;font-size:14px}
+.login .form{grid-template-columns:1fr}
+.err{color:var(--bad);font-size:13px;min-height:18px}
+@media (max-width:760px){
+  header nav{display:none}
+  header .user .name{display:none}
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .bottom-nav button{flex:1;background:none;border:0;padding:10px 4px;font-size:13px;color:var(--muted)}
+  .bottom-nav button.active{color:var(--primary);font-weight:600}
+  .stats{grid-template-columns:1fr 1fr}
+  .fab{bottom:72px;right:16px}
+  .form{grid-template-columns:1fr}
+  .kv{grid-template-columns:110px 1fr}
+  .sheet{padding:14px}
+  .modal{padding:0}
+  .modal .sheet{min-height:100vh;border-radius:0}
+  .parts-row{grid-template-columns:1fr 80px 52px 30px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="loginView" class="login hidden">
+  <div class="card">
+    <div class="logo"><img src="https://alex-workspace.pages.dev/alexios-logo.png" alt="">T-ALEXIOS</div>
+    <p>Nhật ký dịch vụ kỹ thuật. Đăng nhập bằng tài khoản Alexios.</p>
+    <form id="loginForm" class="form">
+      <label>Tên đăng nhập hoặc email<input id="lgUser" autocomplete="username" required></label>
+      <label>Mật khẩu<input id="lgPass" type="password" autocomplete="current-password" required></label>
+      <div class="err" id="lgErr"></div>
+      <button class="btn primary" type="submit">Đăng nhập</button>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="appView" class="hidden">
+  <header>
+    <div class="brand"><img src="https://alex-workspace.pages.dev/alexios-logo.png" alt="">T-ALEXIOS</div>
+    <nav id="topNav">
+      <button data-tab="overview">Tổng quan</button>
+      <button data-tab="visits">Nhật ký</button>
+      <button data-tab="equipment">Máy</button>
+      <button data-tab="customers">Khách hàng</button>
+    </nav>
+    <div class="user"><span class="name" id="meName"></span><button id="logoutBtn">Đăng xuất</button></div>
+  </header>
+
+  <main>
+    <!-- Overview -->
+    <section data-view="overview">
+      <h2>Tổng quan</h2>
+      <div class="grid stats">
+        <div class="card stat"><div class="n" id="stMonth">0</div><div class="l">Lượt công tác tháng này</div></div>
+        <div class="card stat"><div class="n" id="stMine">0</div><div class="l">Của tôi tháng này</div></div>
+        <div class="card stat"><div class="n" id="stOpen">0</div><div class="l">Việc chưa đóng</div></div>
+        <div class="card stat"><div class="n" id="stWarranty">0</div><div class="l">Máy hết BH trong 60 ngày</div></div>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:12px">
+        <div class="card"><h3>Việc chưa đóng</h3><div class="list" id="openList"></div></div>
+        <div class="card"><h3>Sắp hết bảo hành</h3><div class="list" id="warrantyList"></div></div>
+      </div>
+    </section>
+
+    <!-- Visits -->
+    <section data-view="visits" class="hidden">
+      <h2>Nhật ký công tác</h2>
+      <div class="toolbar">
+        <input class="grow" id="vSearch" placeholder="Tìm khách hàng, máy, serial, nội dung...">
+        <select id="vType"></select>
+        <select id="vResult"></select>
+        <select id="vTech"><option value="">Tất cả KTV</option></select>
+        <input type="date" id="vFrom" title="Từ ngày">
+        <input type="date" id="vTo" title="Đến ngày">
+        <button class="btn" id="vExport">Xuất CSV</button>
+      </div>
+      <div class="list" id="visitList"></div>
+    </section>
+
+    <!-- Equipment -->
+    <section data-view="equipment" class="hidden">
+      <h2>Máy đã lắp đặt</h2>
+      <div class="toolbar">
+        <input class="grow" id="eSearch" placeholder="Tìm tên máy, hãng, model, serial, khách hàng...">
+        <select id="eWarranty">
+          <option value="">Mọi trạng thái BH</option>
+          <option value="in">Còn bảo hành</option>
+          <option value="soon">Hết BH trong 60 ngày</option>
+          <option value="out">Hết bảo hành</option>
+          <option value="none">Chưa nhập hạn BH</option>
+        </select>
+        <button class="btn primary" id="eAdd">+ Thêm máy</button>
+      </div>
+      <div class="list" id="equipList"></div>
+    </section>
+
+    <!-- Customers -->
+    <section data-view="customers" class="hidden">
+      <h2>Khách hàng</h2>
+      <div class="toolbar">
+        <input class="grow" id="cSearch" placeholder="Tìm tên, địa chỉ, người liên hệ...">
+        <button class="btn primary" id="cAdd">+ Thêm khách hàng</button>
+      </div>
+      <div class="list" id="custList"></div>
+    </section>
+  </main>
+
+  <button class="fab" id="fab">+ Ghi nhật ký</button>
+  <nav class="bottom-nav" id="bottomNav">
+    <button data-tab="overview">Tổng quan</button>
+    <button data-tab="visits">Nhật ký</button>
+    <button data-tab="equipment">Máy</button>
+    <button data-tab="customers">Khách hàng</button>
+  </nav>
+</div>
+
+<div id="modalRoot"></div>
+
+<script>
+/* ===== Cấu hình ===== */
+const SUPABASE_URL = 'https://xfgqtgzgptavhqjjklkh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_DnACTiOfgWnETmyD8KXv2Q_Qw9mH5o_';
+const USERNAME_DOMAIN = 'internal.saticus.local';
+const LEAD_ROLES = ['super_admin','admin','manager','cto_coo'];
+
+const WORK_TYPES = {lap_dat:'Lắp đặt', bao_tri:'Bảo trì', sua_chua:'Sửa chữa', hieu_chuan:'Hiệu chuẩn', kiem_tra:'Kiểm tra / khảo sát', dao_tao:'Đào tạo', khac:'Khác'};
+const RESULTS = {hoan_thanh:['Hoàn thành','ok'], chua_xong:['Chưa xong','bad'], cho_linh_kien:['Chờ linh kiện','warn'], theo_doi:['Theo dõi thêm','warn']};
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
+
+const S = {me:null, customers:[], equipment:[], visits:[], tab:'overview'};
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ===== Tiện ích ===== */
+function esc(v){return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmtDate(d){ if(!d) return ''; const [y,m,dd] = String(d).slice(0,10).split('-'); return `${dd}/${m}/${y}`; }
+function today(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
+function nowTime(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d'); }
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+function isLead(){ return LEAD_ROLES.includes(S.me?.role); }
+function custById(id){ return S.customers.find(c=>c.id===id); }
+function eqById(id){ return S.equipment.find(e=>e.id===id); }
+function eqLabel(e){ if(!e) return '(máy đã xoá)'; return [e.name, [e.brand,e.model].filter(Boolean).join(' '), e.serial?('SN '+e.serial):''].filter(Boolean).join(' · '); }
+function warrantyState(e, refDate){
+  if(!e?.warranty_end) return {key:'none', label:'Chưa có hạn BH', cls:''};
+  const left = daysBetween(refDate || today(), e.warranty_end);
+  if(left < 0) return {key:'out', label:'Hết BH '+fmtDate(e.warranty_end), cls:'bad'};
+  if(left <= 60) return {key:'soon', label:`Còn BH ${left} ngày`, cls:'warn'};
+  return {key:'in', label:'BH đến '+fmtDate(e.warranty_end), cls:'ok'};
+}
+function opts(map, all){ return (all?`<option value="">${all}</option>`:'') + Object.entries(map).map(([k,v])=>`<option value="${k}">${esc(Array.isArray(v)?v[0]:v)}</option>`).join(''); }
+function fail(err){ console.error(err); toast('Lỗi: '+(err?.message||err)); }
+
+/* ===== Đăng nhập ===== */
+$('#loginForm').addEventListener('submit', async ev=>{
+  ev.preventDefault(); $('#lgErr').textContent='';
+  const u = $('#lgUser').value.trim(), p = $('#lgPass').value;
+  let email = u;
+  if(!u.includes('@')){
+    const {data} = await sb.rpc('get_auth_email_for_username', {p_username:u});
+    email = data || `${u.toLowerCase()}@${USERNAME_DOMAIN}`;
+  }
+  const {error} = await sb.auth.signInWithPassword({email, password:p});
+  if(error){ $('#lgErr').textContent='Sai tên đăng nhập hoặc mật khẩu.'; return; }
+  boot();
+});
+$('#logoutBtn').onclick = async ()=>{ await sb.auth.signOut(); location.reload(); };
+
+async function boot(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ $('#loginView').classList.remove('hidden'); $('#appView').classList.add('hidden'); return; }
+  const {data:prof} = await sb.from('profiles').select('id,full_name,username,role').eq('id', session.user.id).maybeSingle();
+  if(!prof){ $('#loginView').classList.remove('hidden'); $('#lgErr').textContent='Tài khoản chưa có hồ sơ trong Alexios.'; await sb.auth.signOut(); return; }
+  S.me = prof;
+  $('#meName').textContent = prof.full_name || prof.username;
+  $('#loginView').classList.add('hidden'); $('#appView').classList.remove('hidden');
+  $('#vType').innerHTML = opts(WORK_TYPES,'Mọi loại việc');
+  $('#vResult').innerHTML = opts(RESULTS,'Mọi kết quả');
+  await loadAll();
+  showTab(sessionStorageGet('tab') || 'overview');
+}
+function sessionStorageGet(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }
+function sessionStorageSet(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }
+
+async function loadAll(){
+  const [c,e,v] = await Promise.all([
+    sb.from('svc_customers').select('*').order('name'),
+    sb.from('svc_equipment').select('*').order('name'),
+    sb.from('svc_visits').select('*').order('visit_date',{ascending:false}).order('created_at',{ascending:false}).limit(2000)
+  ]);
+  if(c.error||e.error||v.error) return fail(c.error||e.error||v.error);
+  S.customers=c.data; S.equipment=e.data; S.visits=v.data;
+  const techs = [...new Map(S.visits.filter(x=>x.technician_id).map(x=>[x.technician_id, x.technician_name||'?'])).entries()];
+  const cur = $('#vTech').value;
+  $('#vTech').innerHTML = '<option value="">Tất cả KTV</option>' + techs.map(([id,n])=>`<option value="${id}">${esc(n)}</option>`).join('');
+  $('#vTech').value = cur;
+  renderAll();
+}
+
+/* ===== Điều hướng ===== */
+function showTab(tab){
+  S.tab = tab; sessionStorageSet('tab', tab);
+  $$('[data-view]').forEach(s=>s.classList.toggle('hidden', s.dataset.view!==tab));
+  $$('[data-tab]').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  window.scrollTo(0,0);
+}
+$$('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$('#fab').onclick = ()=>openVisitForm();
+['#vSearch','#vType','#vResult','#vTech','#vFrom','#vTo'].forEach(s=>$(s).addEventListener('input', renderVisits));
+$('#eSearch').addEventListener('input', renderEquipment); $('#eWarranty').addEventListener('input', renderEquipment);
+$('#cSearch').addEventListener('input', renderCustomers);
+$('#eAdd').onclick = ()=>openEquipmentForm();
+$('#cAdd').onclick = ()=>openCustomerForm();
+$('#vExport').onclick = exportCSV;
+
+/* ===== Render ===== */
+function renderAll(){ renderOverview(); renderVisits(); renderEquipment(); renderCustomers(); }
+
+function visitCard(v){
+  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+  const [rl, rc] = RESULTS[v.result] || [v.result,''];
+  return `<div class="item" data-visit="${v.id}">
+    <div class="top"><div><div class="title">${esc(c?.name||'(không rõ KH)')}</div>
+      <div class="sub">${fmtDate(v.visit_date)}${v.time_in?' · '+v.time_in.slice(0,5):''}${v.time_out?'–'+v.time_out.slice(0,5):''} · ${esc(v.technician_name||'')} · ${esc(eqLabel(e))}</div></div>
+      <div class="tags"><span class="tag">${esc(WORK_TYPES[v.work_type]||v.work_type)}</span><span class="tag ${rc}">${esc(rl)}</span></div></div>
+    ${v.problem?`<div class="desc">${esc(v.problem.length>180?v.problem.slice(0,180)+'…':v.problem)}</div>`:''}
+  </div>`;
+}
+function bindVisitCards(root){ root.querySelectorAll('[data-visit]').forEach(el=>el.onclick=()=>openVisitDetail(el.dataset.visit)); }
+
+function renderOverview(){
+  const ym = today().slice(0,7);
+  const month = S.visits.filter(v=>String(v.visit_date).startsWith(ym));
+  const open = S.visits.filter(v=>v.result!=='hoan_thanh');
+  const soon = S.equipment.filter(e=>warrantyState(e).key==='soon').sort((a,b)=>a.warranty_end.localeCompare(b.warranty_end));
+  $('#stMonth').textContent = month.length;
+  $('#stMine').textContent = month.filter(v=>v.technician_id===S.me.id).length;
+  $('#stOpen').textContent = open.length;
+  $('#stWarranty').textContent = soon.length;
+  $('#openList').innerHTML = open.slice(0,8).map(visitCard).join('') || '<div class="empty">Không có việc tồn đọng.</div>';
+  bindVisitCards($('#openList'));
+  $('#warrantyList').innerHTML = soon.slice(0,8).map(equipCard).join('') || '<div class="empty">Không có máy sắp hết bảo hành.</div>';
+  bindEquipCards($('#warrantyList'));
+}
+
+function filteredVisits(){
+  const q = norm($('#vSearch').value), t=$('#vType').value, r=$('#vResult').value, tech=$('#vTech').value, f=$('#vFrom').value, to=$('#vTo').value;
+  return S.visits.filter(v=>{
+    if(t && v.work_type!==t) return false;
+    if(r && v.result!==r) return false;
+    if(tech && v.technician_id!==tech) return false;
+    if(f && v.visit_date < f) return false;
+    if(to && v.visit_date > to) return false;
+    if(q){
+      const e=eqById(v.equipment_id), c=e&&custById(e.customer_id);
+      const hay = norm([c?.name, e?.name, e?.brand, e?.model, e?.serial, v.problem, v.action, v.next_action, v.technician_name, v.co_workers].join(' '));
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+function renderVisits(){
+  const list = filteredVisits();
+  $('#visitList').innerHTML = list.slice(0,300).map(visitCard).join('') || '<div class="empty">Chưa có nhật ký phù hợp.</div>';
+  bindVisitCards($('#visitList'));
+}
+
+function equipCard(e){
+  const c = custById(e.customer_id), w = warrantyState(e);
+  const n = S.visits.filter(v=>v.equipment_id===e.id).length;
+  return `<div class="item" data-equip="${e.id}">
+    <div class="top"><div><div class="title">${esc(e.name)}</div>
+      <div class="sub">${esc([e.brand,e.model].filter(Boolean).join(' '))}${e.serial?' · SN '+esc(e.serial):''} · ${esc(c?.name||'')}</div></div>
+      <div class="tags"><span class="tag ${w.cls}">${esc(w.label)}</span><span class="tag">${n} lượt</span></div></div>
+  </div>`;
+}
+function bindEquipCards(root){ root.querySelectorAll('[data-equip]').forEach(el=>el.onclick=()=>openEquipmentDetail(el.dataset.equip)); }
+function renderEquipment(){
+  const q = norm($('#eSearch').value), w = $('#eWarranty').value;
+  const list = S.equipment.filter(e=>{
+    if(w && warrantyState(e).key!==w) return false;
+    if(q){ const c=custById(e.customer_id); if(!norm([e.name,e.brand,e.model,e.serial,e.location,c?.name].join(' ')).includes(q)) return false; }
+    return true;
+  });
+  $('#equipList').innerHTML = list.map(equipCard).join('') || '<div class="empty">Chưa có máy. Bấm "+ Thêm máy" để nhập máy đã lắp đặt.</div>';
+  bindEquipCards($('#equipList'));
+}
+
+function renderCustomers(){
+  const q = norm($('#cSearch').value);
+  const list = S.customers.filter(c=>!q || norm([c.name,c.address,c.contact_name,c.phone].join(' ')).includes(q));
+  $('#custList').innerHTML = list.map(c=>{
+    const n = S.equipment.filter(e=>e.customer_id===c.id).length;
+    return `<div class="item" data-cust="${c.id}"><div class="top"><div><div class="title">${esc(c.name)}</div>
+      <div class="sub">${esc([c.address, c.contact_name, c.phone].filter(Boolean).join(' · '))}</div></div>
+      <span class="tag">${n} máy</span></div></div>`;
+  }).join('') || '<div class="empty">Chưa có khách hàng.</div>';
+  $$('#custList [data-cust]').forEach(el=>el.onclick=()=>openCustomerDetail(el.dataset.cust));
+}
+
+/* ===== Modal ===== */
+function modal(title, body, onMount){
+  const root = $('#modalRoot');
+  const wrap = document.createElement('div'); wrap.className='modal';
+  wrap.innerHTML = `<div class="sheet"><div class="head"><h3>${esc(title)}</h3><button class="x" aria-label="Đóng">×</button></div>${body}</div>`;
+  root.appendChild(wrap);
+  const close = ()=>wrap.remove();
+  wrap.querySelector('.x').onclick = close;
+  wrap.addEventListener('mousedown', ev=>{ if(ev.target===wrap) close(); });
+  onMount && onMount(wrap, close);
+  return close;
+}
+function val(root, name){ const el = root.querySelector(`[name="${name}"]`); if(!el) return null; if(el.type==='checkbox') return el.checked; const v = el.value.trim(); return v===''?null:v; }
+
+/* ===== Khách hàng ===== */
+function openCustomerForm(c, onSaved){
+  c = c || {};
+  modal(c.id?'Sửa khách hàng':'Thêm khách hàng', `
+    <form class="form">
+      <label class="full">Tên khách hàng *<input name="name" required value="${esc(c.name)}"></label>
+      <label class="full">Địa chỉ<input name="address" value="${esc(c.address)}"></label>
+      <label>Người liên hệ<input name="contact_name" value="${esc(c.contact_name)}"></label>
+      <label>Điện thoại<input name="phone" value="${esc(c.phone)}"></label>
+      <label class="full">Ghi chú<textarea name="notes">${esc(c.notes)}</textarea></label>
+      <div class="actions full">${c.id&&isLead()?'<button type="button" class="btn danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const row = {name:val(f,'name'), address:val(f,'address'), contact_name:val(f,'contact_name'), phone:val(f,'phone'), notes:val(f,'notes')};
+      const res = c.id ? await sb.from('svc_customers').update(row).eq('id',c.id).select().single()
+                       : await sb.from('svc_customers').insert(row).select().single();
+      if(res.error) return fail(res.error);
+      close(); await loadAll(); toast('Đã lưu khách hàng'); onSaved && onSaved(res.data);
+    };
+    const d = w.querySelector('[data-del]');
+    if(d) d.onclick = async ()=>{
+      if(!confirm('Xoá khách hàng này? Chỉ xoá được khi không còn máy nào.')) return;
+      const {error} = await sb.from('svc_customers').delete().eq('id',c.id);
+      if(error) return fail(error.code==='23503'?{message:'Khách hàng còn máy, không xoá được.'}:error);
+      close(); $$('.modal').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá');
+    };
+  });
+}
+function openCustomerDetail(id){
+  const c = custById(id); if(!c) return;
+  const eqs = S.equipment.filter(e=>e.customer_id===id);
+  modal(c.name, `
+    <dl class="kv"><dt>Địa chỉ</dt><dd>${esc(c.address||'—')}</dd><dt>Người liên hệ</dt><dd>${esc(c.contact_name||'—')}</dd>
+    <dt>Điện thoại</dt><dd>${c.phone?`<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>`:'—'}</dd><dt>Ghi chú</dt><dd>${esc(c.notes||'—')}</dd></dl>
+    <h3 style="margin-top:16px">Máy (${eqs.length})</h3><div class="list" data-eqs>${eqs.map(equipCard).join('')||'<div class="empty">Chưa có máy.</div>'}</div>
+    <div class="actions"><button class="btn" data-edit>Sửa</button><button class="btn primary" data-addeq>+ Thêm máy</button></div>`,
+  (w, close)=>{
+    bindEquipCards(w.querySelector('[data-eqs]'));
+    w.querySelector('[data-edit]').onclick = ()=>{ close(); openCustomerForm(c); };
+    w.querySelector('[data-addeq]').onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
+  });
+}
+
+/* ===== Máy ===== */
+function customerSelect(selected){
+  return `<select name="customer_id" required><option value="">— Chọn khách hàng —</option>${S.customers.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`;
+}
+function openEquipmentForm(e, onSaved){
+  e = e || {};
+  modal(e.id?'Sửa thông tin máy':'Thêm máy', `
+    <form class="form">
+      <label class="full">Khách hàng *<span class="inline">${customerSelect(e.customer_id)}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
+      <label class="full">Tên máy *<input name="name" required value="${esc(e.name)}" placeholder="VD: Máy đo độ hòa tan"></label>
+      <label>Hãng<input name="brand" value="${esc(e.brand)}" list="brandList"></label>
+      <label>Model<input name="model" value="${esc(e.model)}"></label>
+      <label>Số serial<input name="serial" value="${esc(e.serial)}"></label>
+      <label>Vị trí đặt máy<input name="location" value="${esc(e.location)}" placeholder="Phòng QC, xưởng 2..."></label>
+      <label>Ngày lắp đặt<input type="date" name="install_date" value="${esc(e.install_date)}"></label>
+      <label>Hết bảo hành<input type="date" name="warranty_end" value="${esc(e.warranty_end)}"></label>
+      <label class="full">Ghi chú<textarea name="notes">${esc(e.notes)}</textarea></label>
+      <datalist id="brandList">${[...new Set(S.equipment.map(x=>x.brand).filter(Boolean))].map(b=>`<option value="${esc(b)}">`).join('')}</datalist>
+      <div class="actions full">${e.id&&isLead()?'<button type="button" class="btn danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{
+      f.querySelector('[name=customer_id]').outerHTML = customerSelect(c.id);
+    });
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const row = {customer_id:val(f,'customer_id'), name:val(f,'name'), brand:val(f,'brand'), model:val(f,'model'), serial:val(f,'serial'),
+        location:val(f,'location'), install_date:val(f,'install_date'), warranty_end:val(f,'warranty_end'), notes:val(f,'notes')};
+      const res = e.id ? await sb.from('svc_equipment').update(row).eq('id',e.id).select().single()
+                       : await sb.from('svc_equipment').insert(row).select().single();
+      if(res.error) return fail(res.error.code==='23505'?{message:'Serial này của hãng đã tồn tại.'}:res.error);
+      close(); await loadAll(); toast('Đã lưu máy'); onSaved && onSaved(res.data);
+    };
+    const d = w.querySelector('[data-del]');
+    if(d) d.onclick = async ()=>{
+      if(!confirm('Xoá máy này? Chỉ xoá được khi chưa có nhật ký nào.')) return;
+      const {error} = await sb.from('svc_equipment').delete().eq('id',e.id);
+      if(error) return fail(error.code==='23503'?{message:'Máy đã có nhật ký, không xoá được.'}:error);
+      close(); $$('.modal').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá');
+    };
+  });
+}
+function openEquipmentDetail(id){
+  const e = eqById(id); if(!e) return;
+  const c = custById(e.customer_id), w = warrantyState(e);
+  const hist = S.visits.filter(v=>v.equipment_id===id);
+  const parts = hist.flatMap(v=>(v.parts||[]).map(p=>({...p, date:v.visit_date})));
+  modal(e.name, `
+    <div class="tags" style="margin-bottom:10px"><span class="tag ${w.cls}">${esc(w.label)}</span><span class="tag">${hist.length} lượt can thiệp</span></div>
+    <dl class="kv">
+      <dt>Khách hàng</dt><dd>${esc(c?.name||'—')}</dd>
+      <dt>Hãng / Model</dt><dd>${esc([e.brand,e.model].filter(Boolean).join(' / ')||'—')}</dd>
+      <dt>Serial</dt><dd>${esc(e.serial||'—')}</dd>
+      <dt>Vị trí</dt><dd>${esc(e.location||'—')}</dd>
+      <dt>Ngày lắp đặt</dt><dd>${fmtDate(e.install_date)||'—'}</dd>
+      <dt>Hết bảo hành</dt><dd>${fmtDate(e.warranty_end)||'—'}</dd>
+      ${e.notes?`<dt>Ghi chú</dt><dd>${esc(e.notes)}</dd>`:''}
+    </dl>
+    ${parts.length?`<h3 style="margin-top:16px">Linh kiện đã thay</h3><div class="list">${parts.map(p=>`<div class="sub">${fmtDate(p.date)} · ${esc(p.name)}${p.code?' ('+esc(p.code)+')':''} × ${esc(p.qty||1)}</div>`).join('')}</div>`:''}
+    <h3 style="margin-top:16px">Lịch sử</h3>
+    <div class="timeline">${hist.map(v=>`<div class="t item" data-visit="${v.id}" style="border:0;padding:0">
+      <div class="title">${fmtDate(v.visit_date)} · ${esc(WORK_TYPES[v.work_type]||'')} <span class="tag ${(RESULTS[v.result]||[])[1]||''}">${esc((RESULTS[v.result]||[v.result])[0])}</span></div>
+      <div class="sub">${esc(v.technician_name||'')}</div>
+      ${v.problem?`<div class="desc">${esc(v.problem)}</div>`:''}</div>`).join('') || '<div class="empty">Chưa có lần can thiệp nào.</div>'}</div>
+    <div class="actions"><button class="btn" data-edit>Sửa máy</button><button class="btn primary" data-log>+ Ghi nhật ký cho máy này</button></div>`,
+  (wr, close)=>{
+    bindVisitCards(wr);
+    wr.querySelector('[data-edit]').onclick = ()=>{ close(); openEquipmentForm(e); };
+    wr.querySelector('[data-log]').onclick = ()=>{ close(); openVisitForm({equipment_id:id}); };
+  });
+}
+
+/* ===== Nhật ký ===== */
+function equipSelect(customerId, selected){
+  const list = S.equipment.filter(e=>!customerId || e.customer_id===customerId);
+  return `<select name="equipment_id" required><option value="">— Chọn máy —</option>${list.map(e=>`<option value="${e.id}" ${e.id===selected?'selected':''}>${esc(eqLabel(e))}</option>`).join('')}</select>`;
+}
+function partRow(p={}){
+  return `<div class="parts-row"><input placeholder="Tên linh kiện" data-p="name" value="${esc(p.name)}"><input placeholder="Mã" data-p="code" value="${esc(p.code)}"><input type="number" min="0" step="any" placeholder="SL" data-p="qty" value="${esc(p.qty??1)}"><button type="button" class="btn sm" data-rm>×</button></div>`;
+}
+function openVisitForm(v){
+  v = v || {};
+  const isNew = !v.id;
+  const eq = v.equipment_id && eqById(v.equipment_id);
+  const custId = eq?.customer_id || '';
+  modal(isNew?'Ghi nhật ký công tác':'Sửa nhật ký', `
+    <form class="form">
+      <label class="full">Khách hàng *<span class="inline">${customerSelect(custId).replace('name="customer_id" required','name="customer_id" required data-cust')}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
+      <label class="full">Máy *<span class="inline" data-eqwrap>${equipSelect(custId, v.equipment_id)}<button type="button" class="btn" data-neweq>+ Mới</button></span></label>
+      <div class="full sub" data-winfo style="font-size:13px"></div>
+      <label>Ngày *<input type="date" name="visit_date" required value="${esc(v.visit_date||today())}"></label>
+      <label>Loại công việc *<select name="work_type" required>${opts(WORK_TYPES)}</select></label>
+      <label>Giờ đến<input type="time" name="time_in" value="${esc((v.time_in||(isNew?nowTime():'')).slice(0,5))}"></label>
+      <label>Giờ về<input type="time" name="time_out" value="${esc((v.time_out||'').slice(0,5))}"></label>
+      <label>Người đi cùng<input name="co_workers" value="${esc(v.co_workers)}"></label>
+      <label>Người liên hệ phía khách<input name="customer_contact" value="${esc(v.customer_contact)}"></label>
+      <label class="full">Tình trạng / yêu cầu / lỗi ghi nhận<textarea name="problem">${esc(v.problem)}</textarea></label>
+      <label class="full">Công việc đã thực hiện<textarea name="action">${esc(v.action)}</textarea></label>
+      <div class="full"><div class="sub" style="margin-bottom:6px">Linh kiện thay thế</div><div data-parts>${(v.parts||[]).map(partRow).join('')}</div>
+        <button type="button" class="btn sm" data-addp>+ Thêm linh kiện</button></div>
+      <label>Kết quả *<select name="result" required>${opts(RESULTS)}</select></label>
+      <label class="check" style="align-self:end"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
+      <label class="full">Việc cần làm tiếp<textarea name="next_action" style="min-height:56px">${esc(v.next_action)}</textarea></label>
+      <div class="actions full">${!isNew&&(v.technician_id===S.me.id||isLead())?'<button type="button" class="btn danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    if(v.work_type) f.work_type.value = v.work_type;
+    if(v.result) f.result.value = v.result;
+    const wrap = w.querySelector('[data-eqwrap]');
+    const winfo = w.querySelector('[data-winfo]');
+    const updateWarranty = (auto)=>{
+      const e = eqById(f.querySelector('[name=equipment_id]').value);
+      if(!e){ winfo.textContent=''; return; }
+      const st = warrantyState(e, f.visit_date.value);
+      winfo.innerHTML = `<span class="tag ${st.cls}">${esc(st.label)}</span>`;
+      if(auto) f.under_warranty.checked = (st.key==='in'||st.key==='soon');
+    };
+    const bindEq = ()=>f.querySelector('[name=equipment_id]').addEventListener('change', ()=>updateWarranty(true));
+    const refreshEq = (sel)=>{ wrap.querySelector('select').outerHTML = equipSelect(f.querySelector('[data-cust]').value, sel); bindEq(); updateWarranty(true); };
+    bindEq(); updateWarranty(isNew);
+    f.querySelector('[data-cust]').addEventListener('change', ()=>refreshEq(''));
+    f.visit_date.addEventListener('change', ()=>updateWarranty(isNew));
+    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{
+      f.querySelector('[data-cust]').outerHTML = customerSelect(c.id).replace('name="customer_id" required','name="customer_id" required data-cust');
+      f.querySelector('[data-cust]').addEventListener('change', ()=>refreshEq(''));
+      refreshEq('');
+    });
+    w.querySelector('[data-neweq]').onclick = ()=>openEquipmentForm({customer_id:f.querySelector('[data-cust]').value||undefined}, e=>{
+      const cs = f.querySelector('[data-cust]'); cs.value = e.customer_id; refreshEq(e.id);
+    });
+    const partsBox = w.querySelector('[data-parts]');
+    w.querySelector('[data-addp]').onclick = ()=>partsBox.insertAdjacentHTML('beforeend', partRow());
+    partsBox.addEventListener('click', ev=>{ if(ev.target.matches('[data-rm]')) ev.target.parentElement.remove(); });
+
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const parts = [...partsBox.querySelectorAll('.parts-row')].map(r=>({
+        name:r.querySelector('[data-p=name]').value.trim(), code:r.querySelector('[data-p=code]').value.trim(), qty:Number(r.querySelector('[data-p=qty]').value)||1
+      })).filter(p=>p.name);
+      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:val(f,'work_type'), time_in:val(f,'time_in'), time_out:val(f,'time_out'),
+        co_workers:val(f,'co_workers'), customer_contact:val(f,'customer_contact'), problem:val(f,'problem'), action:val(f,'action'),
+        result:val(f,'result'), under_warranty:val(f,'under_warranty'), next_action:val(f,'next_action'), parts};
+      if(row.time_in && row.time_out && row.time_out < row.time_in && !confirm('Giờ về sớm hơn giờ đến. Vẫn lưu?')) return;
+      let res;
+      if(isNew){ row.technician_id = S.me.id; row.technician_name = S.me.full_name || S.me.username; res = await sb.from('svc_visits').insert(row).select().single(); }
+      else res = await sb.from('svc_visits').update(row).eq('id', v.id).select().single();
+      if(res.error) return fail(res.error.code==='42501'?{message:'Bạn chỉ sửa được nhật ký của mình.'}:res.error);
+      close(); await loadAll(); toast('Đã lưu nhật ký');
+    };
+    const d = w.querySelector('[data-del]');
+    if(d) d.onclick = async ()=>{
+      if(!confirm('Xoá nhật ký này?')) return;
+      const {error} = await sb.from('svc_visits').delete().eq('id', v.id);
+      if(error) return fail(error);
+      close(); await loadAll(); toast('Đã xoá');
+    };
+  });
+}
+function openVisitDetail(id){
+  const v = S.visits.find(x=>x.id===id); if(!v) return;
+  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+  const [rl, rc] = RESULTS[v.result] || [v.result,''];
+  const canEdit = v.technician_id===S.me.id || isLead();
+  modal(`${WORK_TYPES[v.work_type]||''} · ${fmtDate(v.visit_date)}`, `
+    <div class="tags" style="margin-bottom:10px"><span class="tag ${rc}">${esc(rl)}</span>${v.under_warranty?'<span class="tag ok">Trong bảo hành</span>':''}</div>
+    <dl class="kv">
+      <dt>Khách hàng</dt><dd>${esc(c?.name||'—')}</dd>
+      <dt>Máy</dt><dd><a href="#" data-eq>${esc(eqLabel(e))}</a></dd>
+      <dt>Thời gian</dt><dd>${esc([v.time_in?.slice(0,5), v.time_out?.slice(0,5)].filter(Boolean).join(' – ')||'—')}</dd>
+      <dt>Kỹ thuật viên</dt><dd>${esc(v.technician_name||'—')}${v.co_workers?' + '+esc(v.co_workers):''}</dd>
+      <dt>Liên hệ phía KH</dt><dd>${esc(v.customer_contact||'—')}</dd>
+      <dt>Tình trạng / lỗi</dt><dd>${esc(v.problem||'—')}</dd>
+      <dt>Đã thực hiện</dt><dd>${esc(v.action||'—')}</dd>
+      <dt>Linh kiện</dt><dd>${(v.parts||[]).length? v.parts.map(p=>`${esc(p.name)}${p.code?' ('+esc(p.code)+')':''} × ${esc(p.qty||1)}`).join('<br>') : '—'}</dd>
+      <dt>Việc tiếp theo</dt><dd>${esc(v.next_action||'—')}</dd>
+    </dl>
+    <div class="actions">${canEdit?'<button class="btn primary" data-edit>Sửa</button>':''}</div>`,
+  (w, close)=>{
+    w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
+    const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openVisitForm(v); };
+  });
+}
+
+/* ===== Xuất CSV ===== */
+function exportCSV(){
+  const rows = filteredVisits();
+  const head = ['Ngày','Giờ đến','Giờ về','Khách hàng','Tên máy','Hãng','Model','Serial','Loại việc','KTV','Đi cùng','Liên hệ KH','Tình trạng/lỗi','Đã thực hiện','Linh kiện','Kết quả','Trong BH','Việc tiếp theo'];
+  const q = s => '"' + String(s ?? '').replace(/"/g,'""') + '"';
+  const lines = rows.map(v=>{
+    const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+    return [fmtDate(v.visit_date), v.time_in?.slice(0,5), v.time_out?.slice(0,5), c?.name, e?.name, e?.brand, e?.model, e?.serial,
+      WORK_TYPES[v.work_type], v.technician_name, v.co_workers, v.customer_contact, v.problem, v.action,
+      (v.parts||[]).map(p=>`${p.name}${p.code?' ('+p.code+')':''} x${p.qty||1}`).join('; '),
+      (RESULTS[v.result]||[v.result])[0], v.under_warranty?'Có':'', v.next_action].map(q).join(',');
+  });
+  const blob = new Blob(['\ufeff' + [head.map(q).join(','), ...lines].join('\r\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `nhat-ky-dich-vu-${today()}.csv`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+
+sb.auth.onAuthStateChange((evt)=>{ if(evt==='SIGNED_OUT'){ $('#appView').classList.add('hidden'); $('#loginView').classList.remove('hidden'); } });
+boot();
+</script>
+</body>
+</html>
