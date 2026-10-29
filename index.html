@@ -346,6 +346,23 @@ body:not(.is-owner) .need-owner{display:none!important}
 .lockbar{padding:12px 16px;border-radius:14px;background:var(--card);box-shadow:inset 3px 0 0 var(--text),var(--shadow-card);font-size:14px}
 .chain{display:flex;flex-direction:column;gap:6px}
 .chain a{font-size:14px}
+body:not(.is-lead) .need-lead{display:none!important}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.pcard{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid transparent;border-radius:18px;padding:18px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,border-color .2s ease}
+.pcard:hover{transform:translateY(-2px);border-color:var(--btn-border)}
+.pcard:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.pcard .ph{display:flex;align-items:center;gap:12px}
+.pcard .ph .ttl{margin:0;font-weight:800;font-size:16px}
+.pcard .ph .sub{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.pstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pstats div{background:var(--card-2);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pstats b{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.pstats span{font-size:11.5px;color:var(--muted);line-height:1.25}
+.pstats .zero b{color:var(--muted);opacity:.6}
+.pflags{display:flex;flex-wrap:wrap;gap:6px;min-height:22px}
+.board.in-dlg{grid-template-columns:repeat(3,minmax(0,1fr));margin:0;padding:0;overflow:visible}
+.dlg .box.wide{max-width:1100px}
+@media (max-width:860px){ .board.in-dlg{grid-template-columns:minmax(0,1fr)} .pstats{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
 .bcol{background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--ink)}
 .bcol:nth-child(2){border-top-color:var(--sc-orange)}
@@ -442,6 +459,7 @@ body:not(.is-owner) .need-owner{display:none!important}
     <button type="button" data-tab="maint"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m9.5 15 2 2 3.5-3.5"/></svg><span>Bảo trì</span><span class="cnt" id="cntMaint" hidden></span></button>
     <button type="button" data-tab="equipment"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11" rx="2"/><path d="M8 20h8M12 16v4"/><circle cx="8" cy="10.5" r="1.6"/><path d="M12 9h5M12 12h3"/></svg><span>Máy đã lắp</span></button>
     <button type="button" data-tab="customers"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V8.5L12 4l8 4.5V20"/><path d="M9 20v-5h6v5"/><path d="M8.5 10.5h1M14.5 10.5h1"/></svg><span>Khách hàng</span></button>
+    <button type="button" data-tab="staff" class="need-lead"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2.5"/><circle cx="9" cy="10" r="2.2"/><path d="M5.8 16.5c.5-1.8 1.8-2.8 3.2-2.8s2.7 1 3.2 2.8M14.5 9h3M14.5 12.5h3"/></svg><span>Nhân sự</span></button>
     <button type="button" data-tab="members" class="need-owner"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 3-5 5.5-5s4.9 1.8 5.5 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.8c1.6.6 2.7 2.3 3 4.7"/></svg><span>Thành viên</span></button>
     <div class="sep"></div>
     <a href="https://alex-workspace.pages.dev/app"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-5.5H9v5.5H5.5A1.5 1.5 0 0 1 4 19z"/></svg><span>Về Alexios</span></a>
@@ -554,6 +572,20 @@ body:not(.is-owner) .need-owner{display:none!important}
     <div class="mgrid" id="custList"></div>
   </section>
 
+  <!-- NHÂN SỰ (Super Admin, CEO, CTO/COO) -->
+  <section class="view" data-view="staff" hidden>
+    <header class="phead">
+      <div><p class="eyebrow">Nhân sự</p><h1 class="hero">Ai đang làm gì. <span class="dim">Đến hạn khi nào.</span></h1></div>
+    </header>
+    <div class="tools">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="sSearch" type="search" placeholder="Tìm theo tên…" aria-label="Tìm nhân sự"></label>
+    </div>
+    <div class="filters"><div class="chips" id="sFilter" role="group" aria-label="Lọc nhân sự"></div></div>
+    <p class="hint">Lắp đặt: hồ sơ chưa hoàn tất người đó phụ trách. Sửa chữa: phiếu chưa hoàn thành người đó phụ trách hoặc tham gia. Bảo trì: lịch chưa làm do người đó lên lịch.</p>
+    <div class="pgrid" id="staffList"></div>
+  </section>
+
   <!-- THÀNH VIÊN (chỉ Super Admin) -->
   <section class="view" data-view="members" hidden>
     <header class="phead">
@@ -565,7 +597,7 @@ body:not(.is-owner) .need-owner{display:none!important}
       <dl class="specs left">
         <div><dt>Super Admin</dt><dd>Toàn quyền (gồm chốt hoàn thành), quản lý thành viên</dd></div>
         <div><dt>CEO</dt><dd>Như CTO/COO, thêm quyền bấm "Hoàn thành &amp; chốt" để khoá hồ sơ</dd></div>
-        <div><dt>CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ chưa chốt</dd></div>
+        <div><dt>CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ chưa chốt; xem mục Nhân sự</dd></div>
         <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; tạo lắp đặt, sửa chữa, ghi bảo trì; sửa hồ sơ lắp đặt mình phụ trách và phiếu sửa chữa mình tạo, phụ trách hoặc tham gia</dd></div>
       </dl>
       <p class="hint">Phân quyền này tách riêng với Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới trên Alexios rồi thêm vào đây.</p>
@@ -591,6 +623,7 @@ body:not(.is-owner) .need-owner{display:none!important}
     <p class="eyebrow" id="sheetMe" style="padding:0 4px 6px"></p>
     <button class="btn" type="button" data-tab="equipment">Máy đã lắp</button>
     <button class="btn" type="button" data-tab="customers">Khách hàng</button>
+    <button class="btn need-lead" type="button" data-tab="staff">Nhân sự</button>
     <button class="btn need-owner" type="button" data-tab="members">Thành viên</button>
     <a class="btn" href="https://alex-workspace.pages.dev/app">Về Alexios</a>
     <button class="btn theme-btn" type="button">Đổi giao diện sáng / tối</button>
@@ -617,7 +650,7 @@ const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'
 const REMIND_DAYS = 14;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], members:[], customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
+const S = {me:null, staff:[], members:[], sf:'technician', customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -726,6 +759,7 @@ async function boot(){
   }
   S.me = {...prof, role: svcRole};
   document.body.classList.toggle('is-owner', svcRole==='super_admin');
+  document.body.classList.toggle('is-lead', LEAD_ROLES.includes(svcRole));
   const name = prof.full_name || prof.username;
   $('#meName').textContent = name;
   $('#meRole').textContent = ROLE_LABEL[svcRole] || svcRole; $('#meRole').hidden = false;
@@ -757,16 +791,16 @@ async function loadAll(){
 }
 
 /* ===== Điều hướng ===== */
-const SHEET_TABS = ['equipment','customers','members'];
+const SHEET_TABS = ['equipment','customers','members','staff'];
 function showTab(tab){
-  if(!document.querySelector(`[data-view="${tab}"]`) || (tab==='members' && S.me?.role!=='super_admin')) tab='overview';
+  if(!document.querySelector(`[data-view="${tab}"]`) || (tab==='members' && S.me?.role!=='super_admin') || (tab==='staff' && !isLead())) tab='overview';
   ssSet('tab', tab); S.tab = tab;
   if(tab==='members') renderMembers();
   $$('[data-view]').forEach(s=>s.hidden = s.dataset.view!==tab);
   $$('.nav [data-tab], .tabbar [data-tab]').forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
   const more = $('.tabbar [data-act=more]'); if(SHEET_TABS.includes(tab)) more.setAttribute('aria-current','page'); else more.removeAttribute('aria-current');
   $('.fab').textContent = tab==='install' ? '+ Lắp đặt mới' : '+ Ghi sửa chữa';
-  $('.fab').hidden = ['maint','members','customers','equipment'].includes(tab);
+  $('.fab').hidden = ['maint','members','customers','equipment','staff'].includes(tab);
   $('#moreSheet').hidden = true;
   window.scrollTo(0,0);
 }
@@ -790,6 +824,7 @@ $('#vClear').onclick = ()=>{ $('#vTech').value=''; $('#vFrom').value=''; $('#vTo
 $('#iSearch').addEventListener('input', renderInstalls);
 $('#eSearch').addEventListener('input', renderEquipment);
 $('#cSearch').addEventListener('input', renderCustomers);
+$('#sSearch').addEventListener('input', renderStaff);
 
 function chipGroup(el, items, cur, onPick){
   el.innerHTML = items.map(([k,l,n])=>`<button type="button" class="chip-f" data-k="${k}" aria-pressed="${k===cur}">${esc(l)}${n!=null?` <span class="n">${n}</span>`:''}</button>`).join('');
@@ -814,7 +849,7 @@ function delButton(btn, run){
 }
 
 /* ===== Render chung ===== */
-function renderAll(){ renderOverview(); renderInstalls(); renderRepairs(); renderMaint(); renderEquipment(); renderCustomers(); updateBadges(); }
+function renderAll(){ renderOverview(); renderInstalls(); renderRepairs(); renderMaint(); renderEquipment(); renderCustomers(); if(isLead()) renderStaff(); updateBadges(); }
 function updateBadges(){
   setCount('#cntInstall', S.installs.filter(x=>installStage(x)!=='done').length);
   setCount('#cntRepair', repairs().filter(v=>isOpen(v) && deadlineState(v)?.key==='over').length);
@@ -827,6 +862,41 @@ function byUrgency(a,b){
   const da=a.deadline||'9999-12-31', db=b.deadline||'9999-12-31';
   return da===db ? String(b.visit_date).localeCompare(String(a.visit_date)) : da.localeCompare(db);
 }
+function instSortKey(a,b){ return installStage(a)-installStage(b) || String(a.planned_date||'9999').localeCompare(String(b.planned_date||'9999')); }
+function kInstall(x){
+  const c = custById(x.customer_id), st = installStage(x);
+  const next = st===1 ? 'Bổ sung thông tin Đợt 1' : st===2 ? 'Chờ ký biên bản giao nhận' : 'Chờ nghiệm thu' + ((x.tests||[]).length ? ` · ${(x.tests||[]).filter(t=>x.test_dates?.[t]).length}/${x.tests.length} phép thử` : '');
+  const late = x.planned_date && st===1 && x.planned_date < today();
+  return `<button type="button" class="kcard" data-inst="${x.id}">
+    <span class="kt"><p class="ttl">${esc(custById(x.customer_id)?.name||'—')}</p><span class="chip blue">Đợt ${st}</span></span>
+    <p class="sub">${esc([x.machine_name, x.brand, x.model].filter(Boolean).join(' · '))}</p>
+    <span class="kf"><span class="sub">${esc(next)}</span>${x.planned_date?`<span class="chip ${late?'bad':''}">Dự kiến ${fmtDate(x.planned_date)}</span>`:''}</span>
+    <p class="sub">Phụ trách ${esc(staffName(x.owner_id, x.owner_name)||'—')}</p>
+  </button>`;
+}
+function kRepair(v){
+  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+  const txt = v.remaining || v.problem || v.next_action;
+  return `<button type="button" class="kcard" data-visit="${v.id}">
+    <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${resultChip(v.result)}</span>
+    <p class="sub">${esc(eqLabel(e))}</p>
+    ${txt?`<p class="sub" style="color:var(--text)">${esc(txt.length>90?txt.slice(0,90)+'…':txt)}</p>`:''}
+    <span class="kf">${deadlineChip(v)}<span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</span></span>
+  </button>`;
+}
+function kMaint(s){
+  const e = s.eq, c = e && custById(e.customer_id);
+  return `<button type="button" class="kcard" data-meq="${s.rec.equipment_id}">
+    <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${maintChip(s)}</span>
+    <p class="sub">${esc(eqLabel(e))}</p>
+    <span class="kf"><span class="chip">Hạn ${fmtDate(s.due)}</span>${s.rec.plan_notes?`<span class="sub">${esc(s.rec.plan_notes.length>60?s.rec.plan_notes.slice(0,60)+'…':s.rec.plan_notes)}</span>`:''}</span>
+  </button>`;
+}
+function bindK(root, before){
+  root.querySelectorAll('[data-inst]').forEach(el=>el.onclick=()=>{ before&&before(); openInstallDetail(el.dataset.inst); });
+  root.querySelectorAll('[data-visit]').forEach(el=>el.onclick=()=>{ before&&before(); openVisitDetail(el.dataset.visit); });
+  root.querySelectorAll('[data-meq]').forEach(el=>el.onclick=()=>{ before&&before(); openEquipmentDetail(el.dataset.meq); });
+}
 function renderOverview(){
   const ym = today().slice(0,7), rp = repairs();
   const month = rp.filter(v=>String(v.visit_date).startsWith(ym));
@@ -838,47 +908,19 @@ function renderOverview(){
   $('#stWarranty').textContent = soon.length;
 
   // Lắp đặt chưa hoàn tất: đợt thấp trước, rồi ngày dự kiến gần nhất
-  const inst = S.installs.filter(x=>installStage(x)!=='done').sort((a,b)=> installStage(a)-installStage(b) || String(a.planned_date||'9999').localeCompare(String(b.planned_date||'9999')));
+  const inst = S.installs.filter(x=>installStage(x)!=='done').sort(instSortKey);
   $('#bnInstall').textContent = inst.length;
-  $('#bInstall').innerHTML = inst.map(x=>{
-    const c = custById(x.customer_id), st = installStage(x);
-    const next = st===1 ? 'Bổ sung thông tin Đợt 1' : st===2 ? 'Chờ ký biên bản giao nhận' : 'Chờ nghiệm thu' + ((x.tests||[]).length ? ` · ${(x.tests||[]).filter(t=>x.test_dates?.[t]).length}/${x.tests.length} phép thử` : '');
-    const late = x.planned_date && st===1 && x.planned_date < today();
-    return `<button type="button" class="kcard" data-inst="${x.id}">
-      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p><span class="chip blue">Đợt ${st}</span></span>
-      <p class="sub">${esc([x.machine_name, x.brand, x.model].filter(Boolean).join(' · '))}</p>
-      <span class="kf"><span class="sub">${esc(next)}</span>${x.planned_date?`<span class="chip ${late?'bad':''}">Dự kiến ${fmtDate(x.planned_date)}</span>`:''}</span>
-      <p class="sub">Phụ trách ${esc(staffName(x.owner_id, x.owner_name)||'—')}</p>
-    </button>`;
-  }).join('') || '<div class="empty">Không có lắp đặt đang dở.</div>';
-  $$('#bInstall [data-inst]').forEach(el=>el.onclick=()=>openInstallDetail(el.dataset.inst));
+  $('#bInstall').innerHTML = inst.map(kInstall).join('') || '<div class="empty">Không có lắp đặt đang dở.</div>';
 
   // Sửa chữa đang mở: theo deadline
   $('#bnRepair').textContent = open.length;
-  $('#bRepair').innerHTML = open.map(v=>{
-    const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
-    const txt = v.remaining || v.problem || v.next_action;
-    return `<button type="button" class="kcard" data-visit="${v.id}">
-      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${resultChip(v.result)}</span>
-      <p class="sub">${esc(eqLabel(e))}</p>
-      ${txt?`<p class="sub" style="color:var(--text)">${esc(txt.length>90?txt.slice(0,90)+'…':txt)}</p>`:''}
-      <span class="kf">${deadlineChip(v)}<span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</span></span>
-    </button>`;
-  }).join('') || '<div class="empty">Không có sửa chữa đang mở.</div>';
-  bindVisitCards($('#bRepair'));
+  $('#bRepair').innerHTML = open.map(kRepair).join('') || '<div class="empty">Không có sửa chữa đang mở.</div>';
 
   // Bảo trì chưa làm: theo ngày đến hạn
   const mt = maintItems().filter(s=>!s.done).sort((a,b)=>a.due.localeCompare(b.due));
   $('#bnMaint').textContent = mt.length;
-  $('#bMaint').innerHTML = mt.map(s=>{
-    const e = s.eq, c = e && custById(e.customer_id);
-    return `<button type="button" class="kcard" data-meq="${s.rec.equipment_id}">
-      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${maintChip(s)}</span>
-      <p class="sub">${esc(eqLabel(e))}</p>
-      <span class="kf"><span class="chip">Hạn ${fmtDate(s.due)}</span>${s.rec.plan_notes?`<span class="sub">${esc(s.rec.plan_notes.length>60?s.rec.plan_notes.slice(0,60)+'…':s.rec.plan_notes)}</span>`:''}</span>
-    </button>`;
-  }).join('') || '<div class="empty">Không có lịch bảo trì chưa làm.</div>';
-  $$('#bMaint [data-meq]').forEach(el=>el.onclick=()=>openEquipmentDetail(el.dataset.meq));
+  $('#bMaint').innerHTML = mt.map(kMaint).join('') || '<div class="empty">Không có lịch bảo trì chưa làm.</div>';
+  bindK($('.view[data-view=overview] .board'));
 }
 
 /* ===== LẮP ĐẶT ===== */
@@ -1554,6 +1596,52 @@ function openCustomerDetail(id){
     w.querySelector('[data-edit]').onclick = ()=>{ close(); openCustomerForm(c); };
     w.querySelector('[data-addeq]').onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
   });
+}
+
+/* ===== NHÂN SỰ (Super Admin, CEO, CTO/COO) ===== */
+function workOf(uid){
+  const inst = S.installs.filter(x=>x.owner_id===uid && installStage(x)!=='done').sort(instSortKey);
+  const openR = repairs().filter(isOpen);
+  const lead = openR.filter(v=>v.assignee_id===uid).sort(byUrgency);
+  const part = openR.filter(v=>v.assignee_id!==uid && (v.participant_ids||[]).includes(uid)).sort(byUrgency);
+  const maint = maintItems().filter(s=>!s.done && s.rec.created_by===uid).sort((a,b)=>a.due.localeCompare(b.due));
+  const over = lead.filter(v=>deadlineState(v)?.key==='over').length + maint.filter(s=>s.state==='over').length + inst.filter(x=>installStage(x)===1 && x.planned_date && x.planned_date<today()).length;
+  const soon = lead.filter(v=>['today','soon'].includes(deadlineState(v)?.key)).length + maint.filter(s=>s.state==='soon').length;
+  const ym = today().slice(0,7);
+  const doneMonth = repairs().filter(v=>v.assignee_id===uid && !isOpen(v) && String(v.updated_at||v.visit_date).startsWith(ym)).length
+    + S.maint.filter(m=>m.done_by===uid && String(m.done_date).startsWith(ym)).length;
+  return {inst, lead, part, maint, over, soon, doneMonth, total: inst.length + lead.length + part.length + maint.length};
+}
+function renderStaff(){
+  if(!isLead()) return;
+  const roleOrder = {technician:0, cto_coo:1, ceo:2, super_admin:3};
+  const people = S.staff.slice().sort((a,b)=>(roleOrder[a.role]-roleOrder[b.role]) || (a.full_name||a.username).localeCompare(b.full_name||b.username));
+  const n = k => k==='all' ? people.length : people.filter(p=>p.role==='technician').length;
+  chipGroup($('#sFilter'), [['technician','Kỹ thuật',n('technician')],['all','Tất cả thành viên',n('all')]], S.sf, k=>{S.sf=k; renderStaff();});
+  const q = norm($('#sSearch').value);
+  const list = people.filter(p=>(S.sf==='all' || p.role==='technician') && (!q || norm([p.full_name,p.username].join(' ')).includes(q)));
+  $('#staffList').innerHTML = list.map(p=>{
+    const w = workOf(p.id), nm = p.full_name || p.username;
+    const st = (n,l)=>`<div class="${n?'':'zero'}"><b>${n}</b><span>${l}</span></div>`;
+    return `<button type="button" class="pcard" data-uid="${p.id}">
+      <span class="ph"><span class="avatar">${esc(nm.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</span><span><p class="ttl">${esc(nm)}</p><p class="sub">${esc(ROLE_LABEL[p.role]||p.role)} · ${w.total} việc đang có</p></span></span>
+      <span class="pstats">${st(w.inst.length,'Lắp đặt phụ trách')}${st(w.lead.length,'Sửa chữa phụ trách')}${st(w.part.length,'Sửa chữa tham gia')}${st(w.maint.length,'Bảo trì chờ làm')}</span>
+      <span class="pflags">${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}${w.soon?`<span class="chip warn">${w.soon} sắp đến hạn</span>`:''}${w.doneMonth?`<span class="chip ok">${w.doneMonth} xong trong tháng</span>`:''}${!w.total?'<span class="chip">Đang trống việc</span>':''}</span>
+    </button>`;
+  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có kỹ thuật nào. Super Admin thêm thành viên với vai trò Kỹ thuật ở mục Thành viên.</div>';
+  $$('#staffList [data-uid]').forEach(el=>el.onclick=()=>openStaffDetail(el.dataset.uid));
+}
+function openStaffDetail(uid){
+  const p = S.staff.find(x=>x.id===uid); if(!p) return;
+  const w = workOf(uid), nm = p.full_name || p.username;
+  const col = (title, n, items, empty)=>`<section class="bcol"><div class="bhead"><h2>${title}</h2><span class="bn">${n}</span></div><div class="blist">${items || `<div class="empty">${empty}</div>`}</div></section>`;
+  const close = modal(ROLE_LABEL[p.role]||'Nhân sự', nm, `
+    <div class="chips-row">${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}${w.soon?`<span class="chip warn">${w.soon} sắp đến hạn</span>`:''}${w.doneMonth?`<span class="chip ok">${w.doneMonth} việc xong trong tháng</span>`:''}<span class="chip blue">${w.total} việc đang có</span></div>
+    <div class="board in-dlg">
+      ${col('Lắp đặt', w.inst.length, w.inst.map(kInstall).join(''), 'Không phụ trách lắp đặt nào đang dở.')}
+      ${col('Sửa chữa', w.lead.length + w.part.length, (w.lead.length?'<p class="eyebrow" style="margin:2px 2px 0">Phụ trách</p>'+w.lead.map(kRepair).join(''):'') + (w.part.length?'<p class="eyebrow" style="margin:8px 2px 0">Tham gia</p>'+w.part.map(kRepair).join(''):''), 'Không có phiếu sửa chữa đang mở.')}
+      ${col('Bảo trì', w.maint.length, w.maint.map(kMaint).join(''), 'Không có lịch bảo trì chờ làm.')}
+    </div>`, (wr, close)=>{ wr.querySelector('.box').classList.add('wide'); bindK(wr, close); });
 }
 
 /* ===== THÀNH VIÊN (chỉ Super Admin) ===== */
