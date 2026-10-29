@@ -209,6 +209,12 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
 .sec{display:flex;flex-direction:column;gap:4px}
 .sec h3{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 .sec p{margin:0;white-space:pre-wrap}
+body:not(.is-owner) .need-owner{display:none!important}
+.mrow{display:grid;grid-template-columns:44px minmax(0,1fr) 180px auto;gap:14px;align-items:center;background:var(--card);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow-card)}
+.avatar{width:44px;height:44px;border-radius:12px;background:var(--blue-bg);color:var(--ink);display:grid;place-items:center;font-weight:800;font-size:16px}
+.mrow .ttl{margin:0;font-weight:700;font-size:15.5px;overflow-wrap:anywhere}
+.mrow .sub{margin:2px 0 0;font-size:13px;color:var(--muted)}
+@media (max-width:860px){ .mrow{grid-template-columns:44px minmax(0,1fr);padding:14px} .mrow select,.mrow .btn{grid-column:1/-1} }
 .acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
 .acts .left{margin-right:auto}
 .timeline{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--border);margin-left:8px}
@@ -338,7 +344,12 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
   </aside>
   <div class="lg-main">
     <div class="lg-top"><button class="btn sm icon theme-btn" type="button" title="Sáng / Tối" aria-label="Đổi giao diện sáng hoặc tối">☾</button></div>
-    <div class="lg-box">
+    <div class="lg-box" id="noAccess" hidden>
+      <div class="lg-head"><p class="eyebrow">Chưa có quyền truy cập</p><h2 class="lg-title">Tài khoản chưa được cấp quyền.</h2>
+        <p class="lg-sub">T-Alexios có phân quyền riêng. Tài khoản <b id="naUser"></b> đăng nhập được nhưng chưa được Super Admin thêm vào danh sách thành viên. Hãy liên hệ Super Admin để được cấp quyền.</p></div>
+      <button class="btn block lg-submit" type="button" data-act="logout">Đăng xuất</button>
+    </div>
+    <div class="lg-box" id="loginBox">
       <form id="loginForm" autocomplete="on" novalidate>
         <div class="lg-head"><p class="eyebrow">Đăng nhập</p><h2 class="lg-title">Chào bạn trở lại.</h2><p class="lg-sub">Dùng tên đăng nhập và mật khẩu của Alexios.</p></div>
         <div class="msg" id="lgErr" role="alert" hidden></div>
@@ -361,6 +372,7 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
     <button type="button" data-tab="visits"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>Nhật ký</span></button>
     <button type="button" data-tab="equipment"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11" rx="2"/><path d="M8 20h8M12 16v4"/><circle cx="8" cy="10.5" r="1.6"/><path d="M12 9h5M12 12h3"/></svg><span>Máy đã lắp</span></button>
     <button type="button" data-tab="customers"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V8.5L12 4l8 4.5V20"/><path d="M9 20v-5h6v5"/><path d="M8.5 10.5h1M14.5 10.5h1"/></svg><span>Khách hàng</span></button>
+    <button type="button" data-tab="members" class="need-owner"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 3-5 5.5-5s4.9 1.8 5.5 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.8c1.6.6 2.7 2.3 3 4.7"/></svg><span>Thành viên</span></button>
     <div class="sep"></div>
     <a href="https://alex-workspace.pages.dev/app"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-5.5H9v5.5H5.5A1.5 1.5 0 0 1 4 19z"/></svg><span>Về Alexios</span></a>
   </nav>
@@ -447,6 +459,25 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
     <div class="mgrid" id="custList"></div>
   </section>
 
+  <!-- THÀNH VIÊN (chỉ Super Admin) -->
+  <section class="view" data-view="members" hidden>
+    <header class="phead">
+      <div><p class="eyebrow">Phân quyền T-Alexios</p><h1 class="hero">Ai được vào. <span class="dim">Làm được gì.</span></h1></div>
+      <button class="btn primary" type="button" data-act="addMember" style="display:inline-flex">+ Thêm thành viên</button>
+    </header>
+    <div class="panel">
+      <h2>Vai trò</h2>
+      <dl class="specs left">
+        <div><dt>Super Admin</dt><dd>Toàn quyền, quản lý thành viên</dd></div>
+        <div><dt>CEO, CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi nhật ký, máy, khách hàng</dd></div>
+        <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; ghi nhật ký; sửa nhật ký mình tạo, phụ trách hoặc tham gia; thêm máy, khách hàng</dd></div>
+      </dl>
+      <p class="hint">Phân quyền này tách riêng với Alexios: vai trò bên Alexios không ảnh hưởng tới T-Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới thực hiện trên Alexios rồi thêm vào đây.</p>
+    </div>
+    <p class="count" id="mCount"></p>
+    <div class="list" id="memberList"></div>
+  </section>
+
   <p class="foot">T-Alexios · Nhật ký dịch vụ kỹ thuật SatiCus · dùng chung tài khoản Alexios</p>
 </main>
 
@@ -462,6 +493,7 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
   <div class="inner">
     <p class="eyebrow" id="sheetMe" style="padding:0 4px 6px"></p>
     <button class="btn" type="button" data-tab="customers">Khách hàng</button>
+    <button class="btn need-owner" type="button" data-tab="members">Thành viên</button>
     <a class="btn" href="https://alex-workspace.pages.dev/app">Về Alexios</a>
     <button class="btn theme-btn" type="button">Đổi giao diện sáng / tối</button>
     <button class="btn" type="button" data-act="logout">Đăng xuất</button>
@@ -479,15 +511,15 @@ select{appearance:none;-webkit-appearance:none;padding-right:34px;background-ima
 const SUPABASE_URL = 'https://xfgqtgzgptavhqjjklkh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_DnACTiOfgWnETmyD8KXv2Q_Qw9mH5o_';
 const USERNAME_DOMAIN = 'internal.saticus.local';
-const LEAD_ROLES = ['super_admin','admin','manager','cto_coo'];
-const ROLE_LABEL = {super_admin:'Super Admin', admin:'Admin', manager:'Manager', cto_coo:'CTO/COO', user:'User', backend:'Backend'};
+const LEAD_ROLES = ['super_admin','ceo','cto_coo'];
+const ROLE_LABEL = {super_admin:'Super Admin', ceo:'CEO', cto_coo:'CTO/COO', technician:'Kỹ thuật'};
 
 const WORK_TYPES = {lap_dat:'Lắp đặt', bao_tri:'Bảo trì', sua_chua:'Sửa chữa', hieu_chuan:'Hiệu chuẩn', kiem_tra:'Kiểm tra / khảo sát', dao_tao:'Đào tạo', khac:'Khác'};
 const RESULTS = {hoan_thanh:['Hoàn thành','ok'], chua_xong:['Chưa xong','bad'], cho_linh_kien:['Chờ linh kiện','warn'], theo_doi:['Theo dõi thêm','warn']};
 const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'Hết bảo hành', none:'Chưa nhập hạn BH'};
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], customers:[], equipment:[], visits:[], f:{type:'', result:'', warranty:''}};
+const S = {me:null, staff:[], members:[], customers:[], equipment:[], visits:[], f:{type:'', result:'', warranty:''}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -511,7 +543,7 @@ function warrantyState(e, refDate){
   return {key:'in', label:'BH đến '+fmtDate(e.warranty_end), cls:'ok'};
 }
 function opts(map){ return Object.entries(map).map(([k,v])=>`<option value="${k}">${esc(Array.isArray(v)?v[0]:v)}</option>`).join(''); }
-function fail(err){ console.error(err); toast('Lỗi: '+(err?.message||err), true); }
+function fail(err){ console.error(err); const m = String(err?.message||err); toast(m.includes('Super Admin') ? m : 'Lỗi: '+m, true); }
 function resultChip(r){ const [l,c] = RESULTS[r] || [r,'']; return `<span class="chip ${c}">${esc(l)}</span>`; }
 function staffName(id, fallback){ const p = S.staff.find(x=>x.id===id); return p ? (p.full_name || p.username) : (fallback || ''); }
 function isOpen(v){ return v.result!=='hoan_thanh'; }
@@ -562,7 +594,7 @@ $('#loginForm').addEventListener('submit', async ev=>{
 async function logout(){ await sb.auth.signOut(); location.reload(); }
 
 function showLogin(msg){
-  $('#appView').hidden = true; $('#loginView').hidden = false;
+  $('#appView').hidden = true; $('#loginView').hidden = false; $('#noAccess').hidden = true; $('#loginBox').hidden = false;
   if(msg){ $('#lgErr').textContent = msg; $('#lgErr').hidden = false; }
 }
 
@@ -571,11 +603,18 @@ async function boot(){
   if(!session) return showLogin();
   const {data:prof} = await sb.from('profiles').select('id,full_name,username,role').eq('id', session.user.id).maybeSingle();
   if(!prof){ await sb.auth.signOut(); return showLogin('Tài khoản chưa có hồ sơ trong Alexios.'); }
-  S.me = prof;
+  const {data:svcRole, error:roleErr} = await sb.rpc('svc_my_role');
+  if(roleErr){ await sb.auth.signOut(); return showLogin('Không kiểm tra được quyền truy cập: '+roleErr.message); }
+  if(!svcRole){
+    $('#appView').hidden = true; $('#loginView').hidden = false; $('#loginBox').hidden = true;
+    $('#naUser').textContent = prof.full_name || prof.username; $('#noAccess').hidden = false; return;
+  }
+  S.me = {...prof, role: svcRole};
+  document.body.classList.toggle('is-owner', svcRole==='super_admin');
   const name = prof.full_name || prof.username;
   $('#meName').textContent = name;
-  $('#meRole').textContent = ROLE_LABEL[prof.role] || prof.role; $('#meRole').hidden = false;
-  $('#sheetMe').textContent = name + ' · ' + (ROLE_LABEL[prof.role] || prof.role);
+  $('#meRole').textContent = ROLE_LABEL[svcRole] || svcRole; $('#meRole').hidden = false;
+  $('#sheetMe').textContent = name + ' · ' + (ROLE_LABEL[svcRole] || svcRole);
   const d = new Date();
   $('#todayPill').textContent = d.toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
   $('#loginView').hidden = true; $('#appView').hidden = false;
@@ -603,11 +642,12 @@ async function loadAll(){
 
 /* ===== Điều hướng ===== */
 function showTab(tab){
-  if(!document.querySelector(`[data-view="${tab}"]`)) tab='overview';
+  if(!document.querySelector(`[data-view="${tab}"]`) || (tab==='members' && S.me?.role!=='super_admin')) tab='overview';
+  if(tab==='members') renderMembers();
   ssSet('tab', tab);
   $$('[data-view]').forEach(s=>s.hidden = s.dataset.view!==tab);
   $$('.nav [data-tab], .tabbar [data-tab]').forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
-  if(tab==='customers'){ const m=$('.tabbar [data-act=more]'); m.setAttribute('aria-current','page'); } else $('.tabbar [data-act=more]').removeAttribute('aria-current');
+  if(tab==='customers' || tab==='members'){ const m=$('.tabbar [data-act=more]'); m.setAttribute('aria-current','page'); } else $('.tabbar [data-act=more]').removeAttribute('aria-current');
   $('#moreSheet').hidden = true;
   window.scrollTo(0,0);
 }
@@ -616,7 +656,7 @@ document.addEventListener('click', ev=>{
   const a = ev.target.closest('[data-act]'); if(!a) return;
   ({
     logout, newVisit:()=>openVisitForm(), newEquip:()=>openEquipmentForm(), newCust:()=>openCustomerForm(),
-    export:exportCSV, more:()=>{$('#moreSheet').hidden=false;}, closeSheet:()=>{$('#moreSheet').hidden=true;},
+    export:exportCSV, addMember:openAddMember, more:()=>{$('#moreSheet').hidden=false;}, closeSheet:()=>{$('#moreSheet').hidden=true;},
     seeOpen:()=>{ S.f.result='__open'; renderVisits(); showTab('visits'); },
     seeSoon:()=>{ S.f.warranty='soon'; renderEquipment(); showTab('equipment'); }
   })[a.dataset.act]?.();
@@ -1048,6 +1088,66 @@ function openVisitDetail(id){
     w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openVisitForm(v); };
     const hd = w.querySelector('[data-hand]'); if(hd) hd.onclick = ()=>{ close(); openHandover(v); };
+  });
+}
+
+/* ===== Thành viên (chỉ Super Admin) ===== */
+function svcRoleOptions(sel){ return Object.entries(ROLE_LABEL).map(([k,l])=>`<option value="${k}" ${k===sel?'selected':''}>${l}</option>`).join(''); }
+async function renderMembers(){
+  if(S.me?.role!=='super_admin') return;
+  const {data, error} = await sb.from('svc_members').select('user_id,role,created_at').order('created_at');
+  if(error) return fail(error);
+  S.members = data;
+  const order = {super_admin:0, ceo:1, cto_coo:2, technician:3};
+  const rows = data.slice().sort((a,b)=>(order[a.role]-order[b.role]) || staffName(a.user_id).localeCompare(staffName(b.user_id)));
+  $('#mCount').textContent = `${rows.length} thành viên`;
+  $('#memberList').innerHTML = rows.map(m=>{
+    const st = S.staff.find(x=>x.id===m.user_id) || {};
+    const nm = st.full_name || st.username || '(tài khoản)';
+    const me = m.user_id===S.me.id;
+    return `<div class="mrow" data-uid="${m.user_id}">
+      <span class="avatar">${esc(nm.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</span>
+      <span><p class="ttl">${esc(nm)}${me?' <span class="chip blue">Bạn</span>':''}</p><p class="sub">@${esc(st.username||'')} · thêm ngày ${fmtDate(m.created_at)}</p></span>
+      <select data-role aria-label="Vai trò">${svcRoleOptions(m.role)}</select>
+      <button class="btn sm ghost danger" type="button" data-rm>Gỡ quyền</button>
+    </div>`;
+  }).join('') || '<div class="empty">Chưa có thành viên.</div>';
+  $$('#memberList .mrow').forEach(r=>{
+    const uid = r.dataset.uid;
+    r.querySelector('[data-role]').onchange = async ev=>{
+      const {error} = await sb.from('svc_members').update({role: ev.target.value}).eq('user_id', uid);
+      if(error){ fail(error); return renderMembers(); }
+      toast('Đã đổi vai trò'); await loadAll(); if(uid===S.me.id) location.reload(); else renderMembers();
+    };
+    const rm = r.querySelector('[data-rm]');
+    rm.onclick = async ()=>{
+      if(rm.dataset.sure!=='1'){ rm.dataset.sure='1'; rm.textContent='Bấm lần nữa để gỡ'; return; }
+      const {error} = await sb.from('svc_members').delete().eq('user_id', uid);
+      if(error) return fail(error);
+      toast('Đã gỡ quyền truy cập'); if(uid===S.me.id) return location.reload(); await loadAll(); renderMembers();
+    };
+  });
+}
+async function openAddMember(){
+  const {data, error} = await sb.rpc('svc_candidates');
+  if(error) return fail(error);
+  modal('Phân quyền T-Alexios', 'Thêm thành viên', `
+    <form class="grid2">
+      <label class="full">Tài khoản *<select name="uid" required><option value="">— Chọn tài khoản —</option>${(data||[]).map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)} (@${esc(p.username||'')})</option>`).join('')}</select></label>
+      <label class="full">Vai trò *<select name="role" required>${svcRoleOptions('technician')}</select></label>
+      <p class="hint full">${(data||[]).length ? 'Danh sách là các tài khoản đã có trên Alexios nhưng chưa vào T-Alexios.' : 'Tất cả tài khoản đã là thành viên. Tạo tài khoản mới trên Alexios trước rồi thêm vào đây.'}</p>
+      <div class="acts full"><button type="submit" class="btn primary">Thêm</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      if(!val(f,'uid')) return toast('Chọn tài khoản', true);
+      const btn=f.querySelector('[type=submit]'); busy(btn,true);
+      const {error} = await sb.from('svc_members').insert({user_id: val(f,'uid'), role: val(f,'role')});
+      busy(btn,false);
+      if(error) return fail(error);
+      close(); await loadAll(); renderMembers(); toast('Đã thêm thành viên');
+    };
   });
 }
 

@@ -9,11 +9,13 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 
 ## Quyền
 
-| | Mọi tài khoản | Super Admin / Admin / Manager / CTO-COO |
-|---|---|---|
-| Xem toàn bộ nhật ký, máy, khách hàng | ✓ | ✓ |
-| Thêm khách hàng, máy, nhật ký | ✓ | ✓ |
-| Sửa khách hàng, máy | ✓ | ✓ |
-| Sửa nhật ký, bàn giao | Khi là người tạo, phụ trách hoặc tham gia | Tất cả |
-| Xoá nhật ký | Chỉ nhật ký mình tạo | Tất cả |
-| Xoá khách hàng, máy | | ✓ |
+Phân quyền riêng của T-Alexios (bảng `svc_members`, `supabase/003_phan_quyen_rieng.sql`), không phụ thuộc vai trò trong Alexios. Tài khoản đăng nhập dùng chung; tài khoản chưa được thêm vào `svc_members` không vào được app và không đọc được dữ liệu.
+
+| | Super Admin | CEO, CTO/COO | Kỹ thuật |
+|---|---|---|---|
+| Xem toàn bộ nhật ký, máy, khách hàng | ✓ | ✓ | ✓ |
+| Ghi nhật ký, thêm máy, khách hàng | ✓ | ✓ | ✓ |
+| Sửa nhật ký, bàn giao | ✓ | ✓ | Khi là người tạo, phụ trách hoặc tham gia |
+| Xoá nhật ký | ✓ | ✓ | Nhật ký mình tạo |
+| Xoá máy, khách hàng | ✓ | ✓ | |
+| Thêm, gỡ thành viên, đổi vai trò | ✓ | | |
