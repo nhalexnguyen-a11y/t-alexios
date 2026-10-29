@@ -13,6 +13,7 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 - **Lắp đặt** (`svc_installations`): Đợt 1 thông tin lắp đặt (khách hàng, tên máy, hãng, model, serial, số hợp đồng — đều bắt buộc —, ngày dự kiến, phụ trách = người tạo, thời gian và chu kỳ bảo trì, chọn IQ/OQ/PQ/FAT/SAT) → Đợt 2 ngày ký biên bản giao nhận → Đợt 3 ngày hoàn thành các phép thử đã chọn, ngày ký biên bản nghiệm thu, thời hạn bảo hành. Đợt sau chỉ hiện khi đợt trước đủ thông tin. Tạo hồ sơ tự thêm máy vào Máy đã lắp; nghiệm thu tự tính hạn bảo hành.
 - **Sửa chữa** (`svc_visits`): Đợt 1 vấn đề, khắc phục, vấn đề còn lại, hướng giải quyết tiếp theo → Đợt 2 deadline. Có người phụ trách, kỹ thuật tham gia, bàn giao.
 - **Bảo trì** (`svc_maintenance`, `005_bao_tri_tu_dien.sql`): kỹ thuật tự lên lịch cho từng máy (một hoặc nhiều ngày), app nhắc trong app khi còn 14 ngày và khi quá hạn; ghi nhận "Đã bảo trì". Thời gian và chu kỳ bảo trì trong hồ sơ lắp đặt chỉ để tham khảo.
+- **Chốt hoàn thành** (`006_chot_hoan_thanh.sql`): CEO (và Super Admin) bấm "Hoàn thành & chốt" trên phiếu sửa chữa hoặc hồ sơ lắp đặt đủ 3 đợt. Bản ghi đã chốt bị khoá ở database: không sửa, không xoá. Máy gặp sự cố lại thì tạo "bản ghi tiếp nối" gắn với phiếu cũ.
 - **Máy đã lắp, Khách hàng, Thành viên** như trước.
 
 ## Quyền
@@ -27,4 +28,5 @@ Phân quyền riêng của T-Alexios (bảng `svc_members`, `supabase/003_phan_q
 | Sửa phiếu sửa chữa, bàn giao | ✓ | ✓ | Khi là người tạo, phụ trách hoặc tham gia |
 | Xoá nhật ký | ✓ | ✓ | Nhật ký mình tạo |
 | Xoá máy, khách hàng | ✓ | ✓ | |
+| Chốt hoàn thành (khoá hồ sơ) | ✓ | CEO | |
 | Thêm, gỡ thành viên, đổi vai trò | ✓ | | |

@@ -342,6 +342,10 @@ body:not(.is-owner) .need-owner{display:none!important}
 .tbox:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .tchips-s{display:flex;flex-wrap:wrap;gap:6px}
+.chip.lock{background:var(--text);color:var(--bg)}
+.lockbar{padding:12px 16px;border-radius:14px;background:var(--card);box-shadow:inset 3px 0 0 var(--text),var(--shadow-card);font-size:14px}
+.chain{display:flex;flex-direction:column;gap:6px}
+.chain a{font-size:14px}
 .board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
 .bcol{background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--ink)}
 .bcol:nth-child(2){border-top-color:var(--sc-orange)}
@@ -559,8 +563,9 @@ body:not(.is-owner) .need-owner{display:none!important}
     <div class="panel">
       <h2>Vai trò</h2>
       <dl class="specs left">
-        <div><dt>Super Admin</dt><dd>Toàn quyền, quản lý thành viên</dd></div>
-        <div><dt>CEO, CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ lắp đặt, sửa chữa, bảo trì, máy, khách hàng</dd></div>
+        <div><dt>Super Admin</dt><dd>Toàn quyền (gồm chốt hoàn thành), quản lý thành viên</dd></div>
+        <div><dt>CEO</dt><dd>Như CTO/COO, thêm quyền bấm "Hoàn thành &amp; chốt" để khoá hồ sơ</dd></div>
+        <div><dt>CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ chưa chốt</dd></div>
         <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; tạo lắp đặt, sửa chữa, ghi bảo trì; sửa hồ sơ lắp đặt mình phụ trách và phiếu sửa chữa mình tạo, phụ trách hoặc tham gia</dd></div>
       </dl>
       <p class="hint">Phân quyền này tách riêng với Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới trên Alexios rồi thêm vào đây.</p>
@@ -652,7 +657,20 @@ function deadlineState(v){
 }
 function deadlineChip(v){ const d = deadlineState(v); return d ? `<span class="chip ${d.cls}">${esc(d.label)}</span>` : ''; }
 function involved(v, uid){ return v.technician_id===uid || v.assignee_id===uid || (v.participant_ids||[]).includes(uid); }
-function canEditVisit(v){ return involved(v, S.me.id) || isLead(); }
+function canEditVisit(v){ return !v.locked_at && (involved(v, S.me.id) || isLead()); }
+function canLock(){ return ['ceo','super_admin'].includes(S.me?.role); }
+function lockChip(x){ return x.locked_at ? '<span class="chip lock">🔒 Đã chốt</span>' : ''; }
+function lockBanner(x){ return x.locked_at ? `<div class="lockbar">🔒 Đã chốt hoàn thành bởi <b>${esc(staffName(x.locked_by, x.locked_by_name)||'—')}</b> lúc ${new Date(x.locked_at).toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}. Thông tin đã khoá, không sửa hoặc xoá được.</div>` : ''; }
+function lockButton(btn, table, id, label){
+  btn.onclick = async ()=>{
+    if(btn.dataset.sure!=='1'){ btn.dataset.sure='1'; btn.textContent='Bấm lần nữa để chốt (không hoàn tác được)'; return; }
+    busy(btn,true);
+    const {error} = await sb.from(table).update({locked_at:new Date().toISOString(), locked_by_name:S.me.full_name||S.me.username}).eq('id', id).select().single();
+    busy(btn,false);
+    if(error) return fail(error);
+    $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast(label);
+  };
+}
 function participantNames(v){ return (v.participant_ids||[]).map(id=>staffName(id)).filter(Boolean); }
 function val(root, name){ const el = root.querySelector(`[name="${name}"]`); if(!el) return null; if(el.type==='checkbox') return el.checked; const v = el.value.trim(); return v===''?null:v; }
 function num(root, name){ const v = val(root,name); return v==null ? null : Math.max(0, parseInt(v,10)||0); }
@@ -884,7 +902,7 @@ function installCard(x){
   const nextTxt = st===1 ? `Dự kiến ${fmtDate(x.planned_date)||'—'}` : st===2 ? 'Chờ ký biên bản giao nhận' : st===3 ? `Giao nhận ${fmtDate(x.handover_date)} · chờ nghiệm thu` : `Nghiệm thu ${fmtDate(x.acceptance_date)}`;
   return `<button type="button" class="icard" data-inst="${x.id}">
     <span class="top"><span><p class="ttl">${esc(c?.name||'(không rõ khách hàng)')}</p>
-      <p class="sub">${esc([x.machine_name, [x.brand,x.model].filter(Boolean).join(' '), x.serial?'SN '+x.serial:''].filter(Boolean).join(' · '))}</p></span>${stagesHtml(x)}</span>
+      <p class="sub">${esc([x.machine_name, [x.brand,x.model].filter(Boolean).join(' '), x.serial?'SN '+x.serial:''].filter(Boolean).join(' · '))}</p></span><span class="chips-row">${lockChip(x)}${stagesHtml(x)}</span></span>
     <span class="who"><span>HĐ <b>${esc(x.contract_no||'—')}</b></span><span>Phụ trách <b>${esc(staffName(x.owner_id, x.owner_name)||'—')}</b></span><span>${esc(nextTxt)}</span></span>
     ${testChips(x)}
   </button>`;
@@ -943,7 +961,7 @@ function openInstallForm(x){
         </div>
       </div>
       <label style="margin-top:14px">Ghi chú<textarea name="notes" style="min-height:60px">${esc(x.notes)}</textarea></label>
-      <div class="acts" style="margin-top:16px">${!isNew&&(x.owner_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<span class="hint" data-hint></span><button type="submit" class="btn primary">Lưu</button></div>
+      <div class="acts" style="margin-top:16px">${!isNew&&!x.locked_at&&(x.owner_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<span class="hint" data-hint></span><button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     const picked = ()=>[...w.querySelectorAll('[data-tests] .tbox[aria-pressed="true"]')].map(b=>b.dataset.t);
@@ -1006,11 +1024,12 @@ function schedPanel(eqId, canAdd){
 function openInstallDetail(id){
   const x = S.installs.find(i=>i.id===id); if(!x) return;
   const c = custById(x.customer_id), e = eqById(x.equipment_id);
-  const canEdit = x.owner_id===S.me.id || isLead();
+  const canEdit = !x.locked_at && (x.owner_id===S.me.id || isLead());
   const st = installStage(x);
   const td = x.test_dates || {};
   modal('Lắp đặt', c?.name || 'Hồ sơ lắp đặt', `
-    ${stagesHtml(x)}
+    ${lockBanner(x)}
+    <div class="chips-row">${lockChip(x)}${stagesHtml(x)}</div>
     <div class="panel"><h2>Đợt 1 · Thông tin lắp đặt</h2><dl class="specs left">
       <div><dt>Máy</dt><dd>${e?`<a href="#" data-eq>${esc(eqLabel(e))}</a>`:esc([x.machine_name, x.brand, x.model].filter(Boolean).join(' · '))}</dd></div>
       <div><dt>Hãng</dt><dd>${esc(x.brand||'—')}</dd></div>
@@ -1030,8 +1049,10 @@ function openInstallDetail(id){
     </dl></div>`:''}
     ${x.equipment_id?schedPanel(x.equipment_id, true):''}
     ${x.notes?`<div class="panel"><div class="sec"><h3>Ghi chú</h3><p>${esc(x.notes)}</p></div></div>`:''}
-    <div class="acts">${canEdit?`<button class="btn primary" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}</div>`,
+    <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>
+    ${!x.locked_at&&st!=='done'&&canLock()?'<p class="hint" style="text-align:right">Chốt hoàn thành được khi hồ sơ đủ 3 đợt.</p>':''}`,
   (w, close)=>{
+    const lk = w.querySelector('[data-lock]'); if(lk) lockButton(lk, 'svc_installations', x.id, 'Đã chốt hoàn thành hồ sơ lắp đặt');
     const a = w.querySelector('[data-eq]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openEquipmentDetail(e.id); };
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openInstallForm(x); };
     const am = w.querySelector('[data-addmaint]'); if(am) am.onclick = ()=>{ close(); openMaintForm({equipment_id:am.dataset.addmaint}); };
@@ -1177,7 +1198,7 @@ function visitCard(v){
       <p class="sub">${esc(eqLabel(e))}</p>
       <span class="who"><span>Phụ trách <b>${esc(asg||'—')}</b></span>${parts.length?`<span>Tham gia <b>${esc(parts.join(', '))}</b></span>`:''}<span>Tạo bởi ${esc(staffName(v.technician_id, v.technician_name)||'—')}</span></span>
       ${summary?`<p class="desc">${esc(summary)}</p>`:''}</span>
-    <span class="right">${resultChip(v.result)}${deadlineChip(v)}</span>
+    <span class="right">${v.locked_at?lockChip(v):resultChip(v.result)+deadlineChip(v)}${v.parent_id?'<span class="chip blue">Tiếp nối</span>':''}</span>
   </button>`;
 }
 function bindVisitCards(root){ root.querySelectorAll('[data-visit]').forEach(el=>el.onclick=()=>openVisitDetail(el.dataset.visit)); }
@@ -1187,6 +1208,7 @@ function filteredRepairs(){
     if(S.f.result==='__open'){ if(!isOpen(v)) return false; }
     else if(S.f.result==='__over'){ if(deadlineState(v)?.key!=='over') return false; }
     else if(S.f.result==='__mine'){ if(!involved(v, S.me.id)) return false; }
+    else if(S.f.result==='__locked'){ if(!v.locked_at) return false; }
     else if(S.f.result && v.result!==S.f.result) return false;
     if(tech && !involved(v, tech)) return false;
     if(f && v.visit_date < f) return false;
@@ -1201,7 +1223,7 @@ function filteredRepairs(){
 }
 function renderRepairs(){
   const rp = repairs();
-  chipGroup($('#vResult'), [['','Tất cả',rp.length],['__mine','Liên quan tôi'],['__open','Đang mở',rp.filter(isOpen).length],['__over','Quá hạn',rp.filter(v=>deadlineState(v)?.key==='over').length], ...Object.entries(RESULTS).map(([k,[l]])=>[k,l])], S.f.result, k=>{S.f.result=k; renderRepairs();});
+  chipGroup($('#vResult'), [['','Tất cả',rp.length],['__mine','Liên quan tôi'],['__open','Đang mở',rp.filter(isOpen).length],['__over','Quá hạn',rp.filter(v=>deadlineState(v)?.key==='over').length], ...Object.entries(RESULTS).map(([k,[l]])=>[k,l]), ['__locked','Đã chốt',rp.filter(v=>v.locked_at).length]], S.f.result, k=>{S.f.result=k; renderRepairs();});
   let list = filteredRepairs();
   if(S.f.result==='__open' || S.f.result==='__over') list = list.sort(byUrgency);
   $('#vCount').textContent = `${list.length} phiếu sửa chữa` + (list.length>300?' · hiển thị 300 mới nhất':'');
@@ -1225,9 +1247,11 @@ function openRepairForm(v){
   const eq = v.equipment_id && eqById(v.equipment_id);
   const custId = eq?.customer_id || '';
   const asg = v.assignee_id || S.me.id;
-  modal('Sửa chữa', isNew?'Phiếu sửa chữa mới':'Cập nhật sửa chữa', `
+  const parent = v.parent_id && S.visits.find(x=>x.id===v.parent_id);
+  modal('Sửa chữa', isNew ? (parent?'Bản ghi tiếp nối':'Phiếu sửa chữa mới') : 'Cập nhật sửa chữa', `
     <form>
-      <div class="stage-box">
+      ${parent?`<div class="lockbar">Tiếp nối phiếu ngày <b>${fmtDate(parent.visit_date)}</b> (đã chốt). Phiếu cũ giữ nguyên, không bị thay đổi.</div>`:''}
+      <div class="stage-box" ${parent?'style="margin-top:14px"':''}>
         <div class="grid2">
           <label class="full">Khách hàng *<span class="inline">${customerSelect(custId,'data-cust')}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
           <label class="full">Máy *<span class="inline" data-eqwrap>${equipSelect(custId, v.equipment_id)}<button type="button" class="btn" data-neweq>+ Mới</button></span></label>
@@ -1254,7 +1278,7 @@ function openRepairForm(v){
           <label class="checkrow full"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
         </div>
       </div>
-      <div class="acts" style="margin-top:16px">${!isNew&&(v.technician_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+      <div class="acts" style="margin-top:16px">${!isNew&&!v.locked_at&&(v.technician_id===S.me.id||isLead())&&!S.visits.some(x=>x.parent_id===v.id)?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     const pick = w.querySelector('[data-pick]');
@@ -1285,7 +1309,7 @@ function openRepairForm(v){
       if(!val(f,'equipment_id')) return toast('Chọn khách hàng và máy', true);
       if(!val(f,'problem')) return toast('Nhập vấn đề', true);
       const assignee_id = val(f,'assignee_id');
-      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:'sua_chua',
+      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:'sua_chua', parent_id: v.parent_id || null,
         assignee_id, assignee_name:staffName(assignee_id),
         participant_ids:[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==assignee_id),
         problem:val(f,'problem'), solution:val(f,'solution'), remaining:val(f,'remaining'), next_action:val(f,'next_action'),
@@ -1336,8 +1360,15 @@ function openVisitDetail(id){
   const canEdit = canEditVisit(v);
   const parts = participantNames(v);
   const sec = (t, x, hl)=> x ? `<div class="panel" ${hl?'style="box-shadow:inset 3px 0 0 var(--sc-orange),var(--shadow-card)"':''}><div class="sec"><h3>${t}</h3><p>${esc(x)}</p></div></div>` : '';
+  const parent = v.parent_id && S.visits.find(x=>x.id===v.parent_id);
+  const kids = S.visits.filter(x=>x.parent_id===v.id).sort((a,b)=>String(a.visit_date).localeCompare(String(b.visit_date)));
   modal(`Sửa chữa · ${fmtDate(v.visit_date)}`, c?.name||'Phiếu sửa chữa', `
-    <div class="chips-row">${resultChip(v.result)}${deadlineChip(v)}${v.under_warranty?'<span class="chip ok">Trong bảo hành</span>':''}</div>
+    ${lockBanner(v)}
+    <div class="chips-row">${lockChip(v)}${resultChip(v.result)}${v.locked_at?'':deadlineChip(v)}${v.under_warranty?'<span class="chip ok">Trong bảo hành</span>':''}</div>
+    ${parent||kids.length?`<div class="panel"><h2>Chuỗi xử lý</h2><div class="chain">
+      ${parent?`<a href="#" data-goto="${parent.id}">← Tiếp nối từ phiếu ${fmtDate(parent.visit_date)}${parent.locked_at?' (đã chốt)':''}</a>`:''}
+      ${kids.map(k=>`<a href="#" data-goto="${k.id}">→ Bản ghi tiếp nối ${fmtDate(k.visit_date)} · ${(RESULTS[k.result]||[k.result])[0]}${k.locked_at?' (đã chốt)':''}</a>`).join('')}
+    </div></div>`:''}
     <div class="panel"><dl class="specs left">
       <div><dt>Máy</dt><dd><a href="#" data-eq>${esc(eqLabel(e))}</a></dd></div>
       <div><dt>Người phụ trách</dt><dd><b>${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</b></dd></div>
@@ -1346,8 +1377,11 @@ function openVisitDetail(id){
       <div><dt>Deadline</dt><dd>${fmtDate(v.deadline)||'—'}</dd></div>
     </dl></div>
     ${sec('Vấn đề', v.problem || v.cause)}${sec('Khắc phục', v.solution || v.action)}${sec('Vấn đề còn lại', v.remaining, true)}${sec('Hướng giải quyết tiếp theo', v.next_action, true)}
-    <div class="acts">${canEdit&&isOpen(v)?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn primary" data-edit>Cập nhật tiến độ</button>':''}</div>`,
+    <div class="acts">${v.locked_at?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>`,
   (w, close)=>{
+    w.querySelectorAll('[data-goto]').forEach(a=>a.onclick=ev=>{ ev.preventDefault(); close(); openVisitDetail(a.dataset.goto); });
+    const fl = w.querySelector('[data-follow]'); if(fl) fl.onclick = ()=>{ close(); openRepairForm({parent_id:v.id, equipment_id:v.equipment_id, assignee_id:v.assignee_id, participant_ids:v.participant_ids, problem:[v.remaining, v.next_action].filter(Boolean).join('\n')}); };
+    const lk = w.querySelector('[data-lock]'); if(lk) lockButton(lk, 'svc_visits', v.id, 'Đã chốt hoàn thành phiếu sửa chữa');
     w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openRepairForm(v); };
     const hd = w.querySelector('[data-hand]'); if(hd) hd.onclick = ()=>{ close(); openHandover(v); };
@@ -1440,7 +1474,7 @@ function openEquipmentDetail(id){
     ${schedPanel(id, true)}
     <div class="panel"><div class="h2row"><h2>Lịch sử sửa chữa</h2><button class="btn sm primary" data-log>+ Ghi sửa chữa</button></div>
       <div class="timeline">${hist.map(v=>`<button type="button" class="titem" data-visit="${v.id}">
-        <span class="ttl">${fmtDate(v.visit_date)} ${resultChip(v.result)}</span>
+        <span class="ttl">${fmtDate(v.visit_date)} ${v.locked_at?lockChip(v):resultChip(v.result)}${v.parent_id?' <span class="chip blue">Tiếp nối</span>':''}</span>
         <span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}${v.deadline?' · deadline '+fmtDate(v.deadline):''}</span>
         ${(v.problem||v.cause)?`<span class="desc">${esc(v.problem||v.cause)}</span>`:''}</button>`).join('') || '<div class="empty">Chưa có lần sửa chữa nào.</div>'}</div></div>
     <div class="acts"><button class="btn" data-edit>Sửa thông tin máy</button></div>`,
