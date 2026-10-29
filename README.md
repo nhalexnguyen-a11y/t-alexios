@@ -4,7 +4,8 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 
 - Giao diện: `index.html` tĩnh, chạy trên GitHub Pages, dùng được trên điện thoại và laptop.
 - Dữ liệu và đăng nhập: dùng chung Supabase project và tài khoản với Alexios. Không phụ thuộc app nào khác.
-- Bảng riêng: `svc_customers`, `svc_equipment`, `svc_visits` (`supabase/001_nhat_ky_dich_vu.sql`, đã chạy).
+- Bảng riêng: `svc_customers`, `svc_equipment`, `svc_visits` (`supabase/001_*.sql`, `002_*.sql`, đã chạy).
+- Mỗi nhật ký có người tạo, người phụ trách, kỹ thuật tham gia và deadline. Bàn giao = đổi người phụ trách, người cũ chuyển sang danh sách tham gia.
 
 ## Quyền
 
@@ -13,5 +14,6 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 | Xem toàn bộ nhật ký, máy, khách hàng | ✓ | ✓ |
 | Thêm khách hàng, máy, nhật ký | ✓ | ✓ |
 | Sửa khách hàng, máy | ✓ | ✓ |
-| Sửa, xoá nhật ký | Chỉ của mình | Tất cả |
+| Sửa nhật ký, bàn giao | Khi là người tạo, phụ trách hoặc tham gia | Tất cả |
+| Xoá nhật ký | Chỉ nhật ký mình tạo | Tất cả |
 | Xoá khách hàng, máy | | ✓ |
