@@ -323,6 +323,49 @@ body:not(.is-owner) .need-owner{display:none!important}
   .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* Đợt (stepper) */
+.stages{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.stg{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:999px;background:var(--card-2);font-size:12px;font-weight:600;color:var(--muted)}
+.stg i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--card);font-size:11px;font-weight:700}
+.stg.done{color:var(--green)} .stg.done i{background:var(--green-bg);color:var(--green)}
+.stg.cur{background:var(--ink);color:var(--on-ink)} .stg.cur i{background:var(--on-ink);color:var(--ink)}
+.stage-box{border-radius:16px;background:var(--card);box-shadow:var(--shadow-card);padding:18px;display:flex;flex-direction:column;gap:14px}
+.stage-box > .h{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.stage-box > .h b{font-size:15px;font-weight:800;letter-spacing:-.005em}
+.stage-box > .h .eyebrow{font-size:11px}
+.stage-box.locked{opacity:.55}
+.tests{display:flex;flex-wrap:wrap;gap:8px}
+.tbox{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:12px;border:1.5px solid var(--btn-border);font-weight:700;font-size:14px;color:var(--muted);background:var(--card)}
+.tbox[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--blue-bg)}
+.tbox .bx{width:18px;height:18px;border-radius:5px;border:1.5px solid currentColor;display:grid;place-items:center;font-size:12px}
+.tbox:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tchips-s{display:flex;flex-wrap:wrap;gap:6px}
+.nav .cnt,.tabbar .cnt{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--sc-orange);color:#1a1a1a;font-size:11px;font-weight:800;display:inline-grid;place-items:center}
+.tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0}
+.tabbar button{position:relative}
+.icard{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid transparent;border-radius:18px;padding:18px 20px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:12px;transition:transform .2s ease,border-color .2s ease}
+.icard:hover{transform:translateY(-2px);border-color:var(--btn-border)}
+.icard:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.icard .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.icard .ttl{margin:0;font-size:17px;font-weight:700;line-height:1.3}
+.icard .sub{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.mrow2{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--card);border-radius:18px;padding:14px 18px;box-shadow:var(--shadow-card)}
+.mrow2 .ttl{margin:0;font-weight:700;font-size:15.5px}
+.mrow2 .sub{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.mrow2 .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.panel .mrow2{box-shadow:none;background:var(--card-2)}
+.sched{display:flex;flex-direction:column}
+.sched div{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--border);font-size:14px}
+.sched span.m{color:var(--muted);font-size:13px}
+@media (max-width:860px){
+  .tabbar{grid-template-columns:repeat(5,1fr)}
+  .mrow2{grid-template-columns:52px minmax(0,1fr);padding:14px}
+  .mrow2 .right{grid-column:1/-1;justify-content:flex-start}
+  .sched div{grid-template-columns:84px minmax(0,1fr)}
+  .sched div > :last-child{grid-column:1/-1}
+}
 </style>
 </head>
 <body>
@@ -369,7 +412,9 @@ body:not(.is-owner) .need-owner{display:none!important}
   <div class="brand"><span class="alogo" aria-hidden="true"><img src="alexios-logo.png" alt=""></span><div><b>ALEXIOS</b><small>NHẬT KÝ KỸ THUẬT</small></div></div>
   <nav class="nav">
     <button type="button" data-tab="overview"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg><span>Tổng quan</span></button>
-    <button type="button" data-tab="visits"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>Nhật ký</span></button>
+    <button type="button" data-tab="install"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg><span>Lắp đặt</span><span class="cnt" id="cntInstall" hidden></span></button>
+    <button type="button" data-tab="repair"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg><span>Sửa chữa</span><span class="cnt" id="cntRepair" hidden></span></button>
+    <button type="button" data-tab="maint"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m9.5 15 2 2 3.5-3.5"/></svg><span>Bảo trì</span><span class="cnt" id="cntMaint" hidden></span></button>
     <button type="button" data-tab="equipment"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11" rx="2"/><path d="M8 20h8M12 16v4"/><circle cx="8" cy="10.5" r="1.6"/><path d="M12 9h5M12 12h3"/></svg><span>Máy đã lắp</span></button>
     <button type="button" data-tab="customers"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V8.5L12 4l8 4.5V20"/><path d="M9 20v-5h6v5"/><path d="M8.5 10.5h1M14.5 10.5h1"/></svg><span>Khách hàng</span></button>
     <button type="button" data-tab="members" class="need-owner"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 3-5 5.5-5s4.9 1.8 5.5 5"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.8c1.6.6 2.7 2.3 3 4.7"/></svg><span>Thành viên</span></button>
@@ -390,10 +435,10 @@ body:not(.is-owner) .need-owner{display:none!important}
   <section class="view" data-view="overview">
     <header class="phead">
       <div><p class="eyebrow" id="todayPill"></p><h1 class="hero">Nhật ký kỹ thuật. <span class="dim">Mỗi lần đến khách đều có dấu vết.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newVisit">+ Ghi nhật ký</button>
+      <button class="btn primary" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
     </header>
     <div class="stats">
-      <div class="stat hl"><span class="lb">Tháng này</span><span class="n" id="stMonth">0</span><span class="s">lượt công tác của cả đội</span></div>
+      <div class="stat hl"><span class="lb">Tháng này</span><span class="n" id="stMonth">0</span><span class="s">lượt sửa chữa của cả đội</span></div>
       <div class="stat"><span class="lb">Tôi phụ trách</span><span class="n" id="stMine">0</span><span class="s">việc đang mở</span></div>
       <div class="stat"><span class="lb">Quá hạn</span><span class="n" id="stOverdue">0</span><span class="s">việc đã qua deadline</span></div>
       <div class="stat"><span class="lb">Sắp hết BH</span><span class="n" id="stWarranty">0</span><span class="s">máy trong 60 ngày tới</span></div>
@@ -404,22 +449,34 @@ body:not(.is-owner) .need-owner{display:none!important}
     </div>
   </section>
 
-  <!-- NHẬT KÝ -->
-  <section class="view" data-view="visits" hidden>
+  <!-- LẮP ĐẶT -->
+  <section class="view" data-view="install" hidden>
     <header class="phead">
-      <div><p class="eyebrow">Nhật ký công tác</p><h1 class="hero">Đã làm gì, <span class="dim">ở đâu, cho máy nào.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newVisit">+ Ghi nhật ký</button>
+      <div><p class="eyebrow">Lắp đặt</p><h1 class="hero">Từ hợp đồng <span class="dim">đến nghiệm thu.</span></h1></div>
+      <button class="btn primary" type="button" data-act="newInstall">+ Lắp đặt mới</button>
     </header>
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="vSearch" type="search" placeholder="Tìm khách hàng, máy, serial, nội dung…" aria-label="Tìm nhật ký"></label>
+        <input id="iSearch" type="search" placeholder="Tìm khách hàng, máy, hãng, serial, số hợp đồng…" aria-label="Tìm lắp đặt"></label>
+    </div>
+    <div class="filters"><div class="chips" id="iStage" role="group" aria-label="Lọc theo đợt"></div></div>
+    <p class="count" id="iCount" aria-live="polite"></p>
+    <div class="list" id="installList"></div>
+  </section>
+
+  <!-- SỬA CHỮA -->
+  <section class="view" data-view="repair" hidden>
+    <header class="phead">
+      <div><p class="eyebrow">Sửa chữa</p><h1 class="hero">Vấn đề, khắc phục, <span class="dim">việc còn lại.</span></h1></div>
+      <button class="btn primary" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
+    </header>
+    <div class="tools">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="vSearch" type="search" placeholder="Tìm khách hàng, máy, serial, nội dung…" aria-label="Tìm sửa chữa"></label>
       <button class="btn" type="button" id="vMore" aria-expanded="false">Bộ lọc</button>
       <button class="btn" type="button" data-act="export">Xuất CSV</button>
     </div>
-    <div class="filters">
-      <div class="chips" id="vType" role="group" aria-label="Lọc theo loại việc"></div>
-      <div class="chips sub" id="vResult" role="group" aria-label="Lọc theo kết quả"></div>
-    </div>
+    <div class="filters"><div class="chips sub" id="vResult" role="group" aria-label="Lọc theo trạng thái"></div></div>
     <div class="adv" id="vAdv" hidden>
       <label>Kỹ thuật viên liên quan<select id="vTech"><option value="">Tất cả</option></select></label>
       <label>Từ ngày<input type="date" id="vFrom"></label>
@@ -428,6 +485,17 @@ body:not(.is-owner) .need-owner{display:none!important}
     </div>
     <p class="count" id="vCount" aria-live="polite"></p>
     <div class="list" id="visitList"></div>
+  </section>
+
+  <!-- BẢO TRÌ -->
+  <section class="view" data-view="maint" hidden>
+    <header class="phead">
+      <div><p class="eyebrow">Bảo trì</p><h1 class="hero">Đến hạn là nhắc. <span class="dim">Làm xong là ghi.</span></h1></div>
+    </header>
+    <div class="filters"><div class="chips" id="mFilter" role="group" aria-label="Lọc lịch bảo trì"></div></div>
+    <p class="hint">Lịch tự sinh từ hồ sơ lắp đặt: bắt đầu từ ngày ký biên bản nghiệm thu, lặp theo chu kỳ, trong thời gian bảo trì đã khai báo. Nhắc trước 14 ngày.</p>
+    <p class="count" id="mCount2" aria-live="polite"></p>
+    <div class="list" id="maintList"></div>
   </section>
 
   <!-- MÁY -->
@@ -469,10 +537,10 @@ body:not(.is-owner) .need-owner{display:none!important}
       <h2>Vai trò</h2>
       <dl class="specs left">
         <div><dt>Super Admin</dt><dd>Toàn quyền, quản lý thành viên</dd></div>
-        <div><dt>CEO, CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi nhật ký, máy, khách hàng</dd></div>
-        <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; ghi nhật ký; sửa nhật ký mình tạo, phụ trách hoặc tham gia; thêm máy, khách hàng</dd></div>
+        <div><dt>CEO, CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ lắp đặt, sửa chữa, bảo trì, máy, khách hàng</dd></div>
+        <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; tạo lắp đặt, sửa chữa, ghi bảo trì; sửa hồ sơ lắp đặt mình phụ trách và phiếu sửa chữa mình tạo, phụ trách hoặc tham gia</dd></div>
       </dl>
-      <p class="hint">Phân quyền này tách riêng với Alexios: vai trò bên Alexios không ảnh hưởng tới T-Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới thực hiện trên Alexios rồi thêm vào đây.</p>
+      <p class="hint">Phân quyền này tách riêng với Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới trên Alexios rồi thêm vào đây.</p>
     </div>
     <p class="count" id="mCount"></p>
     <div class="list" id="memberList"></div>
@@ -481,17 +549,19 @@ body:not(.is-owner) .need-owner{display:none!important}
   <p class="foot">T-Alexios · Nhật ký dịch vụ kỹ thuật SatiCus · dùng chung tài khoản Alexios</p>
 </main>
 
-<button class="btn primary fab" type="button" data-act="newVisit">+ Ghi nhật ký</button>
+<button class="btn primary fab" type="button" data-act="fab">+ Ghi sửa chữa</button>
 
 <nav class="tabbar" aria-label="Điều hướng nhanh">
   <button type="button" data-tab="overview"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>Tổng quan</button>
-  <button type="button" data-tab="visits"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Nhật ký</button>
-  <button type="button" data-tab="equipment"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11" rx="2"/><path d="M8 20h8M12 16v4"/><circle cx="8" cy="10.5" r="1.6"/><path d="M12 9h5M12 12h3"/></svg>Máy</button>
+  <button type="button" data-tab="install"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg>Lắp đặt</button>
+  <button type="button" data-tab="repair"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>Sửa chữa</button>
+  <button type="button" data-tab="maint"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m9.5 15 2 2 3.5-3.5"/></svg>Bảo trì<span class="cnt" id="cntMaintM" hidden></span></button>
   <button type="button" data-act="more" aria-haspopup="dialog"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>Khác</button>
 </nav>
 <div class="sheet" id="moreSheet" hidden role="dialog" aria-modal="true" aria-label="Mục khác">
   <div class="inner">
     <p class="eyebrow" id="sheetMe" style="padding:0 4px 6px"></p>
+    <button class="btn" type="button" data-tab="equipment">Máy đã lắp</button>
     <button class="btn" type="button" data-tab="customers">Khách hàng</button>
     <button class="btn need-owner" type="button" data-tab="members">Thành viên</button>
     <a class="btn" href="https://alex-workspace.pages.dev/app">Về Alexios</a>
@@ -513,13 +583,13 @@ const SUPABASE_KEY = 'sb_publishable_DnACTiOfgWnETmyD8KXv2Q_Qw9mH5o_';
 const USERNAME_DOMAIN = 'internal.saticus.local';
 const LEAD_ROLES = ['super_admin','ceo','cto_coo'];
 const ROLE_LABEL = {super_admin:'Super Admin', ceo:'CEO', cto_coo:'CTO/COO', technician:'Kỹ thuật'};
-
-const WORK_TYPES = {lap_dat:'Lắp đặt', bao_tri:'Bảo trì', sua_chua:'Sửa chữa', hieu_chuan:'Hiệu chuẩn', kiem_tra:'Kiểm tra / khảo sát', dao_tao:'Đào tạo', khac:'Khác'};
-const RESULTS = {hoan_thanh:['Hoàn thành','ok'], chua_xong:['Chưa xong','bad'], cho_linh_kien:['Chờ linh kiện','warn'], theo_doi:['Theo dõi thêm','warn']};
-const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'Hết bảo hành', none:'Chưa nhập hạn BH'};
+const TESTS = ['IQ','OQ','PQ','FAT','SAT'];
+const RESULTS = {chua_xong:['Chưa xong','bad'], cho_linh_kien:['Chờ linh kiện','warn'], theo_doi:['Theo dõi thêm','warn'], hoan_thanh:['Hoàn thành','ok']};
+const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'Hết bảo hành', none:'Chưa có hạn BH'};
+const REMIND_DAYS = 14;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], members:[], customers:[], equipment:[], visits:[], f:{type:'', result:'', warranty:''}};
+const S = {me:null, staff:[], members:[], customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -528,6 +598,7 @@ function esc(v){return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<
 function fmtDate(d){ if(!d) return ''; const [y,m,dd] = String(d).slice(0,10).split('-'); return `${dd}/${m}/${y}`; }
 function today(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
 function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function addMonths(iso, n){ const [y,m,d]=iso.split('-').map(Number); const t=new Date(Date.UTC(y,m-1+n,1)); const last=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth()+1,0)).getUTCDate(); t.setUTCDate(Math.min(d,last)); return t.toISOString().slice(0,10); }
 function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d'); }
 let toastT=null;
 function toast(msg, err){ const t=$('#toast'); t.textContent=msg; t.classList.toggle('err', !!err); t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'), 2800); }
@@ -542,9 +613,9 @@ function warrantyState(e, refDate){
   if(left <= 60) return {key:'soon', label:`Còn BH ${left} ngày`, cls:'warn'};
   return {key:'in', label:'BH đến '+fmtDate(e.warranty_end), cls:'ok'};
 }
-function opts(map){ return Object.entries(map).map(([k,v])=>`<option value="${k}">${esc(Array.isArray(v)?v[0]:v)}</option>`).join(''); }
+function opts(map, sel){ return Object.entries(map).map(([k,v])=>`<option value="${k}" ${k===sel?'selected':''}>${esc(Array.isArray(v)?v[0]:v)}</option>`).join(''); }
 function fail(err){ console.error(err); const m = String(err?.message||err); toast(m.includes('Super Admin') ? m : 'Lỗi: '+m, true); }
-function resultChip(r){ const [l,c] = RESULTS[r] || [r,'']; return `<span class="chip ${c}">${esc(l)}</span>`; }
+function resultChip(r){ const [l,c] = RESULTS[r] || [r||'—','']; return `<span class="chip ${c}">${esc(l)}</span>`; }
 function staffName(id, fallback){ const p = S.staff.find(x=>x.id===id); return p ? (p.full_name || p.username) : (fallback || ''); }
 function isOpen(v){ return v.result!=='hoan_thanh'; }
 function deadlineState(v){
@@ -560,6 +631,10 @@ function deadlineChip(v){ const d = deadlineState(v); return d ? `<span class="c
 function involved(v, uid){ return v.technician_id===uid || v.assignee_id===uid || (v.participant_ids||[]).includes(uid); }
 function canEditVisit(v){ return involved(v, S.me.id) || isLead(); }
 function participantNames(v){ return (v.participant_ids||[]).map(id=>staffName(id)).filter(Boolean); }
+function val(root, name){ const el = root.querySelector(`[name="${name}"]`); if(!el) return null; if(el.type==='checkbox') return el.checked; const v = el.value.trim(); return v===''?null:v; }
+function num(root, name){ const v = val(root,name); return v==null ? null : Math.max(0, parseInt(v,10)||0); }
+function busy(btn, on){ btn.disabled = on; }
+function repairs(){ return S.visits.filter(v=>v.work_type!=='lap_dat'); }
 
 /* ===== Theme ===== */
 function themeNow(){ return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
@@ -592,7 +667,6 @@ $('#loginForm').addEventListener('submit', async ev=>{
   } finally { btn.classList.remove('busy'); btn.disabled=false; }
 });
 async function logout(){ await sb.auth.signOut(); location.reload(); }
-
 function showLogin(msg){
   $('#appView').hidden = true; $('#loginView').hidden = false; $('#noAccess').hidden = true; $('#loginBox').hidden = false;
   if(msg){ $('#lgErr').textContent = msg; $('#lgErr').hidden = false; }
@@ -615,8 +689,7 @@ async function boot(){
   $('#meName').textContent = name;
   $('#meRole').textContent = ROLE_LABEL[svcRole] || svcRole; $('#meRole').hidden = false;
   $('#sheetMe').textContent = name + ' · ' + (ROLE_LABEL[svcRole] || svcRole);
-  const d = new Date();
-  $('#todayPill').textContent = d.toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
+  $('#todayPill').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
   $('#loginView').hidden = true; $('#appView').hidden = false;
   await loadAll();
   showTab(ssGet('tab') || 'overview');
@@ -625,15 +698,17 @@ function ssGet(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} 
 function ssSet(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }
 
 async function loadAll(){
-  const [st,c,e,v] = await Promise.all([
+  const [st,c,e,v,i,m] = await Promise.all([
     sb.rpc('svc_staff'),
     sb.from('svc_customers').select('*').order('name'),
     sb.from('svc_equipment').select('*').order('name'),
-    sb.from('svc_visits').select('*').order('visit_date',{ascending:false}).order('created_at',{ascending:false}).limit(2000)
+    sb.from('svc_visits').select('*').order('visit_date',{ascending:false}).order('created_at',{ascending:false}).limit(2000),
+    sb.from('svc_installations').select('*').order('created_at',{ascending:false}),
+    sb.from('svc_maintenance').select('*').order('due_date')
   ]);
-  if(c.error||e.error||v.error) return fail(c.error||e.error||v.error);
+  const err = c.error||e.error||v.error||i.error||m.error; if(err) return fail(err);
   S.staff = st.error ? [{id:S.me.id, full_name:S.me.full_name, username:S.me.username, role:S.me.role}] : (st.data||[]);
-  S.customers=c.data; S.equipment=e.data; S.visits=v.data;
+  S.customers=c.data; S.equipment=e.data; S.visits=v.data; S.installs=i.data; S.maint=m.data;
   const cur = $('#vTech').value;
   $('#vTech').innerHTML = '<option value="">Tất cả</option>' + S.staff.map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('');
   $('#vTech').value = cur;
@@ -641,31 +716,36 @@ async function loadAll(){
 }
 
 /* ===== Điều hướng ===== */
+const SHEET_TABS = ['equipment','customers','members'];
 function showTab(tab){
   if(!document.querySelector(`[data-view="${tab}"]`) || (tab==='members' && S.me?.role!=='super_admin')) tab='overview';
+  ssSet('tab', tab); S.tab = tab;
   if(tab==='members') renderMembers();
-  ssSet('tab', tab);
   $$('[data-view]').forEach(s=>s.hidden = s.dataset.view!==tab);
   $$('.nav [data-tab], .tabbar [data-tab]').forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
-  if(tab==='customers' || tab==='members'){ const m=$('.tabbar [data-act=more]'); m.setAttribute('aria-current','page'); } else $('.tabbar [data-act=more]').removeAttribute('aria-current');
+  const more = $('.tabbar [data-act=more]'); if(SHEET_TABS.includes(tab)) more.setAttribute('aria-current','page'); else more.removeAttribute('aria-current');
+  $('.fab').textContent = tab==='install' ? '+ Lắp đặt mới' : '+ Ghi sửa chữa';
+  $('.fab').hidden = ['maint','members','customers','equipment'].includes(tab);
   $('#moreSheet').hidden = true;
   window.scrollTo(0,0);
 }
 document.addEventListener('click', ev=>{
-  const t = ev.target.closest('[data-tab]'); if(t){ showTab(t.dataset.tab); return; }
+  const t = ev.target.closest('[data-tab]'); if(t && !t.closest('.dlg')){ showTab(t.dataset.tab); return; }
   const a = ev.target.closest('[data-act]'); if(!a) return;
   ({
-    logout, newVisit:()=>openVisitForm(), newEquip:()=>openEquipmentForm(), newCust:()=>openCustomerForm(),
+    logout, newRepair:()=>openRepairForm(), newInstall:()=>openInstallForm(), newEquip:()=>openEquipmentForm(), newCust:()=>openCustomerForm(),
+    fab:()=> S.tab==='install' ? openInstallForm() : openRepairForm(),
     export:exportCSV, addMember:openAddMember, more:()=>{$('#moreSheet').hidden=false;}, closeSheet:()=>{$('#moreSheet').hidden=true;},
-    seeOpen:()=>{ S.f.result='__open'; renderVisits(); showTab('visits'); },
+    seeOpen:()=>{ S.f.result='__open'; renderRepairs(); showTab('repair'); },
     seeSoon:()=>{ S.f.warranty='soon'; renderEquipment(); showTab('equipment'); }
   })[a.dataset.act]?.();
 });
 $('#moreSheet').addEventListener('click', e=>{ if(e.target===$('#moreSheet')) $('#moreSheet').hidden=true; });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ $('#moreSheet').hidden=true; const m=$$('.dlg').pop(); if(m) m.remove(); } });
-['#vSearch','#vTech','#vFrom','#vTo'].forEach(s=>$(s).addEventListener('input', renderVisits));
+['#vSearch','#vTech','#vFrom','#vTo'].forEach(s=>$(s).addEventListener('input', renderRepairs));
 $('#vMore').onclick = ()=>{ const a=$('#vAdv'); a.hidden=!a.hidden; $('#vMore').setAttribute('aria-expanded', !a.hidden); };
-$('#vClear').onclick = ()=>{ $('#vTech').value=''; $('#vFrom').value=''; $('#vTo').value=''; $('#vSearch').value=''; S.f.type=''; S.f.result=''; renderVisits(); };
+$('#vClear').onclick = ()=>{ $('#vTech').value=''; $('#vFrom').value=''; $('#vTo').value=''; $('#vSearch').value=''; S.f.result=''; renderRepairs(); };
+$('#iSearch').addEventListener('input', renderInstalls);
 $('#eSearch').addEventListener('input', renderEquipment);
 $('#cSearch').addEventListener('input', renderCustomers);
 
@@ -673,35 +753,42 @@ function chipGroup(el, items, cur, onPick){
   el.innerHTML = items.map(([k,l,n])=>`<button type="button" class="chip-f" data-k="${k}" aria-pressed="${k===cur}">${esc(l)}${n!=null?` <span class="n">${n}</span>`:''}</button>`).join('');
   el.querySelectorAll('.chip-f').forEach(b=>b.onclick=()=>onPick(b.dataset.k));
 }
+function setCount(id, n){ const el=$(id); if(!el) return; el.textContent=n; el.hidden=!n; }
 
-/* ===== Render ===== */
-function renderAll(){ renderOverview(); renderVisits(); renderEquipment(); renderCustomers(); }
-
-function visitCard(v){
-  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
-  const [y,m,d] = String(v.visit_date).split('-');
-  const asg = staffName(v.assignee_id, v.assignee_name);
-  const parts = participantNames(v);
-  const summary = v.next_action || v.cause || v.action || v.problem;
-  return `<button type="button" class="vcard" data-visit="${v.id}">
-    <span class="dbox"><b>${d}</b><span>Th${Number(m)}/${y.slice(2)}</span></span>
-    <span><p class="ttl">${esc(c?.name||'(không rõ khách hàng)')}</p>
-      <p class="sub">${esc(eqLabel(e))}</p>
-      <span class="who"><span>Phụ trách <b>${esc(asg||'—')}</b></span>${parts.length?`<span>Tham gia <b>${esc(parts.join(', '))}</b></span>`:''}<span>Tạo bởi ${esc(staffName(v.technician_id, v.technician_name)||'—')}</span></span>
-      ${summary?`<p class="desc">${esc(summary)}</p>`:''}</span>
-    <span class="right"><span class="chip blue">${esc(WORK_TYPES[v.work_type]||v.work_type)}</span>${resultChip(v.result)}${deadlineChip(v)}</span>
-  </button>`;
+/* ===== Hộp thoại ===== */
+function modal(eyebrow, title, body, onMount){
+  const wrap = document.createElement('div'); wrap.className='dlg'; wrap.setAttribute('role','dialog'); wrap.setAttribute('aria-modal','true');
+  wrap.innerHTML = `<div class="box"><div class="hd"><div><p class="eyebrow">${esc(eyebrow)}</p><h2>${esc(title)}</h2></div><button class="xbtn" aria-label="Đóng">×</button></div><div class="bd">${body}</div></div>`;
+  $('#modalRoot').appendChild(wrap);
+  const close = ()=>wrap.remove();
+  wrap.querySelector('.xbtn').onclick = close;
+  wrap.addEventListener('mousedown', ev=>{ if(ev.target===wrap) close(); });
+  onMount && onMount(wrap, close);
+  const first = wrap.querySelector('.bd input:not([type=checkbox]), .bd select, .bd textarea'); if(first && window.innerWidth>860) first.focus();
+  return close;
 }
-function bindVisitCards(root){ root.querySelectorAll('[data-visit]').forEach(el=>el.onclick=()=>openVisitDetail(el.dataset.visit)); }
+function delButton(btn, run){
+  btn.onclick = async ()=>{ if(btn.dataset.sure!=='1'){ btn.dataset.sure='1'; btn.textContent='Bấm lần nữa để xoá'; return; } await run(); };
+}
 
+/* ===== Render chung ===== */
+function renderAll(){ renderOverview(); renderInstalls(); renderRepairs(); renderMaint(); renderEquipment(); renderCustomers(); updateBadges(); }
+function updateBadges(){
+  setCount('#cntInstall', S.installs.filter(x=>installStage(x)!=='done').length);
+  setCount('#cntRepair', repairs().filter(v=>isOpen(v) && deadlineState(v)?.key==='over').length);
+  const due = maintSchedule().filter(x=>!x.done && (x.state==='over' || x.state==='soon')).length;
+  setCount('#cntMaint', due); setCount('#cntMaintM', due);
+}
+
+/* ===== Tổng quan ===== */
 function byUrgency(a,b){
   const da=a.deadline||'9999-12-31', db=b.deadline||'9999-12-31';
   return da===db ? String(b.visit_date).localeCompare(String(a.visit_date)) : da.localeCompare(db);
 }
 function renderOverview(){
-  const ym = today().slice(0,7);
-  const month = S.visits.filter(v=>String(v.visit_date).startsWith(ym));
-  const open = S.visits.filter(isOpen).sort(byUrgency);
+  const ym = today().slice(0,7), rp = repairs();
+  const month = rp.filter(v=>String(v.visit_date).startsWith(ym));
+  const open = rp.filter(isOpen).sort(byUrgency);
   const soon = S.equipment.filter(e=>warrantyState(e).key==='soon').sort((a,b)=>a.warranty_end.localeCompare(b.warranty_end));
   $('#stMonth').textContent = month.length;
   $('#stMine').textContent = open.filter(v=>v.assignee_id===S.me.id).length;
@@ -713,10 +800,254 @@ function renderOverview(){
   bindEquipCards($('#warrantyList'));
 }
 
-function filteredVisits(){
+/* ===== LẮP ĐẶT ===== */
+function s1Done(x){ return !!(x.customer_id && x.machine_name && x.brand && x.planned_date && x.serial && x.contract_no && x.maint_duration_months!=null && x.maint_interval_months); }
+function s2Done(x){ return !!x.handover_date; }
+function s3Done(x){ return (x.tests||[]).every(t=>x.test_dates?.[t]) && !!x.acceptance_date && x.warranty_months!=null; }
+function installStage(x){ return !s1Done(x) ? 1 : !s2Done(x) ? 2 : !s3Done(x) ? 3 : 'done'; }
+function stagesHtml(x){
+  const st = installStage(x);
+  return `<span class="stages">${[1,2,3].map(n=>{
+    const cls = st==='done' || n < st ? 'done' : n===st ? 'cur' : '';
+    return `<span class="stg ${cls}"><i>${cls==='done'?'✓':n}</i>Đợt ${n}</span>`;
+  }).join('')}${st==='done'?'<span class="chip ok">Hoàn tất</span>':''}</span>`;
+}
+function testChips(x){
+  return (x.tests||[]).length ? `<span class="tchips-s">${x.tests.map(t=>`<span class="chip ${x.test_dates?.[t]?'ok':''}">${t}${x.test_dates?.[t]?' ✓':''}</span>`).join('')}</span>` : '';
+}
+function installCard(x){
+  const c = custById(x.customer_id);
+  const st = installStage(x);
+  const nextTxt = st===1 ? `Dự kiến ${fmtDate(x.planned_date)||'—'}` : st===2 ? 'Chờ ký biên bản giao nhận' : st===3 ? `Giao nhận ${fmtDate(x.handover_date)} · chờ nghiệm thu` : `Nghiệm thu ${fmtDate(x.acceptance_date)}`;
+  return `<button type="button" class="icard" data-inst="${x.id}">
+    <span class="top"><span><p class="ttl">${esc(c?.name||'(không rõ khách hàng)')}</p>
+      <p class="sub">${esc([x.machine_name, [x.brand,x.model].filter(Boolean).join(' '), x.serial?'SN '+x.serial:''].filter(Boolean).join(' · '))}</p></span>${stagesHtml(x)}</span>
+    <span class="who"><span>HĐ <b>${esc(x.contract_no||'—')}</b></span><span>Phụ trách <b>${esc(staffName(x.owner_id, x.owner_name)||'—')}</b></span><span>${esc(nextTxt)}</span></span>
+    ${testChips(x)}
+  </button>`;
+}
+function renderInstalls(){
+  const cnt = k => S.installs.filter(x=>String(installStage(x))===k).length;
+  chipGroup($('#iStage'), [['','Tất cả',S.installs.length],['1','Đợt 1',cnt('1')],['2','Đợt 2',cnt('2')],['3','Đợt 3',cnt('3')],['done','Hoàn tất',cnt('done')]], S.f.stage, k=>{S.f.stage=k; renderInstalls();});
+  const q = norm($('#iSearch').value);
+  const list = S.installs.filter(x=>{
+    if(S.f.stage && String(installStage(x))!==S.f.stage) return false;
+    if(q && !norm([custById(x.customer_id)?.name, x.machine_name, x.brand, x.model, x.serial, x.contract_no, staffName(x.owner_id, x.owner_name)].join(' ')).includes(q)) return false;
+    return true;
+  });
+  $('#iCount').textContent = `${list.length} hồ sơ lắp đặt`;
+  $('#installList').innerHTML = list.map(installCard).join('') || '<div class="empty">Chưa có hồ sơ lắp đặt. Bấm "+ Lắp đặt mới" để bắt đầu.</div>';
+  $$('#installList [data-inst]').forEach(el=>el.onclick=()=>openInstallDetail(el.dataset.inst));
+}
+function customerSelect(selected, extra=''){
+  return `<select name="customer_id" required ${extra}><option value="">— Chọn khách hàng —</option>${S.customers.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`;
+}
+function openInstallForm(x){
+  x = x || {};
+  const isNew = !x.id;
+  const tests = x.tests || [];
+  const td = x.test_dates || {};
+  const brands = [...new Set([...S.equipment.map(e=>e.brand), ...S.installs.map(i=>i.brand)].filter(Boolean))];
+  modal('Lắp đặt', isNew ? 'Hồ sơ lắp đặt mới' : (custById(x.customer_id)?.name || 'Cập nhật lắp đặt'), `
+    <form>
+      <div class="stage-box" data-stage="1">
+        <div class="h"><b>Đợt 1 · Thông tin lắp đặt</b><span class="eyebrow">Phụ trách: ${esc(isNew ? (S.me.full_name||S.me.username) : staffName(x.owner_id, x.owner_name))}</span></div>
+        <div class="grid2">
+          <label class="full">Khách hàng *<span class="inline">${customerSelect(x.customer_id)}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
+          <label>Tên máy *<input name="machine_name" required value="${esc(x.machine_name)}" placeholder="VD: Máy đo độ hòa tan"></label>
+          <label>Hãng *<input name="brand" value="${esc(x.brand)}" list="brandList2"></label>
+          <label>Model<input name="model" value="${esc(x.model)}"></label>
+          <label>Số serial *<input name="serial" value="${esc(x.serial)}"></label>
+          <label>Số hợp đồng *<input name="contract_no" value="${esc(x.contract_no)}"></label>
+          <label>Ngày dự kiến lắp đặt *<input type="date" name="planned_date" value="${esc(x.planned_date)}"></label>
+          <label>Thời gian bảo trì (tháng) *<input type="number" min="0" name="maint_duration_months" value="${esc(x.maint_duration_months)}" placeholder="VD: 24"></label>
+          <label>Bảo trì mỗi (tháng/lần) *<input type="number" min="1" name="maint_interval_months" value="${esc(x.maint_interval_months)}" placeholder="VD: 6"></label>
+          <div class="fieldset full">Thực hiện<div class="tests" data-tests>${TESTS.map(t=>`<button type="button" class="tbox" data-t="${t}" aria-pressed="${tests.includes(t)}"><span class="bx">${tests.includes(t)?'✓':''}</span>${t}</button>`).join('')}</div></div>
+          <datalist id="brandList2">${brands.map(b=>`<option value="${esc(b)}">`).join('')}</datalist>
+        </div>
+      </div>
+      <div class="stage-box" data-stage="2" style="margin-top:14px">
+        <div class="h"><b>Đợt 2 · Giao nhận</b></div>
+        <div class="grid2"><label>Ngày ký biên bản giao nhận *<input type="date" name="handover_date" value="${esc(x.handover_date)}"></label></div>
+      </div>
+      <div class="stage-box" data-stage="3" style="margin-top:14px">
+        <div class="h"><b>Đợt 3 · Nghiệm thu</b></div>
+        <div class="tgrid" data-tdates>${TESTS.map(t=>`<label data-tdl="${t}">Ngày hoàn thành ${t} *<input type="date" data-td="${t}" value="${esc(td[t])}"></label>`).join('')}</div>
+        <div class="grid2">
+          <label>Ngày ký biên bản nghiệm thu *<input type="date" name="acceptance_date" value="${esc(x.acceptance_date)}"></label>
+          <label>Thời hạn bảo hành (tháng) *<input type="number" min="0" name="warranty_months" value="${esc(x.warranty_months)}" placeholder="VD: 12"></label>
+          <p class="hint full" data-wnote></p>
+        </div>
+      </div>
+      <label style="margin-top:14px">Ghi chú<textarea name="notes" style="min-height:60px">${esc(x.notes)}</textarea></label>
+      <div class="acts" style="margin-top:16px">${!isNew&&(x.owner_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<span class="hint" data-hint></span><button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    const picked = ()=>[...w.querySelectorAll('[data-tests] .tbox[aria-pressed="true"]')].map(b=>b.dataset.t);
+    const collect = ()=>{
+      const t = picked(), dates = {};
+      w.querySelectorAll('[data-td]').forEach(i=>{ if(t.includes(i.dataset.td) && i.value) dates[i.dataset.td] = i.value; });
+      return {customer_id:val(f,'customer_id'), machine_name:val(f,'machine_name'), brand:val(f,'brand'), model:val(f,'model'), serial:val(f,'serial'),
+        contract_no:val(f,'contract_no'), planned_date:val(f,'planned_date'), maint_duration_months:num(f,'maint_duration_months'), maint_interval_months:num(f,'maint_interval_months'),
+        tests:t, handover_date:val(f,'handover_date'), test_dates:dates, acceptance_date:val(f,'acceptance_date'), warranty_months:num(f,'warranty_months'), notes:val(f,'notes')};
+    };
+    const refresh = ()=>{
+      const d = collect();
+      const st = installStage(d);
+      w.querySelector('[data-stage="2"]').hidden = !s1Done(d);
+      w.querySelector('[data-stage="3"]').hidden = !(s1Done(d) && s2Done(d));
+      w.querySelectorAll('[data-tdl]').forEach(l=>l.hidden = !d.tests.includes(l.dataset.tdl));
+      w.querySelector('[data-tdates]').hidden = !d.tests.length;
+      w.querySelector('[data-wnote]').textContent = d.acceptance_date && d.warranty_months!=null ? `Bảo hành đến ${fmtDate(addMonths(d.acceptance_date, d.warranty_months))}` + (d.maint_interval_months ? ` · bảo trì đầu tiên ${fmtDate(addMonths(d.acceptance_date, d.maint_interval_months))}` : '') : '';
+      w.querySelector('[data-hint]').textContent = st===1 ? 'Điền đủ Đợt 1 để mở Đợt 2' : st===2 ? 'Nhập ngày giao nhận để mở Đợt 3' : st===3 ? 'Điền đủ Đợt 3 để hoàn tất' : 'Đã đủ thông tin 3 đợt';
+    };
+    w.querySelector('[data-tests]').addEventListener('click', ev=>{ const b=ev.target.closest('.tbox'); if(!b) return; const on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed', on); b.querySelector('.bx').textContent = on?'✓':''; refresh(); });
+    f.addEventListener('input', refresh); f.addEventListener('change', refresh);
+    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{ f.querySelector('[name=customer_id]').outerHTML = customerSelect(c.id); refresh(); });
+    refresh();
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const d = collect();
+      if(!d.customer_id || !d.machine_name) return toast('Chọn khách hàng và nhập tên máy', true);
+      if(!s1Done(d)) toast('Đã lưu nháp Đợt 1. Điền đủ các mục có dấu * để sang Đợt 2.');
+      const btn=f.querySelector('[type=submit]'); busy(btn,true);
+      let res;
+      if(isNew){ d.owner_id = S.me.id; d.owner_name = S.me.full_name || S.me.username; res = await sb.from('svc_installations').insert(d).select().single(); }
+      else res = await sb.from('svc_installations').update(d).eq('id', x.id).select().single();
+      busy(btn,false);
+      if(res.error) return fail(res.error.code==='23505' ? {message:'Serial này của hãng đã có trong danh sách máy.'} : (res.error.code==='PGRST116' ? {message:'Bạn không có quyền sửa hồ sơ này.'} : res.error));
+      close(); await loadAll(); if(s1Done(d)) toast('Đã lưu hồ sơ lắp đặt');
+      openInstallDetail(res.data.id);
+    };
+    const del = w.querySelector('[data-del]');
+    if(del) delButton(del, async ()=>{
+      const {error} = await sb.from('svc_installations').delete().eq('id', x.id);
+      if(error) return fail(error);
+      close(); await loadAll(); toast('Đã xoá hồ sơ lắp đặt (máy vẫn giữ trong danh sách Máy đã lắp)');
+    });
+  });
+}
+function maintFor(x){
+  if(!x.acceptance_date || !x.maint_interval_months || x.maint_duration_months==null) return [];
+  const end = addMonths(x.acceptance_date, x.maint_duration_months), out=[];
+  for(let k=1; k<200; k++){
+    const due = addMonths(x.acceptance_date, k*x.maint_interval_months);
+    if(due > end) break;
+    const rec = S.maint.find(m=>m.installation_id===x.id && m.due_date===due);
+    const left = daysBetween(today(), due);
+    out.push({inst:x, k, due, rec, done:!!rec, left, state: rec ? 'done' : left < 0 ? 'over' : left <= REMIND_DAYS ? 'soon' : 'later'});
+  }
+  out.forEach(o=>o.total = out.length);
+  return out;
+}
+function maintSchedule(){ return S.installs.flatMap(maintFor); }
+function openInstallDetail(id){
+  const x = S.installs.find(i=>i.id===id); if(!x) return;
+  const c = custById(x.customer_id), e = eqById(x.equipment_id);
+  const canEdit = x.owner_id===S.me.id || isLead();
+  const st = installStage(x);
+  const sched = maintFor(x);
+  const td = x.test_dates || {};
+  modal('Lắp đặt', c?.name || 'Hồ sơ lắp đặt', `
+    ${stagesHtml(x)}
+    <div class="panel"><h2>Đợt 1 · Thông tin lắp đặt</h2><dl class="specs left">
+      <div><dt>Máy</dt><dd>${e?`<a href="#" data-eq>${esc(eqLabel(e))}</a>`:esc([x.machine_name, x.brand, x.model].filter(Boolean).join(' · '))}</dd></div>
+      <div><dt>Hãng</dt><dd>${esc(x.brand||'—')}</dd></div>
+      <div><dt>Số serial</dt><dd>${esc(x.serial||'—')}</dd></div>
+      <div><dt>Số hợp đồng</dt><dd>${esc(x.contract_no||'—')}</dd></div>
+      <div><dt>Ngày dự kiến</dt><dd>${fmtDate(x.planned_date)||'—'}</dd></div>
+      <div><dt>Phụ trách</dt><dd><b>${esc(staffName(x.owner_id, x.owner_name)||'—')}</b></dd></div>
+      <div><dt>Bảo trì</dt><dd>${x.maint_duration_months!=null&&x.maint_interval_months?`${x.maint_duration_months} tháng, ${x.maint_interval_months} tháng/lần`:'—'}</dd></div>
+      <div><dt>Thực hiện</dt><dd>${(x.tests||[]).join(', ')||'Không'}</dd></div>
+    </dl></div>
+    ${st!==1?`<div class="panel"><h2>Đợt 2 · Giao nhận</h2><dl class="specs left"><div><dt>Ký biên bản giao nhận</dt><dd>${fmtDate(x.handover_date)||'—'}</dd></div></dl></div>`:''}
+    ${st===3||st==='done'?`<div class="panel"><h2>Đợt 3 · Nghiệm thu</h2><dl class="specs left">
+      ${(x.tests||[]).map(t=>`<div><dt>Hoàn thành ${t}</dt><dd>${fmtDate(td[t])||'—'}</dd></div>`).join('')}
+      <div><dt>Ký biên bản nghiệm thu</dt><dd>${fmtDate(x.acceptance_date)||'—'}</dd></div>
+      <div><dt>Thời hạn bảo hành</dt><dd>${x.warranty_months!=null?x.warranty_months+' tháng'+(x.acceptance_date?' · đến '+fmtDate(addMonths(x.acceptance_date,x.warranty_months)):''):'—'}</dd></div>
+    </dl></div>`:''}
+    ${sched.length?`<div class="panel"><h2>Lịch bảo trì (${sched.filter(s=>s.done).length}/${sched.length} lần)</h2><div class="sched">${sched.map(s=>`<div><b>${fmtDate(s.due)}</b><span class="m">Lần ${s.k}/${s.total}${s.rec?' · đã làm '+fmtDate(s.rec.done_date)+' bởi '+esc(staffName(s.rec.done_by, s.rec.done_by_name)):''}</span>${maintChip(s)}</div>`).join('')}</div></div>`:''}
+    ${x.notes?`<div class="panel"><div class="sec"><h3>Ghi chú</h3><p>${esc(x.notes)}</p></div></div>`:''}
+    <div class="acts">${canEdit?`<button class="btn primary" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}</div>`,
+  (w, close)=>{
+    const a = w.querySelector('[data-eq]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openEquipmentDetail(e.id); };
+    const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openInstallForm(x); };
+  });
+}
+
+/* ===== BẢO TRÌ ===== */
+function maintChip(s){
+  if(s.done) return '<span class="chip ok">Đã bảo trì</span>';
+  if(s.state==='over') return `<span class="chip bad">Quá hạn ${-s.left} ngày</span>`;
+  if(s.state==='soon') return `<span class="chip warn">${s.left===0?'Hôm nay':'Còn '+s.left+' ngày'}</span>`;
+  return '<span class="chip blue">Theo lịch</span>';
+}
+function maintRow(s){
+  const x = s.inst, c = custById(x.customer_id), e = eqById(x.equipment_id);
+  const [y,m,d] = s.due.split('-');
+  return `<div class="mrow2">
+    <span class="dbox"><b>${d}</b><span>Th${Number(m)}/${y.slice(2)}</span></span>
+    <span><p class="ttl">${esc(c?.name||'—')}</p><p class="sub">${esc(e?eqLabel(e):x.machine_name)} · Lần ${s.k}/${s.total}</p>
+      ${s.rec?`<p class="sub">Đã làm ${fmtDate(s.rec.done_date)} · ${esc(staffName(s.rec.done_by, s.rec.done_by_name))}${s.rec.notes?' · '+esc(s.rec.notes):''}</p>`:''}</span>
+    <span class="right">${maintChip(s)}${!s.done?`<button class="btn sm primary" data-mdone="${x.id}|${s.due}">Đã bảo trì</button>`:''}<button class="btn sm ghost" data-minst="${x.id}">Hồ sơ</button></span>
+  </div>`;
+}
+function renderMaint(){
+  const all = maintSchedule();
+  const n = k => all.filter(s=> k==='due' ? (!s.done && (s.state==='over'||s.state==='soon')) : k==='over' ? s.state==='over' : k==='upcoming' ? s.state!=='done' : s.done).length;
+  chipGroup($('#mFilter'), [['due','Cần làm',n('due')],['over','Quá hạn',n('over')],['upcoming','Tất cả lịch sắp tới',n('upcoming')],['done','Đã làm',n('done')]], S.f.maint, k=>{S.f.maint=k; renderMaint();});
+  let list = all.filter(s=> S.f.maint==='due' ? (!s.done && (s.state==='over'||s.state==='soon')) : S.f.maint==='over' ? s.state==='over' : S.f.maint==='upcoming' ? s.state!=='done' : s.done);
+  list.sort((a,b)=> S.f.maint==='done' ? b.due.localeCompare(a.due) : a.due.localeCompare(b.due));
+  $('#mCount2').textContent = `${list.length} lần bảo trì`;
+  const noSched = S.installs.filter(x=>!maintFor(x).length).length;
+  $('#maintList').innerHTML = list.map(maintRow).join('') || `<div class="empty">${S.f.maint==='due'?'Không có lần bảo trì nào cần làm trong 14 ngày tới.':'Không có dữ liệu.'}${noSched?` <br><span class="hint">${noSched} hồ sơ lắp đặt chưa có lịch (chưa nghiệm thu hoặc chưa khai báo chu kỳ bảo trì).</span>`:''}</div>`;
+  bindMaintRows($('#maintList'));
+}
+function bindMaintRows(root){
+  root.querySelectorAll('[data-mdone]').forEach(b=>b.onclick=()=>{ const [id,due]=b.dataset.mdone.split('|'); openMaintDone(id, due); });
+  root.querySelectorAll('[data-minst]').forEach(b=>b.onclick=()=>openInstallDetail(b.dataset.minst));
+}
+function openMaintDone(instId, due){
+  const x = S.installs.find(i=>i.id===instId); if(!x) return;
+  modal('Bảo trì', 'Ghi nhận đã bảo trì', `
+    <form class="grid2">
+      <p class="hint full">${esc(custById(x.customer_id)?.name||'')} · ${esc(x.machine_name)} · lịch ngày ${fmtDate(due)}</p>
+      <label>Ngày thực hiện *<input type="date" name="done_date" required value="${today()}"></label>
+      <label class="full">Ghi chú<textarea name="notes" placeholder="Hạng mục đã làm, tình trạng máy, đề xuất"></textarea></label>
+      <div class="acts full"><button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const btn=f.querySelector('[type=submit]'); busy(btn,true);
+      const {error} = await sb.from('svc_maintenance').insert({installation_id:instId, due_date:due, done_date:val(f,'done_date')||today(), done_by:S.me.id, done_by_name:S.me.full_name||S.me.username, notes:val(f,'notes')});
+      busy(btn,false);
+      if(error) return fail(error);
+      close(); await loadAll(); toast('Đã ghi nhận bảo trì');
+    };
+  });
+}
+
+/* ===== SỬA CHỮA ===== */
+function visitCard(v){
+  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+  const [y,m,d] = String(v.visit_date).split('-');
+  const asg = staffName(v.assignee_id, v.assignee_name);
+  const parts = participantNames(v);
+  const summary = v.remaining || v.problem || v.next_action || v.solution || v.cause || v.action;
+  return `<button type="button" class="vcard" data-visit="${v.id}">
+    <span class="dbox"><b>${d}</b><span>Th${Number(m)}/${y.slice(2)}</span></span>
+    <span><p class="ttl">${esc(c?.name||'(không rõ khách hàng)')}</p>
+      <p class="sub">${esc(eqLabel(e))}</p>
+      <span class="who"><span>Phụ trách <b>${esc(asg||'—')}</b></span>${parts.length?`<span>Tham gia <b>${esc(parts.join(', '))}</b></span>`:''}<span>Tạo bởi ${esc(staffName(v.technician_id, v.technician_name)||'—')}</span></span>
+      ${summary?`<p class="desc">${esc(summary)}</p>`:''}</span>
+    <span class="right">${resultChip(v.result)}${deadlineChip(v)}</span>
+  </button>`;
+}
+function bindVisitCards(root){ root.querySelectorAll('[data-visit]').forEach(el=>el.onclick=()=>openVisitDetail(el.dataset.visit)); }
+function filteredRepairs(){
   const q = norm($('#vSearch').value), tech=$('#vTech').value, f=$('#vFrom').value, to=$('#vTo').value;
-  return S.visits.filter(v=>{
-    if(S.f.type && v.work_type!==S.f.type) return false;
+  return repairs().filter(v=>{
     if(S.f.result==='__open'){ if(!isOpen(v)) return false; }
     else if(S.f.result==='__over'){ if(deadlineState(v)?.key!=='over') return false; }
     else if(S.f.result==='__mine'){ if(!involved(v, S.me.id)) return false; }
@@ -726,23 +1057,168 @@ function filteredVisits(){
     if(to && v.visit_date > to) return false;
     if(q){
       const e=eqById(v.equipment_id), c=e&&custById(e.customer_id);
-      if(!norm([c?.name, e?.name, e?.brand, e?.model, e?.serial, v.problem, v.cause, v.solution, v.action, v.next_action,
+      if(!norm([c?.name, e?.name, e?.brand, e?.model, e?.serial, v.problem, v.cause, v.solution, v.remaining, v.action, v.next_action,
         staffName(v.technician_id, v.technician_name), staffName(v.assignee_id, v.assignee_name), participantNames(v).join(' ')].join(' ')).includes(q)) return false;
     }
     return true;
   });
 }
-function renderVisits(){
-  const cnt = k => S.visits.filter(v=>v.work_type===k).length;
-  chipGroup($('#vType'), [['','Tất cả',S.visits.length], ...Object.entries(WORK_TYPES).filter(([k])=>cnt(k)).map(([k,l])=>[k,l,cnt(k)])], S.f.type, k=>{S.f.type=k; renderVisits();});
-  chipGroup($('#vResult'), [['','Mọi trạng thái'],['__mine','Liên quan tôi'],['__open','Đang mở'],['__over','Quá hạn'], ...Object.entries(RESULTS).map(([k,[l]])=>[k,l])], S.f.result, k=>{S.f.result=k; renderVisits();});
-  let list = filteredVisits();
+function renderRepairs(){
+  const rp = repairs();
+  chipGroup($('#vResult'), [['','Tất cả',rp.length],['__mine','Liên quan tôi'],['__open','Đang mở',rp.filter(isOpen).length],['__over','Quá hạn',rp.filter(v=>deadlineState(v)?.key==='over').length], ...Object.entries(RESULTS).map(([k,[l]])=>[k,l])], S.f.result, k=>{S.f.result=k; renderRepairs();});
+  let list = filteredRepairs();
   if(S.f.result==='__open' || S.f.result==='__over') list = list.sort(byUrgency);
-  $('#vCount').textContent = `${list.length} nhật ký` + (list.length>300?' · hiển thị 300 mới nhất':'');
-  $('#visitList').innerHTML = list.slice(0,300).map(visitCard).join('') || '<div class="empty">Chưa có nhật ký phù hợp. Bấm "+ Ghi nhật ký" để bắt đầu.</div>';
+  $('#vCount').textContent = `${list.length} phiếu sửa chữa` + (list.length>300?' · hiển thị 300 mới nhất':'');
+  $('#visitList').innerHTML = list.slice(0,300).map(visitCard).join('') || '<div class="empty">Chưa có phiếu sửa chữa phù hợp. Bấm "+ Ghi sửa chữa" để bắt đầu.</div>';
   bindVisitCards($('#visitList'));
 }
+function equipSelect(customerId, selected){
+  const list = S.equipment.filter(e=>!customerId || e.customer_id===customerId);
+  return `<select name="equipment_id" required><option value="">— Chọn máy —</option>${list.map(e=>`<option value="${e.id}" ${e.id===selected?'selected':''}>${esc(eqLabel(e))}</option>`).join('')}</select>`;
+}
+function staffOptions(selected){ return S.staff.map(p=>`<option value="${p.id}" ${p.id===selected?'selected':''}>${esc(p.full_name||p.username)}</option>`).join(''); }
+function participantPicker(selectedIds, excludeId){
+  return `<div class="pick" data-pick>${S.staff.map(p=>{
+    const on = selectedIds.includes(p.id) && p.id!==excludeId;
+    return `<button type="button" class="tchip" data-id="${p.id}" aria-pressed="${on}"><span class="bx">${on?'✓':''}</span>${esc(p.full_name||p.username)}</button>`;
+  }).join('')}</div>`;
+}
+function openRepairForm(v){
+  v = v || {};
+  const isNew = !v.id;
+  const eq = v.equipment_id && eqById(v.equipment_id);
+  const custId = eq?.customer_id || '';
+  const asg = v.assignee_id || S.me.id;
+  modal('Sửa chữa', isNew?'Phiếu sửa chữa mới':'Cập nhật sửa chữa', `
+    <form>
+      <div class="stage-box">
+        <div class="grid2">
+          <label class="full">Khách hàng *<span class="inline">${customerSelect(custId,'data-cust')}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
+          <label class="full">Máy *<span class="inline" data-eqwrap>${equipSelect(custId, v.equipment_id)}<button type="button" class="btn" data-neweq>+ Mới</button></span></label>
+          <p class="wnote full" data-winfo></p>
+          <label>Ngày *<input type="date" name="visit_date" required value="${esc(v.visit_date||today())}"></label>
+          <label>Người phụ trách *<select name="assignee_id" required>${staffOptions(asg)}</select></label>
+          <div class="fieldset full">Kỹ thuật tham gia${participantPicker(v.participant_ids||[], asg)}</div>
+        </div>
+      </div>
+      <div class="stage-box" style="margin-top:14px">
+        <div class="h"><b>Đợt 1 · Nội dung xử lý</b></div>
+        <div class="grid2">
+          <label class="full">Vấn đề *<textarea name="problem" placeholder="Hiện tượng, lỗi khách báo, lỗi ghi nhận">${esc(v.problem || v.cause)}</textarea></label>
+          <label class="full">Khắc phục<textarea name="solution" placeholder="Đã xử lý thế nào">${esc(v.solution || v.action)}</textarea></label>
+          <label class="full">Vấn đề còn lại<textarea name="remaining" placeholder="Những gì chưa xử lý xong">${esc(v.remaining)}</textarea></label>
+          <label class="full">Hướng giải quyết tiếp theo<textarea name="next_action" placeholder="Ai làm tiếp, cần chuẩn bị gì">${esc(v.next_action)}</textarea></label>
+        </div>
+      </div>
+      <div class="stage-box" data-s2 style="margin-top:14px">
+        <div class="h"><b>Đợt 2 · Deadline</b></div>
+        <div class="grid2">
+          <label>Deadline<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
+          <label>Trạng thái *<select name="result" required>${opts(RESULTS, v.result || 'chua_xong')}</select></label>
+          <label class="checkrow full"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
+        </div>
+      </div>
+      <div class="acts" style="margin-top:16px">${!isNew&&(v.technician_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    const pick = w.querySelector('[data-pick]');
+    const paintPick = ()=>pick.querySelectorAll('.tchip').forEach(b=>{ const ex=b.dataset.id===f.assignee_id.value; b.disabled=ex; if(ex) b.setAttribute('aria-pressed','false'); b.querySelector('.bx').textContent = b.getAttribute('aria-pressed')==='true'?'✓':''; });
+    pick.addEventListener('click', ev=>{ const b=ev.target.closest('.tchip'); if(!b||b.disabled) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')!=='true'); paintPick(); });
+    f.assignee_id.addEventListener('change', paintPick); paintPick();
+    const s2 = w.querySelector('[data-s2]');
+    const showS2 = ()=>{ s2.hidden = !(f.problem.value.trim()); };
+    f.problem.addEventListener('input', showS2); showS2();
+    const wrap = w.querySelector('[data-eqwrap]'), winfo = w.querySelector('[data-winfo]');
+    const custSel = ()=>f.querySelector('[data-cust]');
+    const updateWarranty = (auto)=>{
+      const e = eqById(f.querySelector('[name=equipment_id]').value);
+      if(!e){ winfo.innerHTML=''; return; }
+      const st = warrantyState(e, f.visit_date.value);
+      winfo.innerHTML = `<span class="chip ${st.cls}">${esc(st.label)}</span>`;
+      if(auto) f.under_warranty.checked = (st.key==='in'||st.key==='soon');
+    };
+    const bindEq = ()=>f.querySelector('[name=equipment_id]').addEventListener('change', ()=>updateWarranty(true));
+    const refreshEq = (sel)=>{ wrap.querySelector('select').outerHTML = equipSelect(custSel().value, sel); bindEq(); updateWarranty(true); };
+    const bindCust = ()=>custSel().addEventListener('change', ()=>refreshEq(''));
+    bindEq(); bindCust(); updateWarranty(isNew);
+    f.visit_date.addEventListener('change', ()=>updateWarranty(isNew));
+    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{ custSel().outerHTML = customerSelect(c.id,'data-cust'); bindCust(); refreshEq(''); });
+    w.querySelector('[data-neweq]').onclick = ()=>openEquipmentForm({customer_id:custSel().value||undefined}, e=>{ custSel().value = e.customer_id; refreshEq(e.id); });
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      if(!val(f,'equipment_id')) return toast('Chọn khách hàng và máy', true);
+      if(!val(f,'problem')) return toast('Nhập vấn đề', true);
+      const assignee_id = val(f,'assignee_id');
+      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:'sua_chua',
+        assignee_id, assignee_name:staffName(assignee_id),
+        participant_ids:[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==assignee_id),
+        problem:val(f,'problem'), solution:val(f,'solution'), remaining:val(f,'remaining'), next_action:val(f,'next_action'),
+        deadline:val(f,'deadline'), result:val(f,'result'), under_warranty:val(f,'under_warranty')};
+      const btn=f.querySelector('[type=submit]'); busy(btn,true);
+      let res;
+      if(isNew){ row.technician_id = S.me.id; row.technician_name = S.me.full_name || S.me.username; res = await sb.from('svc_visits').insert(row).select().single(); }
+      else res = await sb.from('svc_visits').update(row).eq('id', v.id).select().single();
+      busy(btn,false);
+      if(res.error) return fail(res.error.code==='PGRST116'?{message:'Bạn không có quyền sửa phiếu này.'}:res.error);
+      close(); await loadAll(); toast('Đã lưu phiếu sửa chữa');
+    };
+    const del = w.querySelector('[data-del]');
+    if(del) delButton(del, async ()=>{
+      const {error} = await sb.from('svc_visits').delete().eq('id', v.id);
+      if(error) return fail(error);
+      close(); await loadAll(); toast('Đã xoá phiếu sửa chữa');
+    });
+  });
+}
+function openHandover(v){
+  const cur = v.assignee_id;
+  modal('Bàn giao', 'Chuyển người phụ trách', `
+    <form class="grid2">
+      <p class="hint full">Đang phụ trách: <b>${esc(staffName(cur, v.assignee_name)||'—')}</b>. Người cũ được giữ trong danh sách tham gia để theo dõi tiếp.</p>
+      <label class="full">Người nhận bàn giao *<select name="to" required><option value="">— Chọn —</option>${S.staff.filter(p=>p.id!==cur).map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('')}</select></label>
+      <label class="full">Deadline mới (nếu đổi)<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
+      <label class="full">Vấn đề còn lại<textarea name="remaining">${esc(v.remaining)}</textarea></label>
+      <label class="full">Hướng giải quyết tiếp theo<textarea name="next_action">${esc(v.next_action)}</textarea></label>
+      <div class="acts full"><button type="submit" class="btn primary">Bàn giao</button></div>
+    </form>`, (w, close)=>{
+    const f = w.querySelector('form');
+    f.onsubmit = async ev=>{
+      ev.preventDefault();
+      const to = val(f,'to'); if(!to) return toast('Chọn người nhận bàn giao', true);
+      const parts = [...new Set([...(v.participant_ids||[]), cur].filter(id=>id && id!==to))];
+      const btn=f.querySelector('[type=submit]'); busy(btn,true);
+      const {error} = await sb.from('svc_visits').update({assignee_id:to, assignee_name:staffName(to), participant_ids:parts, deadline:val(f,'deadline'), remaining:val(f,'remaining'), next_action:val(f,'next_action')}).eq('id', v.id).select().single();
+      busy(btn,false);
+      if(error) return fail(error);
+      close(); await loadAll(); toast('Đã bàn giao cho '+staffName(to));
+    };
+  });
+}
+function openVisitDetail(id){
+  const v = S.visits.find(x=>x.id===id); if(!v) return;
+  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+  const canEdit = canEditVisit(v);
+  const parts = participantNames(v);
+  const sec = (t, x, hl)=> x ? `<div class="panel" ${hl?'style="box-shadow:inset 3px 0 0 var(--sc-orange),var(--shadow-card)"':''}><div class="sec"><h3>${t}</h3><p>${esc(x)}</p></div></div>` : '';
+  modal(`Sửa chữa · ${fmtDate(v.visit_date)}`, c?.name||'Phiếu sửa chữa', `
+    <div class="chips-row">${resultChip(v.result)}${deadlineChip(v)}${v.under_warranty?'<span class="chip ok">Trong bảo hành</span>':''}</div>
+    <div class="panel"><dl class="specs left">
+      <div><dt>Máy</dt><dd><a href="#" data-eq>${esc(eqLabel(e))}</a></dd></div>
+      <div><dt>Người phụ trách</dt><dd><b>${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</b></dd></div>
+      <div><dt>Kỹ thuật tham gia</dt><dd>${esc(parts.join(', ')||'—')}</dd></div>
+      <div><dt>Người tạo</dt><dd>${esc(staffName(v.technician_id, v.technician_name)||'—')}</dd></div>
+      <div><dt>Deadline</dt><dd>${fmtDate(v.deadline)||'—'}</dd></div>
+    </dl></div>
+    ${sec('Vấn đề', v.problem || v.cause)}${sec('Khắc phục', v.solution || v.action)}${sec('Vấn đề còn lại', v.remaining, true)}${sec('Hướng giải quyết tiếp theo', v.next_action, true)}
+    <div class="acts">${canEdit&&isOpen(v)?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn primary" data-edit>Cập nhật tiến độ</button>':''}</div>`,
+  (w, close)=>{
+    w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
+    const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openRepairForm(v); };
+    const hd = w.querySelector('[data-hand]'); if(hd) hd.onclick = ()=>{ close(); openHandover(v); };
+  });
+}
 
+/* ===== MÁY ===== */
 function equipCard(e){
   const c = custById(e.customer_id), w = warrantyState(e);
   const hist = S.visits.filter(v=>v.equipment_id===e.id);
@@ -752,8 +1228,7 @@ function equipCard(e){
     <dl class="specs">
       <div><dt>Khách hàng</dt><dd>${esc(c?.name||'—')}</dd></div>
       <div><dt>Serial</dt><dd>${esc(e.serial||'—')}</dd></div>
-      <div><dt>Lần gần nhất</dt><dd>${last?fmtDate(last.visit_date)+' · '+esc(WORK_TYPES[last.work_type]||''):'Chưa có'}</dd></div>
-      <div><dt>Số lượt</dt><dd>${hist.length}</dd></div>
+      <div><dt>Sửa chữa gần nhất</dt><dd>${last?fmtDate(last.visit_date):'Chưa có'}</dd></div>
     </dl>
   </button>`;
 }
@@ -768,99 +1243,8 @@ function renderEquipment(){
     return true;
   });
   $('#eCount').textContent = `${list.length} máy`;
-  $('#equipList').innerHTML = list.map(equipCard).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có máy. Bấm "+ Thêm máy" để nhập máy đã lắp đặt.</div>';
+  $('#equipList').innerHTML = list.map(equipCard).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có máy. Máy được thêm tự động khi tạo hồ sơ lắp đặt, hoặc bấm "+ Thêm máy" cho máy lắp từ trước.</div>';
   bindEquipCards($('#equipList'));
-}
-
-function renderCustomers(){
-  const q = norm($('#cSearch').value);
-  const list = S.customers.filter(c=>!q || norm([c.name,c.address,c.contact_name,c.phone].join(' ')).includes(q));
-  $('#cCount').textContent = `${list.length} khách hàng`;
-  $('#custList').innerHTML = list.map(c=>{
-    const eqs = S.equipment.filter(e=>e.customer_id===c.id);
-    const ids = new Set(eqs.map(e=>e.id));
-    const last = S.visits.find(v=>ids.has(v.equipment_id));
-    return `<button type="button" class="mcard" data-cust="${c.id}">
-      <span class="top"><span><p class="ttl">${esc(c.name)}</p><p class="mdl">${esc(c.address||'Chưa có địa chỉ')}</p></span><span class="chip blue">${eqs.length} máy</span></span>
-      <dl class="specs">
-        <div><dt>Liên hệ</dt><dd>${esc([c.contact_name,c.phone].filter(Boolean).join(' · ')||'—')}</dd></div>
-        <div><dt>Lần đến gần nhất</dt><dd>${last?fmtDate(last.visit_date):'Chưa có'}</dd></div>
-      </dl></button>`;
-  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có khách hàng.</div>';
-  $$('#custList [data-cust]').forEach(el=>el.onclick=()=>openCustomerDetail(el.dataset.cust));
-}
-
-/* ===== Hộp thoại ===== */
-function modal(eyebrow, title, body, onMount){
-  const wrap = document.createElement('div'); wrap.className='dlg'; wrap.setAttribute('role','dialog'); wrap.setAttribute('aria-modal','true');
-  wrap.innerHTML = `<div class="box"><div class="hd"><div><p class="eyebrow">${esc(eyebrow)}</p><h2>${esc(title)}</h2></div><button class="xbtn" aria-label="Đóng">×</button></div><div class="bd">${body}</div></div>`;
-  $('#modalRoot').appendChild(wrap);
-  const close = ()=>wrap.remove();
-  wrap.querySelector('.xbtn').onclick = close;
-  wrap.addEventListener('mousedown', ev=>{ if(ev.target===wrap) close(); });
-  onMount && onMount(wrap, close);
-  const first = wrap.querySelector('.bd input, .bd select, .bd textarea'); if(first && window.innerWidth>860) first.focus();
-  return close;
-}
-function val(root, name){ const el = root.querySelector(`[name="${name}"]`); if(!el) return null; if(el.type==='checkbox') return el.checked; const v = el.value.trim(); return v===''?null:v; }
-function busy(btn, on){ btn.disabled = on; }
-
-/* ===== Khách hàng ===== */
-function openCustomerForm(c, onSaved){
-  c = c || {};
-  modal('Khách hàng', c.id?'Sửa khách hàng':'Thêm khách hàng', `
-    <form class="grid2">
-      <label class="full">Tên khách hàng *<input name="name" required value="${esc(c.name)}"></label>
-      <label class="full">Địa chỉ<input name="address" value="${esc(c.address)}"></label>
-      <label>Người liên hệ<input name="contact_name" value="${esc(c.contact_name)}"></label>
-      <label>Điện thoại<input name="phone" type="tel" value="${esc(c.phone)}"></label>
-      <label class="full">Ghi chú<textarea name="notes">${esc(c.notes)}</textarea></label>
-      <div class="acts full">${c.id&&isLead()?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu khách hàng</button></div>
-    </form>`, (w, close)=>{
-    const f = w.querySelector('form');
-    f.onsubmit = async ev=>{
-      ev.preventDefault();
-      if(!val(f,'name')) return toast('Nhập tên khách hàng', true);
-      const btn=f.querySelector('[type=submit]'); busy(btn,true);
-      const row = {name:val(f,'name'), address:val(f,'address'), contact_name:val(f,'contact_name'), phone:val(f,'phone'), notes:val(f,'notes')};
-      const res = c.id ? await sb.from('svc_customers').update(row).eq('id',c.id).select().single()
-                       : await sb.from('svc_customers').insert(row).select().single();
-      busy(btn,false);
-      if(res.error) return fail(res.error);
-      close(); await loadAll(); toast('Đã lưu khách hàng'); onSaved && onSaved(res.data);
-    };
-    const d = w.querySelector('[data-del]');
-    if(d) d.onclick = async ()=>{
-      if(d.dataset.sure!=='1'){ d.dataset.sure='1'; d.textContent='Bấm lần nữa để xoá'; return; }
-      const {error} = await sb.from('svc_customers').delete().eq('id',c.id);
-      if(error) return fail(error.code==='23503'?{message:'Khách hàng còn máy, không xoá được.'}:error);
-      $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá khách hàng');
-    };
-  });
-}
-function openCustomerDetail(id){
-  const c = custById(id); if(!c) return;
-  const eqs = S.equipment.filter(e=>e.customer_id===id);
-  modal('Khách hàng', c.name, `
-    <div class="panel"><dl class="specs left">
-      <div><dt>Địa chỉ</dt><dd>${esc(c.address||'—')}</dd></div>
-      <div><dt>Người liên hệ</dt><dd>${esc(c.contact_name||'—')}</dd></div>
-      <div><dt>Điện thoại</dt><dd>${c.phone?`<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>`:'—'}</dd></div>
-      ${c.notes?`<div><dt>Ghi chú</dt><dd>${esc(c.notes)}</dd></div>`:''}
-    </dl></div>
-    <div class="panel"><div class="h2row"><h2>Máy (${eqs.length})</h2><button class="btn sm" type="button" data-addeq>+ Thêm máy</button></div>
-      <div class="list" data-eqs>${eqs.map(equipCard).join('')||'<div class="empty">Chưa có máy.</div>'}</div></div>
-    <div class="acts"><button class="btn" data-edit>Sửa khách hàng</button></div>`,
-  (w, close)=>{
-    bindEquipCards(w.querySelector('[data-eqs]'));
-    w.querySelector('[data-edit]').onclick = ()=>{ close(); openCustomerForm(c); };
-    w.querySelector('[data-addeq]').onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
-  });
-}
-
-/* ===== Máy ===== */
-function customerSelect(selected, extra=''){
-  return `<select name="customer_id" required ${extra}><option value="">— Chọn khách hàng —</option>${S.customers.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`;
 }
 function openEquipmentForm(e, onSaved){
   e = e || {};
@@ -892,206 +1276,115 @@ function openEquipmentForm(e, onSaved){
       if(res.error) return fail(res.error.code==='23505'?{message:'Serial này của hãng đã tồn tại.'}:res.error);
       close(); await loadAll(); toast('Đã lưu máy'); onSaved && onSaved(res.data);
     };
-    const d = w.querySelector('[data-del]');
-    if(d) d.onclick = async ()=>{
-      if(d.dataset.sure!=='1'){ d.dataset.sure='1'; d.textContent='Bấm lần nữa để xoá'; return; }
+    const del = w.querySelector('[data-del]');
+    if(del) delButton(del, async ()=>{
       const {error} = await sb.from('svc_equipment').delete().eq('id',e.id);
-      if(error) return fail(error.code==='23503'?{message:'Máy đã có nhật ký, không xoá được.'}:error);
+      if(error) return fail(error.code==='23503'?{message:'Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được.'}:error);
       $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá máy');
-    };
+    });
   });
 }
 function openEquipmentDetail(id){
   const e = eqById(id); if(!e) return;
   const c = custById(e.customer_id), w = warrantyState(e);
   const hist = S.visits.filter(v=>v.equipment_id===id);
-  const parts = hist.flatMap(v=>(v.parts||[]).map(p=>({...p, date:v.visit_date})));
+  const inst = S.installs.find(x=>x.equipment_id===id);
+  const sched = inst ? maintFor(inst) : [];
   modal([e.brand,e.model].filter(Boolean).join(' · ') || 'Máy', e.name, `
-    <div class="chips-row"><span class="chip ${w.cls}">${esc(w.label)}</span><span class="chip blue">${hist.length} lượt can thiệp</span></div>
+    <div class="chips-row"><span class="chip ${w.cls}">${esc(w.label)}</span><span class="chip blue">${hist.length} lần sửa chữa</span>${sched.length?`<span class="chip blue">Bảo trì ${sched.filter(s=>s.done).length}/${sched.length}</span>`:''}</div>
     <div class="panel"><dl class="specs left">
       <div><dt>Khách hàng</dt><dd>${esc(c?.name||'—')}</dd></div>
       <div><dt>Serial</dt><dd>${esc(e.serial||'—')}</dd></div>
       <div><dt>Vị trí</dt><dd>${esc(e.location||'—')}</dd></div>
       <div><dt>Ngày lắp đặt</dt><dd>${fmtDate(e.install_date)||'—'}</dd></div>
       <div><dt>Hết bảo hành</dt><dd>${fmtDate(e.warranty_end)||'—'}</dd></div>
+      ${inst?`<div><dt>Hồ sơ lắp đặt</dt><dd><a href="#" data-inst>HĐ ${esc(inst.contract_no||'—')} · ${installStage(inst)==='done'?'Hoàn tất':'Đợt '+installStage(inst)}</a></dd></div>`:''}
       ${e.notes?`<div><dt>Ghi chú</dt><dd>${esc(e.notes)}</dd></div>`:''}
     </dl></div>
-    ${parts.length?`<div class="panel"><h2>Linh kiện đã thay</h2><div class="plist">${parts.map(p=>`<div><b>${esc(p.name)}${p.code?' <span>('+esc(p.code)+')</span>':''} × ${esc(p.qty||1)}</b><span>${fmtDate(p.date)}</span></div>`).join('')}</div></div>`:''}
-    <div class="panel"><div class="h2row"><h2>Lịch sử</h2><button class="btn sm primary" data-log>+ Ghi nhật ký</button></div>
+    <div class="panel"><div class="h2row"><h2>Lịch sử sửa chữa</h2><button class="btn sm primary" data-log>+ Ghi sửa chữa</button></div>
       <div class="timeline">${hist.map(v=>`<button type="button" class="titem" data-visit="${v.id}">
-        <span class="ttl">${fmtDate(v.visit_date)} · ${esc(WORK_TYPES[v.work_type]||'')} ${resultChip(v.result)}</span>
+        <span class="ttl">${fmtDate(v.visit_date)} ${resultChip(v.result)}</span>
         <span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}${v.deadline?' · deadline '+fmtDate(v.deadline):''}</span>
-        ${(v.cause||v.problem)?`<span class="desc">${esc(v.cause||v.problem)}</span>`:''}</button>`).join('') || '<div class="empty">Chưa có lần can thiệp nào.</div>'}</div></div>
+        ${(v.problem||v.cause)?`<span class="desc">${esc(v.problem||v.cause)}</span>`:''}</button>`).join('') || '<div class="empty">Chưa có lần sửa chữa nào.</div>'}</div></div>
     <div class="acts"><button class="btn" data-edit>Sửa thông tin máy</button></div>`,
   (wr, close)=>{
     bindVisitCards(wr);
     wr.querySelector('[data-edit]').onclick = ()=>{ close(); openEquipmentForm(e); };
-    wr.querySelector('[data-log]').onclick = ()=>{ close(); openVisitForm({equipment_id:id}); };
+    wr.querySelector('[data-log]').onclick = ()=>{ close(); openRepairForm({equipment_id:id}); };
+    const a = wr.querySelector('[data-inst]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openInstallDetail(inst.id); };
   });
 }
 
-/* ===== Nhật ký ===== */
-function equipSelect(customerId, selected){
-  const list = S.equipment.filter(e=>!customerId || e.customer_id===customerId);
-  return `<select name="equipment_id" required><option value="">— Chọn máy —</option>${list.map(e=>`<option value="${e.id}" ${e.id===selected?'selected':''}>${esc(eqLabel(e))}</option>`).join('')}</select>`;
+/* ===== KHÁCH HÀNG ===== */
+function renderCustomers(){
+  const q = norm($('#cSearch').value);
+  const list = S.customers.filter(c=>!q || norm([c.name,c.address,c.contact_name,c.phone].join(' ')).includes(q));
+  $('#cCount').textContent = `${list.length} khách hàng`;
+  $('#custList').innerHTML = list.map(c=>{
+    const eqs = S.equipment.filter(e=>e.customer_id===c.id);
+    const ids = new Set(eqs.map(e=>e.id));
+    const last = S.visits.find(v=>ids.has(v.equipment_id));
+    return `<button type="button" class="mcard" data-cust="${c.id}">
+      <span class="top"><span><p class="ttl">${esc(c.name)}</p><p class="mdl">${esc(c.address||'Chưa có địa chỉ')}</p></span><span class="chip blue">${eqs.length} máy</span></span>
+      <dl class="specs">
+        <div><dt>Liên hệ</dt><dd>${esc([c.contact_name,c.phone].filter(Boolean).join(' · ')||'—')}</dd></div>
+        <div><dt>Lần đến gần nhất</dt><dd>${last?fmtDate(last.visit_date):'Chưa có'}</dd></div>
+      </dl></button>`;
+  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có khách hàng.</div>';
+  $$('#custList [data-cust]').forEach(el=>el.onclick=()=>openCustomerDetail(el.dataset.cust));
 }
-function partRow(p={}){
-  return `<div class="prow"><input placeholder="Tên linh kiện" data-p="name" value="${esc(p.name)}"><input placeholder="Mã" data-p="code" value="${esc(p.code)}"><input type="number" min="0" step="any" placeholder="SL" data-p="qty" value="${esc(p.qty??1)}"><button type="button" class="btn sm ghost" data-rm aria-label="Bỏ dòng">×</button></div>`;
-}
-function staffOptions(selected){
-  return S.staff.map(p=>`<option value="${p.id}" ${p.id===selected?'selected':''}>${esc(p.full_name||p.username)}</option>`).join('');
-}
-function participantPicker(selectedIds, excludeId){
-  return `<div class="pick" data-pick>${S.staff.map(p=>{
-    const on = selectedIds.includes(p.id), ex = p.id===excludeId;
-    return `<button type="button" class="tchip" data-id="${p.id}" aria-pressed="${on && !ex}" ${ex?'disabled title="Đang là người phụ trách"':''}><span class="bx">${on && !ex?'✓':''}</span>${esc(p.full_name||p.username)}</button>`;
-  }).join('') || '<span class="hint">Chưa tải được danh sách nhân sự.</span>'}</div>`;
-}
-function bindPicker(root, getExclude){
-  const box = root.querySelector('[data-pick]');
-  const paint = ()=>box.querySelectorAll('.tchip').forEach(b=>{
-    const ex = b.dataset.id===getExclude();
-    b.disabled = ex; if(ex) b.setAttribute('aria-pressed','false');
-    b.querySelector('.bx').textContent = b.getAttribute('aria-pressed')==='true' ? '✓' : '';
-  });
-  box.addEventListener('click', ev=>{ const b=ev.target.closest('.tchip'); if(!b || b.disabled) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')!=='true'); paint(); });
-  paint();
-  return ()=>[...box.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id);
-}
-function openVisitForm(v){
-  v = v || {};
-  const isNew = !v.id;
-  const eq = v.equipment_id && eqById(v.equipment_id);
-  const custId = eq?.customer_id || '';
-  const asg = v.assignee_id || S.me.id;
-  modal('Nhật ký công tác', isNew?'Ghi nhật ký mới':'Sửa nhật ký', `
+function openCustomerForm(c, onSaved){
+  c = c || {};
+  modal('Khách hàng', c.id?'Sửa khách hàng':'Thêm khách hàng', `
     <form class="grid2">
-      <label class="full">Khách hàng *<span class="inline">${customerSelect(custId,'data-cust')}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
-      <label class="full">Máy *<span class="inline" data-eqwrap>${equipSelect(custId, v.equipment_id)}<button type="button" class="btn" data-neweq>+ Mới</button></span></label>
-      <p class="wnote full" data-winfo></p>
-      <label>Ngày *<input type="date" name="visit_date" required value="${esc(v.visit_date||today())}"></label>
-      <label>Loại công việc *<select name="work_type" required>${opts(WORK_TYPES)}</select></label>
-      <label>Người phụ trách *<select name="assignee_id" required>${staffOptions(asg)}</select></label>
-      <label>Deadline<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
-      <div class="fieldset full">Kỹ thuật tham gia${participantPicker(v.participant_ids||[], asg)}</div>
-      <label class="full">Người liên hệ phía khách<input name="customer_contact" value="${esc(v.customer_contact)}"></label>
-      ${v.problem?`<label class="full">Ghi nhận (bản cũ)<textarea name="problem">${esc(v.problem)}</textarea></label>`:''}
-      <label class="full">Nguyên nhân<textarea name="cause" placeholder="Nguyên nhân gây ra sự cố / lý do của yêu cầu">${esc(v.cause)}</textarea></label>
-      <label class="full">Hướng khắc phục<textarea name="solution" placeholder="Phương án xử lý đã chọn">${esc(v.solution)}</textarea></label>
-      <label class="full">Công việc đã thực hiện<textarea name="action">${esc(v.action)}</textarea></label>
-      <div class="full panel" style="padding:16px;gap:10px"><div class="h2row"><h2 style="font-size:15px">Linh kiện thay thế</h2><button type="button" class="btn sm" data-addp>+ Thêm linh kiện</button></div><div class="parts" data-parts>${(v.parts||[]).map(partRow).join('')}</div></div>
-      <label class="full">Vấn đề còn lại và hướng giải quyết tiếp theo<textarea name="next_action" placeholder="Việc chưa xong, ai làm tiếp, cần chuẩn bị gì">${esc(v.next_action)}</textarea></label>
-      <label>Trạng thái *<select name="result" required>${opts(RESULTS)}</select></label>
-      <label class="checkrow"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
-      <div class="acts full">${!isNew&&(v.technician_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu nhật ký</button></div>
-    </form>`, (w, close)=>{
-    const f = w.querySelector('form');
-    if(v.work_type) f.work_type.value = v.work_type;
-    if(v.result) f.result.value = v.result;
-    const getParts = bindPicker(w, ()=>f.assignee_id.value);
-    f.assignee_id.addEventListener('change', ()=>{ w.querySelectorAll('[data-pick] .tchip').forEach(b=>{ const ex=b.dataset.id===f.assignee_id.value; b.disabled=ex; if(ex){ b.setAttribute('aria-pressed','false'); b.querySelector('.bx').textContent=''; } }); });
-    const wrap = w.querySelector('[data-eqwrap]'), winfo = w.querySelector('[data-winfo]');
-    const custSel = ()=>f.querySelector('[data-cust]');
-    const updateWarranty = (auto)=>{
-      const e = eqById(f.querySelector('[name=equipment_id]').value);
-      if(!e){ winfo.innerHTML=''; return; }
-      const st = warrantyState(e, f.visit_date.value);
-      winfo.innerHTML = `<span class="chip ${st.cls}">${esc(st.label)}</span>`;
-      if(auto) f.under_warranty.checked = (st.key==='in'||st.key==='soon');
-    };
-    const bindEq = ()=>f.querySelector('[name=equipment_id]').addEventListener('change', ()=>updateWarranty(true));
-    const refreshEq = (sel)=>{ wrap.querySelector('select').outerHTML = equipSelect(custSel().value, sel); bindEq(); updateWarranty(true); };
-    const bindCust = ()=>custSel().addEventListener('change', ()=>refreshEq(''));
-    bindEq(); bindCust(); updateWarranty(isNew);
-    f.visit_date.addEventListener('change', ()=>updateWarranty(isNew));
-    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{ custSel().outerHTML = customerSelect(c.id,'data-cust'); bindCust(); refreshEq(''); });
-    w.querySelector('[data-neweq]').onclick = ()=>openEquipmentForm({customer_id:custSel().value||undefined}, e=>{ custSel().value = e.customer_id; refreshEq(e.id); });
-    const partsBox = w.querySelector('[data-parts]');
-    w.querySelector('[data-addp]').onclick = ()=>partsBox.insertAdjacentHTML('beforeend', partRow());
-    partsBox.addEventListener('click', ev=>{ const b=ev.target.closest('[data-rm]'); if(b) b.parentElement.remove(); });
-
-    f.onsubmit = async ev=>{
-      ev.preventDefault();
-      if(!val(f,'equipment_id')) return toast('Chọn khách hàng và máy', true);
-      if(!val(f,'assignee_id')) return toast('Chọn người phụ trách', true);
-      const parts = [...partsBox.querySelectorAll('.prow')].map(r=>({
-        name:r.querySelector('[data-p=name]').value.trim(), code:r.querySelector('[data-p=code]').value.trim(), qty:Number(r.querySelector('[data-p=qty]').value)||1
-      })).filter(p=>p.name);
-      const assignee_id = val(f,'assignee_id');
-      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:val(f,'work_type'),
-        assignee_id, assignee_name:staffName(assignee_id), participant_ids:getParts().filter(id=>id!==assignee_id), deadline:val(f,'deadline'),
-        customer_contact:val(f,'customer_contact'), cause:val(f,'cause'), solution:val(f,'solution'), action:val(f,'action'),
-        result:val(f,'result'), under_warranty:val(f,'under_warranty'), next_action:val(f,'next_action'), parts};
-      if(v.problem) row.problem = val(f,'problem');
-      const btn=f.querySelector('[type=submit]'); busy(btn,true);
-      let res;
-      if(isNew){ row.technician_id = S.me.id; row.technician_name = S.me.full_name || S.me.username; res = await sb.from('svc_visits').insert(row).select().single(); }
-      else res = await sb.from('svc_visits').update(row).eq('id', v.id).select().single();
-      busy(btn,false);
-      if(res.error) return fail(res.error.code==='42501'||res.error.code==='PGRST116'?{message:'Bạn không có quyền sửa nhật ký này.'}:res.error);
-      close(); await loadAll(); toast('Đã lưu nhật ký');
-    };
-    const d = w.querySelector('[data-del]');
-    if(d) d.onclick = async ()=>{
-      if(d.dataset.sure!=='1'){ d.dataset.sure='1'; d.textContent='Bấm lần nữa để xoá'; return; }
-      const {error} = await sb.from('svc_visits').delete().eq('id', v.id);
-      if(error) return fail(error);
-      close(); await loadAll(); toast('Đã xoá nhật ký');
-    };
-  });
-}
-function openHandover(v){
-  const cur = v.assignee_id;
-  modal('Bàn giao', 'Chuyển người phụ trách', `
-    <form class="grid2">
-      <p class="hint full">Đang phụ trách: <b>${esc(staffName(cur, v.assignee_name)||'—')}</b>. Người cũ sẽ được giữ trong danh sách tham gia để theo dõi tiếp.</p>
-      <label class="full">Người nhận bàn giao *<select name="to" required><option value="">— Chọn —</option>${S.staff.filter(p=>p.id!==cur).map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('')}</select></label>
-      <label class="full">Deadline mới (nếu đổi)<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
-      <label class="full">Vấn đề còn lại và hướng giải quyết tiếp theo<textarea name="next_action">${esc(v.next_action)}</textarea></label>
-      <div class="acts full"><button type="submit" class="btn primary">Bàn giao</button></div>
+      <label class="full">Tên khách hàng *<input name="name" required value="${esc(c.name)}"></label>
+      <label class="full">Địa chỉ<input name="address" value="${esc(c.address)}"></label>
+      <label>Người liên hệ<input name="contact_name" value="${esc(c.contact_name)}"></label>
+      <label>Điện thoại<input name="phone" type="tel" value="${esc(c.phone)}"></label>
+      <label class="full">Ghi chú<textarea name="notes">${esc(c.notes)}</textarea></label>
+      <div class="acts full">${c.id&&isLead()?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu khách hàng</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     f.onsubmit = async ev=>{
       ev.preventDefault();
-      const to = val(f,'to'); if(!to) return toast('Chọn người nhận bàn giao', true);
-      const parts = [...new Set([...(v.participant_ids||[]), cur].filter(id=>id && id!==to))];
+      if(!val(f,'name')) return toast('Nhập tên khách hàng', true);
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
-      const {error} = await sb.from('svc_visits').update({assignee_id:to, assignee_name:staffName(to), participant_ids:parts, deadline:val(f,'deadline'), next_action:val(f,'next_action')}).eq('id', v.id).select().single();
+      const row = {name:val(f,'name'), address:val(f,'address'), contact_name:val(f,'contact_name'), phone:val(f,'phone'), notes:val(f,'notes')};
+      const res = c.id ? await sb.from('svc_customers').update(row).eq('id',c.id).select().single()
+                       : await sb.from('svc_customers').insert(row).select().single();
       busy(btn,false);
-      if(error) return fail(error);
-      close(); await loadAll(); toast('Đã bàn giao cho '+staffName(to));
+      if(res.error) return fail(res.error);
+      close(); await loadAll(); toast('Đã lưu khách hàng'); onSaved && onSaved(res.data);
     };
+    const del = w.querySelector('[data-del]');
+    if(del) delButton(del, async ()=>{
+      const {error} = await sb.from('svc_customers').delete().eq('id',c.id);
+      if(error) return fail(error.code==='23503'?{message:'Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được.'}:error);
+      $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá khách hàng');
+    });
   });
 }
-function openVisitDetail(id){
-  const v = S.visits.find(x=>x.id===id); if(!v) return;
-  const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
-  const canEdit = canEditVisit(v);
-  const parts = participantNames(v);
-  const sec = (t, x)=> x ? `<div class="sec"><h3>${t}</h3><p>${esc(x)}</p></div>` : '';
-  const body = [sec('Ghi nhận (bản cũ)', v.problem), sec('Nguyên nhân', v.cause), sec('Hướng khắc phục', v.solution), sec('Công việc đã thực hiện', v.action)].join('');
-  modal(`${WORK_TYPES[v.work_type]||''} · ${fmtDate(v.visit_date)}`, c?.name||'Nhật ký', `
-    <div class="chips-row">${resultChip(v.result)}${deadlineChip(v)}${v.under_warranty?'<span class="chip ok">Trong bảo hành</span>':''}</div>
+function openCustomerDetail(id){
+  const c = custById(id); if(!c) return;
+  const eqs = S.equipment.filter(e=>e.customer_id===id);
+  modal('Khách hàng', c.name, `
     <div class="panel"><dl class="specs left">
-      <div><dt>Máy</dt><dd><a href="#" data-eq>${esc(eqLabel(e))}</a></dd></div>
-      <div><dt>Người phụ trách</dt><dd><b>${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</b></dd></div>
-      <div><dt>Kỹ thuật tham gia</dt><dd>${esc(parts.join(', ')||'—')}</dd></div>
-      <div><dt>Người tạo</dt><dd>${esc(staffName(v.technician_id, v.technician_name)||'—')}</dd></div>
-      <div><dt>Deadline</dt><dd>${fmtDate(v.deadline)||'—'}</dd></div>
-      <div><dt>Liên hệ phía KH</dt><dd>${esc(v.customer_contact||'—')}</dd></div>
+      <div><dt>Địa chỉ</dt><dd>${esc(c.address||'—')}</dd></div>
+      <div><dt>Người liên hệ</dt><dd>${esc(c.contact_name||'—')}</dd></div>
+      <div><dt>Điện thoại</dt><dd>${c.phone?`<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>`:'—'}</dd></div>
+      ${c.notes?`<div><dt>Ghi chú</dt><dd>${esc(c.notes)}</dd></div>`:''}
     </dl></div>
-    ${body?`<div class="panel">${body}</div>`:''}
-    ${(v.parts||[]).length?`<div class="panel"><h2>Linh kiện thay thế</h2><div class="plist">${v.parts.map(p=>`<div><b>${esc(p.name)}${p.code?' <span>('+esc(p.code)+')</span>':''}</b><span>× ${esc(p.qty||1)}</span></div>`).join('')}</div></div>`:''}
-    ${v.next_action?`<div class="panel" style="box-shadow:inset 3px 0 0 var(--sc-orange),var(--shadow-card)"><div class="sec"><h3>Vấn đề còn lại và hướng giải quyết tiếp theo</h3><p>${esc(v.next_action)}</p></div></div>`:''}
-    <div class="acts">${canEdit&&isOpen(v)?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn primary" data-edit>Sửa / cập nhật tiến độ</button>':''}</div>`,
+    <div class="panel"><div class="h2row"><h2>Máy (${eqs.length})</h2><button class="btn sm" type="button" data-addeq>+ Thêm máy</button></div>
+      <div class="list" data-eqs>${eqs.map(equipCard).join('')||'<div class="empty">Chưa có máy.</div>'}</div></div>
+    <div class="acts"><button class="btn" data-edit>Sửa khách hàng</button></div>`,
   (w, close)=>{
-    w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
-    const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openVisitForm(v); };
-    const hd = w.querySelector('[data-hand]'); if(hd) hd.onclick = ()=>{ close(); openHandover(v); };
+    bindEquipCards(w.querySelector('[data-eqs]'));
+    w.querySelector('[data-edit]').onclick = ()=>{ close(); openCustomerForm(c); };
+    w.querySelector('[data-addeq]').onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
   });
 }
 
-/* ===== Thành viên (chỉ Super Admin) ===== */
+/* ===== THÀNH VIÊN (chỉ Super Admin) ===== */
 function svcRoleOptions(sel){ return Object.entries(ROLE_LABEL).map(([k,l])=>`<option value="${k}" ${k===sel?'selected':''}>${l}</option>`).join(''); }
 async function renderMembers(){
   if(S.me?.role!=='super_admin') return;
@@ -1151,23 +1444,21 @@ async function openAddMember(){
   });
 }
 
-/* ===== Xuất CSV ===== */
+/* ===== Xuất CSV (sửa chữa) ===== */
 function exportCSV(){
-  const rows = filteredVisits();
-  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Loại việc','Người phụ trách','Kỹ thuật tham gia','Người tạo','Deadline','Liên hệ KH','Nguyên nhân','Hướng khắc phục','Đã thực hiện','Linh kiện','Vấn đề còn lại & hướng tiếp theo','Trạng thái','Trong BH'];
+  const rows = filteredRepairs();
+  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Người phụ trách','Kỹ thuật tham gia','Người tạo','Vấn đề','Khắc phục','Vấn đề còn lại','Hướng giải quyết tiếp theo','Deadline','Trạng thái','Trong BH'];
   const q = s => '"' + String(s ?? '').replace(/"/g,'""') + '"';
   const lines = rows.map(v=>{
     const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
-    return [fmtDate(v.visit_date), c?.name, e?.name, e?.brand, e?.model, e?.serial, WORK_TYPES[v.work_type],
-      staffName(v.assignee_id, v.assignee_name), participantNames(v).join(', '), staffName(v.technician_id, v.technician_name), fmtDate(v.deadline),
-      v.customer_contact, [v.problem, v.cause].filter(Boolean).join('\n'), v.solution, v.action,
-      (v.parts||[]).map(p=>`${p.name}${p.code?' ('+p.code+')':''} x${p.qty||1}`).join('; '),
-      v.next_action, (RESULTS[v.result]||[v.result])[0], v.under_warranty?'Có':''].map(q).join(',');
+    return [fmtDate(v.visit_date), c?.name, e?.name, e?.brand, e?.model, e?.serial,
+      staffName(v.assignee_id, v.assignee_name), participantNames(v).join(', '), staffName(v.technician_id, v.technician_name),
+      v.problem||v.cause, v.solution||v.action, v.remaining, v.next_action, fmtDate(v.deadline), (RESULTS[v.result]||[v.result])[0], v.under_warranty?'Có':''].map(q).join(',');
   });
   const blob = new Blob(['﻿' + [head.map(q).join(','), ...lines].join('\r\n')], {type:'text/csv;charset=utf-8'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `nhat-ky-dich-vu-${today()}.csv`; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `sua-chua-${today()}.csv`; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-  toast(`Đã xuất ${rows.length} nhật ký`);
+  toast(`Đã xuất ${rows.length} phiếu sửa chữa`);
 }
 
 sb.auth.onAuthStateChange(evt=>{ if(evt==='SIGNED_OUT') showLogin(); });
