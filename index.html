@@ -342,6 +342,27 @@ body:not(.is-owner) .need-owner{display:none!important}
 .tbox:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .tchips-s{display:flex;flex-wrap:wrap;gap:6px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.bcol{background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--ink)}
+.bcol:nth-child(2){border-top-color:var(--sc-orange)}
+.bcol:nth-child(3){border-top-color:var(--green)}
+.bhead{display:flex;align-items:center;gap:10px}
+.bhead h2{margin:0;font-size:16px;font-weight:800;letter-spacing:-.005em}
+.bhead .btn{margin-left:auto}
+.bico{width:32px;height:32px;border-radius:10px;background:var(--blue-bg);color:var(--ink);display:grid;place-items:center;flex:none}
+.bico svg{width:18px;height:18px}
+.bn{min-width:24px;height:24px;padding:0 8px;border-radius:999px;background:var(--card-2);font-size:12.5px;font-weight:800;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
+.blist{display:flex;flex-direction:column;gap:8px;max-height:560px;overflow:auto;margin:0 -4px;padding:0 4px}
+.kcard{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:14px;background:var(--card-2);border:1px solid transparent;transition:border-color .15s ease}
+.kcard:hover{border-color:var(--btn-border)}
+.kcard:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.kcard .kt{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.kcard .ttl{margin:0;font-size:14.5px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.kcard .sub{margin:0;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.kcard .kf{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bcol .empty{padding:20px 12px;font-size:13.5px}
+@media (max-width:1100px){ .board{grid-template-columns:repeat(3,minmax(280px,1fr));overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px} .bcol{scroll-snap-align:start} }
+@media (max-width:860px){ .board{grid-template-columns:repeat(3,85%)} .blist{max-height:none} }
 .nav .cnt,.tabbar .cnt{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--sc-orange);color:#1a1a1a;font-size:11px;font-weight:800;display:inline-grid;place-items:center}
 .tabbar .cnt{position:absolute;top:4px;left:calc(50% + 6px);margin:0}
 .tabbar button{position:relative}
@@ -441,11 +462,12 @@ body:not(.is-owner) .need-owner{display:none!important}
       <div class="stat hl"><span class="lb">Tháng này</span><span class="n" id="stMonth">0</span><span class="s">lượt sửa chữa của cả đội</span></div>
       <div class="stat"><span class="lb">Tôi phụ trách</span><span class="n" id="stMine">0</span><span class="s">việc đang mở</span></div>
       <div class="stat"><span class="lb">Quá hạn</span><span class="n" id="stOverdue">0</span><span class="s">việc đã qua deadline</span></div>
-      <div class="stat"><span class="lb">Sắp hết BH</span><span class="n" id="stWarranty">0</span><span class="s">máy trong 60 ngày tới</span></div>
+      <div class="stat" role="button" tabindex="0" data-act="seeSoon" style="cursor:pointer"><span class="lb">Sắp hết BH</span><span class="n" id="stWarranty">0</span><span class="s">máy trong 60 ngày tới</span></div>
     </div>
-    <div class="two">
-      <div class="panel"><div class="h2row"><h2>Việc đang mở</h2><button class="btn sm ghost" type="button" data-act="seeOpen">Xem tất cả</button></div><div class="list" id="openList"></div></div>
-      <div class="panel"><div class="h2row"><h2>Sắp hết bảo hành</h2><button class="btn sm ghost" type="button" data-act="seeSoon">Xem tất cả</button></div><div class="list" id="warrantyList"></div></div>
+    <div class="board" aria-label="Việc chưa hoàn thành">
+      <section class="bcol"><div class="bhead"><span class="bico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span><h2>Lắp đặt</h2><span class="bn" id="bnInstall">0</span><button class="btn sm ghost" type="button" data-tab="install">Xem tất cả</button></div><div class="blist" id="bInstall"></div></section>
+      <section class="bcol"><div class="bhead"><span class="bico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><h2>Sửa chữa</h2><span class="bn" id="bnRepair">0</span><button class="btn sm ghost" type="button" data-act="seeOpen">Xem tất cả</button></div><div class="blist" id="bRepair"></div></section>
+      <section class="bcol"><div class="bhead"><span class="bico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m9.5 15 2 2 3.5-3.5"/></svg></span><h2>Bảo trì</h2><span class="bn" id="bnMaint">0</span><button class="btn sm ghost" type="button" data-act="seeMaint">Xem tất cả</button></div><div class="blist" id="bMaint"></div></section>
     </div>
   </section>
 
@@ -738,7 +760,8 @@ document.addEventListener('click', ev=>{
     fab:()=> S.tab==='install' ? openInstallForm() : openRepairForm(),
     export:exportCSV, addMember:openAddMember, newMaint:()=>openMaintForm(), more:()=>{$('#moreSheet').hidden=false;}, closeSheet:()=>{$('#moreSheet').hidden=true;},
     seeOpen:()=>{ S.f.result='__open'; renderRepairs(); showTab('repair'); },
-    seeSoon:()=>{ S.f.warranty='soon'; renderEquipment(); showTab('equipment'); }
+    seeSoon:()=>{ S.f.warranty='soon'; renderEquipment(); showTab('equipment'); },
+    seeMaint:()=>{ S.f.maint='upcoming'; renderMaint(); showTab('maint'); }
   })[a.dataset.act]?.();
 });
 $('#moreSheet').addEventListener('click', e=>{ if(e.target===$('#moreSheet')) $('#moreSheet').hidden=true; });
@@ -790,15 +813,54 @@ function renderOverview(){
   const ym = today().slice(0,7), rp = repairs();
   const month = rp.filter(v=>String(v.visit_date).startsWith(ym));
   const open = rp.filter(isOpen).sort(byUrgency);
-  const soon = S.equipment.filter(e=>warrantyState(e).key==='soon').sort((a,b)=>a.warranty_end.localeCompare(b.warranty_end));
+  const soon = S.equipment.filter(e=>warrantyState(e).key==='soon');
   $('#stMonth').textContent = month.length;
   $('#stMine').textContent = open.filter(v=>v.assignee_id===S.me.id).length;
   $('#stOverdue').textContent = open.filter(v=>deadlineState(v)?.key==='over').length;
   $('#stWarranty').textContent = soon.length;
-  $('#openList').innerHTML = open.slice(0,5).map(visitCard).join('') || '<div class="empty">Không có việc đang mở.</div>';
-  bindVisitCards($('#openList'));
-  $('#warrantyList').innerHTML = soon.slice(0,5).map(equipCard).join('') || '<div class="empty">Không có máy sắp hết bảo hành.</div>';
-  bindEquipCards($('#warrantyList'));
+
+  // Lắp đặt chưa hoàn tất: đợt thấp trước, rồi ngày dự kiến gần nhất
+  const inst = S.installs.filter(x=>installStage(x)!=='done').sort((a,b)=> installStage(a)-installStage(b) || String(a.planned_date||'9999').localeCompare(String(b.planned_date||'9999')));
+  $('#bnInstall').textContent = inst.length;
+  $('#bInstall').innerHTML = inst.map(x=>{
+    const c = custById(x.customer_id), st = installStage(x);
+    const next = st===1 ? 'Bổ sung thông tin Đợt 1' : st===2 ? 'Chờ ký biên bản giao nhận' : 'Chờ nghiệm thu' + ((x.tests||[]).length ? ` · ${(x.tests||[]).filter(t=>x.test_dates?.[t]).length}/${x.tests.length} phép thử` : '');
+    const late = x.planned_date && st===1 && x.planned_date < today();
+    return `<button type="button" class="kcard" data-inst="${x.id}">
+      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p><span class="chip blue">Đợt ${st}</span></span>
+      <p class="sub">${esc([x.machine_name, x.brand, x.model].filter(Boolean).join(' · '))}</p>
+      <span class="kf"><span class="sub">${esc(next)}</span>${x.planned_date?`<span class="chip ${late?'bad':''}">Dự kiến ${fmtDate(x.planned_date)}</span>`:''}</span>
+      <p class="sub">Phụ trách ${esc(staffName(x.owner_id, x.owner_name)||'—')}</p>
+    </button>`;
+  }).join('') || '<div class="empty">Không có lắp đặt đang dở.</div>';
+  $$('#bInstall [data-inst]').forEach(el=>el.onclick=()=>openInstallDetail(el.dataset.inst));
+
+  // Sửa chữa đang mở: theo deadline
+  $('#bnRepair').textContent = open.length;
+  $('#bRepair').innerHTML = open.map(v=>{
+    const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
+    const txt = v.remaining || v.problem || v.next_action;
+    return `<button type="button" class="kcard" data-visit="${v.id}">
+      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${resultChip(v.result)}</span>
+      <p class="sub">${esc(eqLabel(e))}</p>
+      ${txt?`<p class="sub" style="color:var(--text)">${esc(txt.length>90?txt.slice(0,90)+'…':txt)}</p>`:''}
+      <span class="kf">${deadlineChip(v)}<span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</span></span>
+    </button>`;
+  }).join('') || '<div class="empty">Không có sửa chữa đang mở.</div>';
+  bindVisitCards($('#bRepair'));
+
+  // Bảo trì chưa làm: theo ngày đến hạn
+  const mt = maintItems().filter(s=>!s.done).sort((a,b)=>a.due.localeCompare(b.due));
+  $('#bnMaint').textContent = mt.length;
+  $('#bMaint').innerHTML = mt.map(s=>{
+    const e = s.eq, c = e && custById(e.customer_id);
+    return `<button type="button" class="kcard" data-meq="${s.rec.equipment_id}">
+      <span class="kt"><p class="ttl">${esc(c?.name||'—')}</p>${maintChip(s)}</span>
+      <p class="sub">${esc(eqLabel(e))}</p>
+      <span class="kf"><span class="chip">Hạn ${fmtDate(s.due)}</span>${s.rec.plan_notes?`<span class="sub">${esc(s.rec.plan_notes.length>60?s.rec.plan_notes.slice(0,60)+'…':s.rec.plan_notes)}</span>`:''}</span>
+    </button>`;
+  }).join('') || '<div class="empty">Không có lịch bảo trì chưa làm.</div>';
+  $$('#bMaint [data-meq]').forEach(el=>el.onclick=()=>openEquipmentDetail(el.dataset.meq));
 }
 
 /* ===== LẮP ĐẶT ===== */
