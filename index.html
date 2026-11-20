@@ -1020,9 +1020,9 @@ function renderOverview(){
 }
 
 /* ===== LẮP ĐẶT ===== */
-const S1_FIELDS = [['customer_id','Khách hàng'],['machine_name','Tên máy'],['brand','Hãng'],['model','Model'],['serial','Số serial'],['contract_no','Số hợp đồng'],['planned_date','Ngày dự kiến lắp đặt'],['maint_duration_months','Thời gian bảo trì'],['maint_interval_months','Bảo trì mỗi']];
-function s1Missing(x){ return S1_FIELDS.filter(([k])=> k==='maint_duration_months' ? x[k]==null : !x[k]); }
-function s1Done(x){ return !!(x.customer_id && x.machine_name && x.brand && x.model && x.planned_date && x.serial && x.contract_no && x.maint_duration_months!=null && x.maint_interval_months); }
+const S1_FIELDS = [['customer_id','Khách hàng'],['machine_name','Tên máy'],['brand','Hãng'],['model','Model'],['serial','Số serial']];
+function s1Missing(x){ return S1_FIELDS.filter(([k])=>!x[k]); }
+function s1Done(x){ return s1Missing(x).length===0; }
 function s2Done(x){ return !!x.handover_date; }
 function s3Done(x){ return (x.tests||[]).every(t=>x.test_dates?.[t]) && !!x.acceptance_date && x.warranty_months!=null; }
 function installStage(x){ return !s1Done(x) ? 1 : !s2Done(x) ? 2 : !s3Done(x) ? 3 : 'done'; }
@@ -1080,10 +1080,10 @@ function openInstallForm(x){
           <label>Hãng *<input name="brand" value="${esc(x.brand)}" list="brandList2"></label>
           <label>Model *<input name="model" value="${esc(x.model)}"></label>
           <label>Số serial *<input name="serial" value="${esc(x.serial)}"></label>
-          <label>Số hợp đồng *<input name="contract_no" value="${esc(x.contract_no)}"></label>
-          <label>Ngày dự kiến lắp đặt *<input type="date" name="planned_date" value="${esc(x.planned_date)}"></label>
-          <label>Thời gian bảo trì (tháng) *<input type="number" min="0" name="maint_duration_months" value="${esc(x.maint_duration_months)}" placeholder="VD: 24"></label>
-          <label>Bảo trì mỗi (tháng/lần) *<input type="number" min="1" name="maint_interval_months" value="${esc(x.maint_interval_months)}" placeholder="VD: 6"></label>
+          <label>Số hợp đồng<input name="contract_no" value="${esc(x.contract_no)}"></label>
+          <label>Ngày dự kiến lắp đặt<input type="date" name="planned_date" value="${esc(x.planned_date)}"></label>
+          <label>Thời gian bảo trì (tháng)<input type="number" min="0" name="maint_duration_months" value="${esc(x.maint_duration_months)}" placeholder="VD: 24"></label>
+          <label>Bảo trì mỗi (tháng/lần)<input type="number" min="1" name="maint_interval_months" value="${esc(x.maint_interval_months)}" placeholder="VD: 6"></label>
           <div class="fieldset full">Thực hiện<div class="tests" data-tests>${TESTS.map(t=>`<button type="button" class="tbox" data-t="${t}" aria-pressed="${tests.includes(t)}"><span class="bx">${tests.includes(t)?'✓':''}</span>${t}</button>`).join('')}</div></div>
           <datalist id="brandList2">${brands.map(b=>`<option value="${esc(b)}">`).join('')}</datalist>
         </div>
