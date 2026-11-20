@@ -14,21 +14,22 @@ App web cho kỹ thuật viên SatiCus ghi nhật ký khi đến khách hàng: l
 - **Sửa chữa** (`svc_visits`): Đợt 1 vấn đề, khắc phục, vấn đề còn lại, hướng giải quyết tiếp theo → Đợt 2 deadline. Có người phụ trách, kỹ thuật tham gia, bàn giao.
 - **Bảo trì** (`svc_maintenance`, `005_bao_tri_tu_dien.sql`): kỹ thuật tự lên lịch cho từng máy (một hoặc nhiều ngày), app nhắc trong app khi còn 14 ngày và khi quá hạn; ghi nhận "Đã bảo trì". Thời gian và chu kỳ bảo trì trong hồ sơ lắp đặt chỉ để tham khảo.
 - **Chốt hoàn thành** (`006_chot_hoan_thanh.sql`): CEO (và Super Admin) bấm "Hoàn thành & chốt" trên phiếu sửa chữa hoặc hồ sơ lắp đặt đủ 3 đợt. Bản ghi đã chốt bị khoá ở database: không sửa, không xoá. Máy gặp sự cố lại thì tạo "bản ghi tiếp nối" gắn với phiếu cũ.
-- **Nhân sự** (Super Admin, CEO, CTO/COO): mỗi thành viên một thẻ tóm tắt việc đang có (lắp đặt phụ trách, sửa chữa phụ trách / tham gia, bảo trì chờ làm), số việc quá hạn, sắp đến hạn, xong trong tháng; bấm vào xem chi tiết theo 3 cụm. Chế độ **Lịch** (Tuần / Tháng): mỗi ngày liệt kê việc (lắp đặt dự kiến, giao nhận, phép thử, nghiệm thu, sửa chữa, deadline, bảo trì) với khách hàng và người phụ trách, lọc theo nhân sự.
+- **Nhân sự** (Super Admin, CEO, Manager): mỗi thành viên một thẻ tóm tắt việc đang có (lắp đặt phụ trách, sửa chữa phụ trách / tham gia, bảo trì chờ làm), số việc quá hạn, sắp đến hạn, xong trong tháng; bấm vào xem chi tiết theo 3 cụm. Chế độ **Lịch** (Tuần / Tháng): mỗi ngày liệt kê việc (lắp đặt dự kiến, giao nhận, phép thử, nghiệm thu, sửa chữa, deadline, bảo trì) với khách hàng và người phụ trách, lọc theo nhân sự.
 - **Máy đã lắp, Khách hàng, Thành viên** như trước.
 
 ## Quyền
 
 Phân quyền riêng của T-Alexios (bảng `svc_members`, `supabase/003_phan_quyen_rieng.sql`), không phụ thuộc vai trò trong Alexios. Tài khoản đăng nhập dùng chung; tài khoản chưa được thêm vào `svc_members` không vào được app và không đọc được dữ liệu.
 
-| | Super Admin | CEO, CTO/COO | Kỹ thuật |
-|---|---|---|---|
-| Xem toàn bộ nhật ký, máy, khách hàng | ✓ | ✓ | ✓ |
-| Ghi nhật ký, thêm máy, khách hàng | ✓ | ✓ | ✓ |
-| Sửa hồ sơ lắp đặt | ✓ | ✓ | Hồ sơ mình phụ trách |
-| Sửa phiếu sửa chữa, bàn giao | ✓ | ✓ | Khi là người tạo, phụ trách hoặc tham gia |
-| Xoá nhật ký | ✓ | ✓ | Nhật ký mình tạo |
-| Xoá máy, khách hàng | ✓ | ✓ | |
-| Chốt hoàn thành (khoá hồ sơ) | ✓ | CEO | |
-| Xem mục Nhân sự | ✓ | ✓ | |
-| Thêm, gỡ thành viên, đổi vai trò | ✓ | | |
+Mô hình giao lệnh (`supabase/007_manager_giao_lenh.sql`): Manager tạo lệnh lắp đặt, sửa chữa, bảo trì và giao người phụ trách chính cùng người tham gia; User cập nhật tiến độ trên lệnh được giao.
+
+| | Super Admin | CEO | Manager | User |
+|---|---|---|---|---|
+| Xem toàn bộ nhật ký, máy, khách hàng | ✓ | ✓ | ✓ | ✓ |
+| Tạo lệnh lắp đặt, sửa chữa, bảo trì; thêm máy, khách hàng | ✓ | ✓ | ✓ | |
+| Giao, đổi người phụ trách chính và người tham gia | ✓ | ✓ | ✓ | |
+| Cập nhật tiến độ lệnh | ✓ | ✓ | ✓ | Lệnh mình phụ trách hoặc tham gia |
+| Bàn giao, tạo bản ghi tiếp nối, xoá | ✓ | ✓ | ✓ | |
+| Chốt hoàn thành (khoá hồ sơ) | ✓ | ✓ | | |
+| Xem mục Nhân sự | ✓ | ✓ | ✓ | |
+| Thêm, gỡ thành viên, đổi vai trò | ✓ | | | |

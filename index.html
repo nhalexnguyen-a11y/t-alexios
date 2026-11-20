@@ -534,7 +534,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="overview">
     <header class="phead">
       <div><p class="eyebrow" id="todayPill"></p><h1 class="hero">Chào ngày mới. <span class="dim">Cùng giữ mọi thiết bị vận hành tốt.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
+      <button class="btn primary need-lead" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
     </header>
     <div class="stats">
       <div class="stat hl"><span class="lb">Tháng này</span><span class="n" id="stMonth">0</span><span class="s">lượt sửa chữa của cả đội</span></div>
@@ -553,7 +553,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="install" hidden>
     <header class="phead">
       <div><p class="eyebrow">Lắp đặt</p><h1 class="hero">Lắp đặt chuẩn chỉnh. <span class="dim">Bàn giao trọn vẹn.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newInstall">+ Lắp đặt mới</button>
+      <button class="btn primary need-lead" type="button" data-act="newInstall">+ Lắp đặt mới</button>
     </header>
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -568,7 +568,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="repair" hidden>
     <header class="phead">
       <div><p class="eyebrow">Sửa chữa</p><h1 class="hero">Xử lý nhanh gọn. <span class="dim">Khách hàng an tâm.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
+      <button class="btn primary need-lead" type="button" data-act="newRepair">+ Ghi sửa chữa</button>
     </header>
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -591,10 +591,10 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="maint" hidden>
     <header class="phead">
       <div><p class="eyebrow">Bảo trì</p><h1 class="hero">Chăm sóc định kỳ. <span class="dim">Máy bền, khách vui.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newMaint" style="display:inline-flex">+ Lên lịch bảo trì</button>
+      <button class="btn primary need-lead" type="button" data-act="newMaint" style="display:inline-flex">+ Lên lịch bảo trì</button>
     </header>
     <div class="filters"><div class="chips" id="mFilter" role="group" aria-label="Lọc lịch bảo trì"></div></div>
-    <p class="hint">Kỹ thuật tự lên lịch bảo trì cho từng máy. App nhắc khi còn 14 ngày đến hạn và khi quá hạn.</p>
+    <p class="hint">Manager lên lịch bảo trì và giao người phụ trách cho từng máy. App nhắc khi còn 14 ngày đến hạn và khi quá hạn.</p>
     <p class="count" id="mCount2" aria-live="polite"></p>
     <div class="list" id="maintList"></div>
   </section>
@@ -603,7 +603,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="equipment" hidden>
     <header class="phead">
       <div><p class="eyebrow">Máy đã lắp đặt</p><h1 class="hero">Mỗi thiết bị một hành trình. <span class="dim">Luôn được chăm sóc chu đáo.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newEquip">+ Thêm máy</button>
+      <button class="btn primary need-lead" type="button" data-act="newEquip">+ Thêm máy</button>
     </header>
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -618,7 +618,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="customers" hidden>
     <header class="phead">
       <div><p class="eyebrow">Khách hàng</p><h1 class="hero">Khách hàng là đối tác. <span class="dim">Luôn sẵn sàng đồng hành.</span></h1></div>
-      <button class="btn primary" type="button" data-act="newCust">+ Thêm khách hàng</button>
+      <button class="btn primary need-lead" type="button" data-act="newCust">+ Thêm khách hàng</button>
     </header>
     <div class="tools">
       <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -628,7 +628,7 @@ body:not(.is-lead) .need-lead{display:none!important}
     <div class="mgrid" id="custList"></div>
   </section>
 
-  <!-- NHÂN SỰ (Super Admin, CEO, CTO/COO) -->
+  <!-- NHÂN SỰ (Super Admin, CEO, Manager) -->
   <section class="view" data-view="staff" hidden>
     <header class="phead">
       <div><p class="eyebrow">Nhân sự</p><h1 class="hero">Một đội ngũ vững vàng. <span class="dim">Mỗi người một thế mạnh.</span></h1></div>
@@ -667,9 +667,9 @@ body:not(.is-lead) .need-lead{display:none!important}
       <h2>Vai trò</h2>
       <dl class="specs left">
         <div><dt>Super Admin</dt><dd>Toàn quyền (gồm chốt hoàn thành), quản lý thành viên</dd></div>
-        <div><dt>CEO</dt><dd>Như CTO/COO, thêm quyền bấm "Hoàn thành &amp; chốt" để khoá hồ sơ</dd></div>
-        <div><dt>CTO/COO</dt><dd>Xem, sửa, bàn giao, xoá mọi hồ sơ chưa chốt; xem mục Nhân sự</dd></div>
-        <div><dt>Kỹ thuật</dt><dd>Xem toàn bộ; tạo lắp đặt, sửa chữa, ghi bảo trì; sửa hồ sơ lắp đặt mình phụ trách và phiếu sửa chữa mình tạo, phụ trách hoặc tham gia</dd></div>
+        <div><dt>CEO</dt><dd>Như Manager, thêm quyền bấm "Hoàn thành &amp; chốt" để khoá hồ sơ</dd></div>
+        <div><dt>Manager</dt><dd>Tạo lệnh lắp đặt, sửa chữa, bảo trì; giao người phụ trách chính và người tham gia; sửa, bàn giao, xoá hồ sơ chưa chốt; xem mục Nhân sự</dd></div>
+        <div><dt>User</dt><dd>Xem toàn bộ; cập nhật tiến độ các lệnh mình phụ trách chính hoặc tham gia</dd></div>
       </dl>
       <p class="hint">Phân quyền này tách riêng với Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới trên Alexios rồi thêm vào đây.</p>
     </div>
@@ -713,15 +713,15 @@ body:not(.is-lead) .need-lead{display:none!important}
 const SUPABASE_URL = 'https://xfgqtgzgptavhqjjklkh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_DnACTiOfgWnETmyD8KXv2Q_Qw9mH5o_';
 const USERNAME_DOMAIN = 'internal.saticus.local';
-const LEAD_ROLES = ['super_admin','ceo','cto_coo'];
-const ROLE_LABEL = {super_admin:'Super Admin', ceo:'CEO', cto_coo:'CTO/COO', technician:'Kỹ thuật'};
+const LEAD_ROLES = ['super_admin','ceo','manager'];
+const ROLE_LABEL = {super_admin:'Super Admin', ceo:'CEO', manager:'Manager', user:'User'};
 const TESTS = ['IQ','OQ','PQ','FAT','SAT'];
 const RESULTS = {chua_xong:['Chưa xong','bad'], cho_linh_kien:['Chờ linh kiện','warn'], theo_doi:['Theo dõi thêm','warn'], hoan_thanh:['Hoàn thành','ok']};
 const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'Hết bảo hành', none:'Chưa có hạn BH'};
 const REMIND_DAYS = 14;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], members:[], sf:'technician', smode:'cards', calView:'month', calDate:null, customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
+const S = {me:null, staff:[], members:[], sf:'user', smode:'cards', calView:'month', calDate:null, customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -761,7 +761,23 @@ function deadlineState(v){
 }
 function deadlineChip(v){ const d = deadlineState(v); return d ? `<span class="chip ${d.cls}">${esc(d.label)}</span>` : ''; }
 function involved(v, uid){ return v.technician_id===uid || v.assignee_id===uid || (v.participant_ids||[]).includes(uid); }
-function canEditVisit(v){ return !v.locked_at && (involved(v, S.me.id) || isLead()); }
+function canEditVisit(v){ return !v.locked_at && (isLead() || v.assignee_id===S.me.id || (v.participant_ids||[]).includes(S.me.id)); }
+function instInvolved(x, uid){ return x.owner_id===uid || (x.participant_ids||[]).includes(uid); }
+function canEditInst(x){ return !x.locked_at && (isLead() || instInvolved(x, S.me.id)); }
+function maintInvolved(m, uid){ return m.assignee_id===uid || (m.participant_ids||[]).includes(uid); }
+function canDoMaint(m){ return isLead() || maintInvolved(m, S.me.id); }
+function pickBlock(label, ownerName, ownerSel, partIds, locked){
+  return `<label>${label} *<select name="${ownerName}" required ${locked?'disabled':''}>${staffOptions(ownerSel)}</select></label>
+    <div class="fieldset full">Người tham gia${participantPicker(partIds||[], ownerSel)}${locked?'<span class="hint">Chỉ Manager, CEO, Super Admin đổi người được giao.</span>':''}</div>`;
+}
+function bindPicker(w, ownerName, locked){
+  const f = w.querySelector('form'), pick = w.querySelector('[data-pick]');
+  const owner = ()=>f.querySelector(`[name=${ownerName}]`).value;
+  const paint = ()=>pick.querySelectorAll('.tchip').forEach(b=>{ const ex=b.dataset.id===owner(); b.disabled = ex || locked; if(ex) b.setAttribute('aria-pressed','false'); b.querySelector('.bx').textContent = b.getAttribute('aria-pressed')==='true'?'✓':''; });
+  pick.addEventListener('click', ev=>{ const b=ev.target.closest('.tchip'); if(!b||b.disabled) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')!=='true'); paint(); });
+  f.querySelector(`[name=${ownerName}]`).addEventListener('change', paint); paint();
+  return ()=>[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==owner());
+}
 function canLock(){ return ['ceo','super_admin'].includes(S.me?.role); }
 function lockChip(x){ return x.locked_at ? '<span class="chip lock">🔒 Đã chốt</span>' : ''; }
 function lockBanner(x){ return x.locked_at ? `<div class="lockbar">🔒 Đã chốt hoàn thành bởi <b>${esc(staffName(x.locked_by, x.locked_by_name)||'—')}</b> lúc ${new Date(x.locked_at).toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}. Thông tin đã khoá, không sửa hoặc xoá được.</div>` : ''; }
@@ -871,7 +887,7 @@ function showTab(tab){
   $$('.nav [data-tab], .tabbar [data-tab]').forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
   const more = $('.tabbar [data-act=more]'); if(SHEET_TABS.includes(tab)) more.setAttribute('aria-current','page'); else more.removeAttribute('aria-current');
   $('.fab').textContent = tab==='install' ? '+ Lắp đặt mới' : '+ Ghi sửa chữa';
-  $('.fab').hidden = ['maint','members','customers','equipment','staff'].includes(tab);
+  $('.fab').hidden = !isLead() || ['maint','members','customers','equipment','staff'].includes(tab);
   $('#moreSheet').hidden = true;
   window.scrollTo(0,0);
 }
@@ -1053,9 +1069,10 @@ function openInstallForm(x){
   modal('Lắp đặt', isNew ? 'Hồ sơ lắp đặt mới' : (custById(x.customer_id)?.name || 'Cập nhật lắp đặt'), `
     <form>
       <div class="stage-box" data-stage="1">
-        <div class="h"><b>Đợt 1 · Thông tin lắp đặt</b><span class="eyebrow">Phụ trách: ${esc(isNew ? (S.me.full_name||S.me.username) : staffName(x.owner_id, x.owner_name))}</span></div>
+        <div class="h"><b>Đợt 1 · Thông tin lắp đặt</b></div>
         <div class="grid2">
-          <label class="full">Khách hàng *<span class="inline">${customerSelect(x.customer_id)}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
+          <label class="full">Khách hàng *<span class="inline">${customerSelect(x.customer_id, isLead()?'':'disabled')}${isLead()?'<button type="button" class="btn" data-newc>+ Mới</button>':''}</span></label>
+          ${pickBlock('Người phụ trách chính', 'owner_id', x.owner_id || S.me.id, x.participant_ids, !isLead())}
           <label>Tên máy *<input name="machine_name" required value="${esc(x.machine_name)}" placeholder="VD: Máy đo độ hòa tan"></label>
           <label>Hãng *<input name="brand" value="${esc(x.brand)}" list="brandList2"></label>
           <label>Model *<input name="model" value="${esc(x.model)}"></label>
@@ -1082,14 +1099,15 @@ function openInstallForm(x){
         </div>
       </div>
       <label style="margin-top:14px">Ghi chú<textarea name="notes" style="min-height:60px">${esc(x.notes)}</textarea></label>
-      <div class="acts" style="margin-top:16px">${!isNew&&!x.locked_at&&(x.owner_id===S.me.id||isLead())?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<span class="hint" data-hint></span><button type="submit" class="btn primary">Lưu</button></div>
+      <div class="acts" style="margin-top:16px">${!isNew&&!x.locked_at&&isLead()?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<span class="hint" data-hint></span><button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
+    const getParts = bindPicker(w, 'owner_id', !isLead());
     const picked = ()=>[...w.querySelectorAll('[data-tests] .tbox[aria-pressed="true"]')].map(b=>b.dataset.t);
     const collect = ()=>{
       const t = picked(), dates = {};
       w.querySelectorAll('[data-td]').forEach(i=>{ if(t.includes(i.dataset.td) && i.value) dates[i.dataset.td] = i.value; });
-      return {customer_id:val(f,'customer_id'), machine_name:val(f,'machine_name'), brand:val(f,'brand'), model:val(f,'model'), serial:val(f,'serial'),
+      return {customer_id:val(f,'customer_id') || x.customer_id || null, machine_name:val(f,'machine_name'), brand:val(f,'brand'), model:val(f,'model'), serial:val(f,'serial'),
         contract_no:val(f,'contract_no'), planned_date:val(f,'planned_date'), maint_duration_months:num(f,'maint_duration_months'), maint_interval_months:num(f,'maint_interval_months'),
         tests:t, handover_date:val(f,'handover_date'), test_dates:dates, acceptance_date:val(f,'acceptance_date'), warranty_months:num(f,'warranty_months'), notes:val(f,'notes')};
     };
@@ -1105,7 +1123,7 @@ function openInstallForm(x){
     };
     w.querySelector('[data-tests]').addEventListener('click', ev=>{ const b=ev.target.closest('.tbox'); if(!b) return; const on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed', on); b.querySelector('.bx').textContent = on?'✓':''; refresh(); });
     f.addEventListener('input', refresh); f.addEventListener('change', refresh);
-    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{ f.querySelector('[name=customer_id]').outerHTML = customerSelect(c.id); refresh(); });
+    const nc = w.querySelector('[data-newc]'); if(nc) nc.onclick = ()=>openCustomerForm(null, c=>{ f.querySelector('[name=customer_id]').outerHTML = customerSelect(c.id); refresh(); });
     refresh();
     f.onsubmit = async ev=>{
       ev.preventDefault();
@@ -1114,7 +1132,8 @@ function openInstallForm(x){
       if(!s1Done(d)) toast('Đã lưu nháp Đợt 1. Điền đủ các mục có dấu * để sang Đợt 2.');
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       let res;
-      if(isNew){ d.owner_id = S.me.id; d.owner_name = S.me.full_name || S.me.username; res = await sb.from('svc_installations').insert(d).select().single(); }
+      if(isLead()){ d.owner_id = f.owner_id.value; d.owner_name = staffName(d.owner_id); d.participant_ids = getParts(); }
+      if(isNew) res = await sb.from('svc_installations').insert(d).select().single();
       else res = await sb.from('svc_installations').update(d).eq('id', x.id).select().single();
       busy(btn,false);
       if(res.error) return fail(res.error.code==='23505' ? {message:'Serial này của hãng đã có trong danh sách máy.'} : (res.error.code==='PGRST116' ? {message:'Bạn không có quyền sửa hồ sơ này.'} : res.error));
@@ -1145,7 +1164,7 @@ function schedPanel(eqId, canAdd){
 function openInstallDetail(id){
   const x = S.installs.find(i=>i.id===id); if(!x) return;
   const c = custById(x.customer_id), e = eqById(x.equipment_id);
-  const canEdit = !x.locked_at && (x.owner_id===S.me.id || isLead());
+  const canEdit = canEditInst(x);
   const st = installStage(x);
   const td = x.test_dates || {};
   modal('Lắp đặt', c?.name || 'Hồ sơ lắp đặt', `
@@ -1158,7 +1177,8 @@ function openInstallDetail(id){
       <div><dt>Số serial</dt><dd>${esc(x.serial||'—')}</dd></div>
       <div><dt>Số hợp đồng</dt><dd>${esc(x.contract_no||'—')}</dd></div>
       <div><dt>Ngày dự kiến</dt><dd>${fmtDate(x.planned_date)||'—'}</dd></div>
-      <div><dt>Phụ trách</dt><dd><b>${esc(staffName(x.owner_id, x.owner_name)||'—')}</b></dd></div>
+      <div><dt>Phụ trách chính</dt><dd><b>${esc(staffName(x.owner_id, x.owner_name)||'—')}</b></dd></div>
+      <div><dt>Người tham gia</dt><dd>${esc((x.participant_ids||[]).map(id=>staffName(id)).filter(Boolean).join(', ')||'—')}</dd></div>
       <div><dt>Bảo trì</dt><dd>${x.maint_duration_months!=null&&x.maint_interval_months?`${x.maint_duration_months} tháng, ${x.maint_interval_months} tháng/lần`:'—'}</dd></div>
       <div><dt>Thực hiện</dt><dd>${(x.tests||[]).join(', ')||'Không'}</dd></div>
     </dl></div>
@@ -1168,7 +1188,7 @@ function openInstallDetail(id){
       <div><dt>Ký biên bản nghiệm thu</dt><dd>${fmtDate(x.acceptance_date)||'—'}</dd></div>
       <div><dt>Thời hạn bảo hành</dt><dd>${x.warranty_months!=null?x.warranty_months+' tháng'+(x.acceptance_date?' · đến '+fmtDate(addMonths(x.acceptance_date,x.warranty_months)):''):'—'}</dd></div>
     </dl></div>`:''}
-    ${x.equipment_id?schedPanel(x.equipment_id, true):''}
+    ${x.equipment_id?schedPanel(x.equipment_id, isLead()):''}
     ${x.notes?`<div class="panel"><div class="sec"><h3>Ghi chú</h3><p>${esc(x.notes)}</p></div></div>`:''}
     <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>
     ${!x.locked_at&&st!=='done'&&canLock()?'<p class="hint" style="text-align:right">Chốt hoàn thành được khi hồ sơ đủ 3 đợt.</p>':''}`,
@@ -1194,8 +1214,9 @@ function maintRow(s){
     <span class="dbox"><b>${d}</b><span>Th${Number(mo)}/${y.slice(2)}</span></span>
     <span><p class="ttl">${esc(c?.name||'—')}</p><p class="sub">${esc(eqLabel(e))}</p>
       ${m.plan_notes?`<p class="sub">Kế hoạch: ${esc(m.plan_notes)}</p>`:''}
-      ${s.done?`<p class="sub">Đã làm ${fmtDate(m.done_date)} · ${esc(staffName(m.done_by, m.done_by_name))}${m.notes?' · '+esc(m.notes):''}</p>`:`<p class="sub">Lên lịch bởi ${esc(staffName(m.created_by, m.created_by_name)||'—')}</p>`}</span>
-    <span class="right">${maintChip(s)}${!s.done?`<button class="btn sm primary" data-mdone="${m.id}">Đã bảo trì</button>`:''}<button class="btn sm ghost" data-medit="${m.id}">Sửa</button></span>
+      <p class="sub">Phụ trách <b style="color:var(--text)">${esc(staffName(m.assignee_id, m.assignee_name || m.created_by_name)||'—')}</b>${(m.participant_ids||[]).length?' · Tham gia '+esc(m.participant_ids.map(id=>staffName(id)).filter(Boolean).join(', ')):''}</p>
+      ${s.done?`<p class="sub">Đã làm ${fmtDate(m.done_date)} · ${esc(staffName(m.done_by, m.done_by_name))}${m.notes?' · '+esc(m.notes):''}</p>`:''}</span>
+    <span class="right">${maintChip(s)}${!s.done&&canDoMaint(m)?`<button class="btn sm primary" data-mdone="${m.id}">Đã bảo trì</button>`:''}${isLead()?`<button class="btn sm ghost" data-medit="${m.id}">Sửa</button>`:''}</span>
   </div>`;
 }
 function maintFilter(s, k){ return k==='due' ? (s.state==='over'||s.state==='soon') : k==='over' ? s.state==='over' : k==='upcoming' ? !s.done : s.done; }
@@ -1223,11 +1244,13 @@ function openMaintForm(pre){
     <form class="grid2">
       <label class="full">Máy *<select name="equipment_id" required><option value="">— Chọn máy —</option>${equipOptions(pre.equipment_id)}</select></label>
       <p class="hint full" data-ref></p>
+      ${pickBlock('Người phụ trách chính', 'assignee_id', S.me.id, [], false)}
       <div class="fieldset full">Ngày bảo trì dự kiến *<div class="parts" data-dates>${dateRow()}</div><button type="button" class="btn sm" data-addd style="align-self:flex-start">+ Thêm ngày</button></div>
       <label class="full">Nội dung dự kiến<textarea name="plan_notes" style="min-height:60px" placeholder="Hạng mục bảo trì, vật tư cần mang theo"></textarea></label>
       <div class="acts full"><button type="submit" class="btn primary">Lưu lịch</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form'), box = w.querySelector('[data-dates]');
+    const getParts = bindPicker(w, 'assignee_id', false);
     const ref = ()=>{
       const i = S.installs.find(x=>x.equipment_id===f.equipment_id.value);
       w.querySelector('[data-ref]').textContent = i && (i.maint_duration_months!=null || i.maint_interval_months) ? `Theo hồ sơ lắp đặt: bảo trì ${i.maint_duration_months??'—'} tháng, ${i.maint_interval_months??'—'} tháng/lần${i.acceptance_date?', nghiệm thu '+fmtDate(i.acceptance_date):''}.` : '';
@@ -1240,7 +1263,8 @@ function openMaintForm(pre){
       const eq = val(f,'equipment_id'); if(!eq) return toast('Chọn máy', true);
       const dates = [...new Set([...box.querySelectorAll('[data-due]')].map(i=>i.value).filter(Boolean))];
       if(!dates.length) return toast('Nhập ít nhất một ngày bảo trì', true);
-      const rows = dates.map(d=>({equipment_id:eq, due_date:d, plan_notes:val(f,'plan_notes'), created_by:S.me.id, created_by_name:S.me.full_name||S.me.username}));
+      const asg = f.assignee_id.value, parts = getParts();
+      const rows = dates.map(d=>({equipment_id:eq, due_date:d, plan_notes:val(f,'plan_notes'), assignee_id:asg, assignee_name:staffName(asg), participant_ids:parts, created_by:S.me.id, created_by_name:S.me.full_name||S.me.username}));
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       const {error} = await sb.from('svc_maintenance').insert(rows);
       busy(btn,false);
@@ -1273,10 +1297,11 @@ function openMaintDone(id){
 function openMaintEdit(id){
   const m = S.maint.find(x=>x.id===id); if(!m) return;
   const e = eqById(m.equipment_id);
-  const canDel = m.created_by===S.me.id || isLead();
+  const canDel = isLead();
   modal('Bảo trì', 'Sửa lịch bảo trì', `
     <form class="grid2">
       <p class="hint full">${esc(custById(e?.customer_id)?.name||'')} · ${esc(eqLabel(e))}</p>
+      ${pickBlock('Người phụ trách chính', 'assignee_id', m.assignee_id || m.created_by, m.participant_ids, false)}
       <label>Ngày dự kiến *<input type="date" name="due_date" required value="${esc(m.due_date)}"></label>
       <label>Ngày đã làm<input type="date" name="done_date" value="${esc(m.done_date)}"></label>
       <label class="full">Nội dung dự kiến<textarea name="plan_notes" style="min-height:60px">${esc(m.plan_notes)}</textarea></label>
@@ -1284,11 +1309,13 @@ function openMaintEdit(id){
       <div class="acts full">${canDel?'<button type="button" class="btn ghost danger left" data-del>Xoá lịch</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
+    const getParts = bindPicker(w, 'assignee_id', false);
     f.onsubmit = async ev=>{
       ev.preventDefault();
       if(!val(f,'due_date')) return toast('Nhập ngày dự kiến', true);
       const done = val(f,'done_date');
-      const row = {due_date:val(f,'due_date'), done_date:done, plan_notes:val(f,'plan_notes'), notes:val(f,'notes')};
+      const asg = f.assignee_id.value;
+      const row = {due_date:val(f,'due_date'), done_date:done, plan_notes:val(f,'plan_notes'), notes:val(f,'notes'), assignee_id:asg, assignee_name:staffName(asg), participant_ids:getParts()};
       if(done && !m.done_date){ row.done_by = S.me.id; row.done_by_name = S.me.full_name||S.me.username; }
       if(!done){ row.done_by = null; row.done_by_name = null; }
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
@@ -1374,12 +1401,11 @@ function openRepairForm(v){
       ${parent?`<div class="lockbar">Tiếp nối phiếu ngày <b>${fmtDate(parent.visit_date)}</b> (đã chốt). Phiếu cũ giữ nguyên, không bị thay đổi.</div>`:''}
       <div class="stage-box" ${parent?'style="margin-top:14px"':''}>
         <div class="grid2">
-          <label class="full">Khách hàng *<span class="inline">${customerSelect(custId,'data-cust')}<button type="button" class="btn" data-newc>+ Mới</button></span></label>
-          <label class="full">Máy *<span class="inline" data-eqwrap>${equipSelect(custId, v.equipment_id)}<button type="button" class="btn" data-neweq>+ Mới</button></span></label>
+          <label class="full">Khách hàng *<span class="inline">${customerSelect(custId, isLead()?'data-cust':'data-cust disabled')}${isLead()?'<button type="button" class="btn" data-newc>+ Mới</button>':''}</span></label>
+          <label class="full">Máy *<span class="inline" data-eqwrap>${isLead()?equipSelect(custId, v.equipment_id):equipSelect(custId, v.equipment_id).replace('<select','<select disabled')}${isLead()?'<button type="button" class="btn" data-neweq>+ Mới</button>':''}</span></label>
           <p class="wnote full" data-winfo></p>
           <label>Ngày *<input type="date" name="visit_date" required value="${esc(v.visit_date||today())}"></label>
-          <label>Người phụ trách *<select name="assignee_id" required>${staffOptions(asg)}</select></label>
-          <div class="fieldset full">Kỹ thuật tham gia${participantPicker(v.participant_ids||[], asg)}</div>
+          ${pickBlock('Người phụ trách chính', 'assignee_id', asg, v.participant_ids, !isLead())}
         </div>
       </div>
       <div class="stage-box" style="margin-top:14px">
@@ -1399,13 +1425,10 @@ function openRepairForm(v){
           <label class="checkrow full"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
         </div>
       </div>
-      <div class="acts" style="margin-top:16px">${!isNew&&!v.locked_at&&(v.technician_id===S.me.id||isLead())&&!S.visits.some(x=>x.parent_id===v.id)?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+      <div class="acts" style="margin-top:16px">${!isNew&&!v.locked_at&&isLead()&&!S.visits.some(x=>x.parent_id===v.id)?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
-    const pick = w.querySelector('[data-pick]');
-    const paintPick = ()=>pick.querySelectorAll('.tchip').forEach(b=>{ const ex=b.dataset.id===f.assignee_id.value; b.disabled=ex; if(ex) b.setAttribute('aria-pressed','false'); b.querySelector('.bx').textContent = b.getAttribute('aria-pressed')==='true'?'✓':''; });
-    pick.addEventListener('click', ev=>{ const b=ev.target.closest('.tchip'); if(!b||b.disabled) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed')!=='true'); paintPick(); });
-    f.assignee_id.addEventListener('change', paintPick); paintPick();
+    const getParts = bindPicker(w, 'assignee_id', !isLead());
     const s2 = w.querySelector('[data-s2]');
     const showS2 = ()=>{ s2.hidden = !(f.problem.value.trim()); };
     f.problem.addEventListener('input', showS2); showS2();
@@ -1423,18 +1446,19 @@ function openRepairForm(v){
     const bindCust = ()=>custSel().addEventListener('change', ()=>refreshEq(''));
     bindEq(); bindCust(); updateWarranty(isNew);
     f.visit_date.addEventListener('change', ()=>updateWarranty(isNew));
-    w.querySelector('[data-newc]').onclick = ()=>openCustomerForm(null, c=>{ custSel().outerHTML = customerSelect(c.id,'data-cust'); bindCust(); refreshEq(''); });
-    w.querySelector('[data-neweq]').onclick = ()=>openEquipmentForm({customer_id:custSel().value||undefined}, e=>{ custSel().value = e.customer_id; refreshEq(e.id); });
+    const nc = w.querySelector('[data-newc]'); if(nc) nc.onclick = ()=>openCustomerForm(null, c=>{ custSel().outerHTML = customerSelect(c.id,'data-cust'); bindCust(); refreshEq(''); });
+    const ne = w.querySelector('[data-neweq]'); if(ne) ne.onclick = ()=>openEquipmentForm({customer_id:custSel().value||undefined}, e=>{ custSel().value = e.customer_id; refreshEq(e.id); });
     f.onsubmit = async ev=>{
       ev.preventDefault();
       if(!val(f,'equipment_id')) return toast('Chọn khách hàng và máy', true);
       if(!val(f,'problem')) return toast('Nhập vấn đề', true);
-      const assignee_id = val(f,'assignee_id');
-      const row = {equipment_id:val(f,'equipment_id'), visit_date:val(f,'visit_date'), work_type:'sua_chua', parent_id: v.parent_id || null,
-        assignee_id, assignee_name:staffName(assignee_id),
-        participant_ids:[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==assignee_id),
+      const row = {visit_date:val(f,'visit_date'), work_type:'sua_chua',
         problem:val(f,'problem'), solution:val(f,'solution'), remaining:val(f,'remaining'), next_action:val(f,'next_action'),
         deadline:val(f,'deadline'), result:val(f,'result'), under_warranty:val(f,'under_warranty')};
+      if(isLead()){
+        const assignee_id = val(f,'assignee_id');
+        Object.assign(row, {equipment_id:val(f,'equipment_id'), parent_id: v.parent_id || null, assignee_id, assignee_name:staffName(assignee_id), participant_ids:getParts()});
+      }
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       let res;
       if(isNew){ row.technician_id = S.me.id; row.technician_name = S.me.full_name || S.me.username; res = await sb.from('svc_visits').insert(row).select().single(); }
@@ -1493,12 +1517,12 @@ function openVisitDetail(id){
     <div class="panel"><dl class="specs left">
       <div><dt>Máy</dt><dd><a href="#" data-eq>${esc(eqLabel(e))}</a></dd></div>
       <div><dt>Người phụ trách</dt><dd><b>${esc(staffName(v.assignee_id, v.assignee_name)||'—')}</b></dd></div>
-      <div><dt>Kỹ thuật tham gia</dt><dd>${esc(parts.join(', ')||'—')}</dd></div>
+      <div><dt>Người tham gia</dt><dd>${esc(parts.join(', ')||'—')}</dd></div>
       <div><dt>Người tạo</dt><dd>${esc(staffName(v.technician_id, v.technician_name)||'—')}</dd></div>
       <div><dt>Deadline</dt><dd>${fmtDate(v.deadline)||'—'}</dd></div>
     </dl></div>
     ${sec('Vấn đề', v.problem || v.cause)}${sec('Khắc phục', v.solution || v.action)}${sec('Vấn đề còn lại', v.remaining, true)}${sec('Hướng giải quyết tiếp theo', v.next_action, true)}
-    <div class="acts">${v.locked_at?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>`,
+    <div class="acts">${v.locked_at&&isLead()?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)&&isLead()?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>`,
   (w, close)=>{
     w.querySelectorAll('[data-goto]').forEach(a=>a.onclick=ev=>{ ev.preventDefault(); close(); openVisitDetail(a.dataset.goto); });
     const fl = w.querySelector('[data-follow]'); if(fl) fl.onclick = ()=>{ close(); openRepairForm({parent_id:v.id, equipment_id:v.equipment_id, assignee_id:v.assignee_id, participant_ids:v.participant_ids, problem:[v.remaining, v.next_action].filter(Boolean).join('\n')}); };
@@ -1592,17 +1616,17 @@ function openEquipmentDetail(id){
       ${inst?`<div><dt>Hồ sơ lắp đặt</dt><dd><a href="#" data-inst>HĐ ${esc(inst.contract_no||'—')} · ${installStage(inst)==='done'?'Hoàn tất':'Đợt '+installStage(inst)}</a></dd></div>`:''}
       ${e.notes?`<div><dt>Ghi chú</dt><dd>${esc(e.notes)}</dd></div>`:''}
     </dl></div>
-    ${schedPanel(id, true)}
-    <div class="panel"><div class="h2row"><h2>Lịch sử sửa chữa</h2><button class="btn sm primary" data-log>+ Ghi sửa chữa</button></div>
+    ${schedPanel(id, isLead())}
+    <div class="panel"><div class="h2row"><h2>Lịch sử sửa chữa</h2>${isLead()?'<button class="btn sm primary" data-log>+ Ghi sửa chữa</button>':''}</div>
       <div class="timeline">${hist.map(v=>`<button type="button" class="titem" data-visit="${v.id}">
         <span class="ttl">${fmtDate(v.visit_date)} ${v.locked_at?lockChip(v):resultChip(v.result)}${v.parent_id?' <span class="chip blue">Tiếp nối</span>':''}</span>
         <span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}${v.deadline?' · deadline '+fmtDate(v.deadline):''}</span>
         ${(v.problem||v.cause)?`<span class="desc">${esc(v.problem||v.cause)}</span>`:''}</button>`).join('') || '<div class="empty">Chưa có lần sửa chữa nào.</div>'}</div></div>
-    <div class="acts"><button class="btn" data-edit>Sửa thông tin máy</button></div>`,
+    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa thông tin máy</button>':''}</div>`,
   (wr, close)=>{
     bindVisitCards(wr);
-    wr.querySelector('[data-edit]').onclick = ()=>{ close(); openEquipmentForm(e); };
-    wr.querySelector('[data-log]').onclick = ()=>{ close(); openRepairForm({equipment_id:id}); };
+    const ed = wr.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openEquipmentForm(e); };
+    const lg = wr.querySelector('[data-log]'); if(lg) lg.onclick = ()=>{ close(); openRepairForm({equipment_id:id}); };
     const a = wr.querySelector('[data-inst]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openInstallDetail(inst.id); };
     const am = wr.querySelector('[data-addmaint]'); if(am) am.onclick = ()=>{ close(); openMaintForm({equipment_id:id}); };
   });
@@ -1667,23 +1691,23 @@ function openCustomerDetail(id){
       <div><dt>Điện thoại</dt><dd>${c.phone?`<a href="tel:${esc(c.phone)}">${esc(c.phone)}</a>`:'—'}</dd></div>
       ${c.notes?`<div><dt>Ghi chú</dt><dd>${esc(c.notes)}</dd></div>`:''}
     </dl></div>
-    <div class="panel"><div class="h2row"><h2>Máy (${eqs.length})</h2><button class="btn sm" type="button" data-addeq>+ Thêm máy</button></div>
+    <div class="panel"><div class="h2row"><h2>Máy (${eqs.length})</h2>${isLead()?'<button class="btn sm" type="button" data-addeq>+ Thêm máy</button>':''}</div>
       <div class="list" data-eqs>${eqs.map(equipCard).join('')||'<div class="empty">Chưa có máy.</div>'}</div></div>
-    <div class="acts"><button class="btn" data-edit>Sửa khách hàng</button></div>`,
+    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa khách hàng</button>':''}</div>`,
   (w, close)=>{
     bindEquipCards(w.querySelector('[data-eqs]'));
-    w.querySelector('[data-edit]').onclick = ()=>{ close(); openCustomerForm(c); };
-    w.querySelector('[data-addeq]').onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
+    const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openCustomerForm(c); };
+    const ae = w.querySelector('[data-addeq]'); if(ae) ae.onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
   });
 }
 
-/* ===== NHÂN SỰ (Super Admin, CEO, CTO/COO) ===== */
+/* ===== NHÂN SỰ (Super Admin, CEO, Manager) ===== */
 function workOf(uid){
-  const inst = S.installs.filter(x=>x.owner_id===uid && installStage(x)!=='done').sort(instSortKey);
+  const inst = S.installs.filter(x=>instInvolved(x, uid) && installStage(x)!=='done').sort(instSortKey);
   const openR = repairs().filter(isOpen);
   const lead = openR.filter(v=>v.assignee_id===uid).sort(byUrgency);
   const part = openR.filter(v=>v.assignee_id!==uid && (v.participant_ids||[]).includes(uid)).sort(byUrgency);
-  const maint = maintItems().filter(s=>!s.done && s.rec.created_by===uid).sort((a,b)=>a.due.localeCompare(b.due));
+  const maint = maintItems().filter(s=>!s.done && maintInvolved(s.rec, uid)).sort((a,b)=>a.due.localeCompare(b.due));
   const over = lead.filter(v=>deadlineState(v)?.key==='over').length + maint.filter(s=>s.state==='over').length + inst.filter(x=>installStage(x)===1 && x.planned_date && x.planned_date<today()).length;
   const soon = lead.filter(v=>['today','soon'].includes(deadlineState(v)?.key)).length + maint.filter(s=>s.state==='soon').length;
   const ym = today().slice(0,7);
@@ -1695,7 +1719,7 @@ function calEvents(){
   const ev = [];
   const custName = id => custById(id)?.name || '—';
   for(const x of S.installs){
-    const base = {type:'install', cust:custName(x.customer_id), who:x.owner_id, whoName:staffName(x.owner_id, x.owner_name), open:()=>openInstallDetail(x.id), sub:[x.machine_name, x.brand, x.model].filter(Boolean).join(' · ')};
+    const base = {type:'install', parts:x.participant_ids||[], cust:custName(x.customer_id), who:x.owner_id, whoName:staffName(x.owner_id, x.owner_name), open:()=>openInstallDetail(x.id), sub:[x.machine_name, x.brand, x.model].filter(Boolean).join(' · ')};
     if(x.planned_date) ev.push({...base, date:x.planned_date, kind:'Lắp đặt dự kiến', done: installStage(x)!==1});
     const past = d => d <= today();
     if(x.handover_date) ev.push({...base, date:x.handover_date, kind: past(x.handover_date)?'Ký giao nhận':'Ký giao nhận (dự kiến)', done:past(x.handover_date)});
@@ -1709,8 +1733,8 @@ function calEvents(){
     if(v.deadline && isOpen(v)) ev.push({...base, type:'dead', date:v.deadline, kind:'Deadline sửa chữa', done:false});
   }
   for(const s of maintItems()){
-    const m = s.rec, e = s.eq, who = m.done_by || m.created_by;
-    ev.push({type:'maint', cust: e ? custName(e.customer_id) : '—', who, whoName:staffName(who, m.done_by_name || m.created_by_name), date: m.done_date || m.due_date, kind: m.done_date ? 'Đã bảo trì' : 'Bảo trì', done:!!m.done_date, open:()=>openEquipmentDetail(m.equipment_id), sub:eqLabel(e)});
+    const m = s.rec, e = s.eq, who = m.assignee_id || m.created_by;
+    ev.push({type:'maint', parts:m.participant_ids||[], cust: e ? custName(e.customer_id) : '—', who, whoName:staffName(who, m.assignee_name || m.created_by_name), date: m.done_date || m.due_date, kind: m.done_date ? 'Đã bảo trì' : 'Bảo trì', done:!!m.done_date, open:()=>openEquipmentDetail(m.equipment_id), sub:eqLabel(e)});
   }
   return ev;
 }
@@ -1776,12 +1800,12 @@ function renderStaff(){
   $('#calWho').innerHTML = '<option value="">Tất cả</option>' + S.staff.map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('');
   $('#calWho').value = curWho;
   if(S.smode==='cal') renderCalendar();
-  const roleOrder = {technician:0, cto_coo:1, ceo:2, super_admin:3};
+  const roleOrder = {user:0, manager:1, ceo:2, super_admin:3};
   const people = S.staff.slice().sort((a,b)=>(roleOrder[a.role]-roleOrder[b.role]) || (a.full_name||a.username).localeCompare(b.full_name||b.username));
-  const n = k => k==='all' ? people.length : people.filter(p=>p.role==='technician').length;
-  chipGroup($('#sFilter'), [['technician','Kỹ thuật',n('technician')],['all','Tất cả thành viên',n('all')]], S.sf, k=>{S.sf=k; renderStaff();});
+  const n = k => k==='all' ? people.length : people.filter(p=>p.role==='user').length;
+  chipGroup($('#sFilter'), [['user','User',n('user')],['all','Tất cả thành viên',n('all')]], S.sf, k=>{S.sf=k; renderStaff();});
   const q = norm($('#sSearch').value);
-  const list = people.filter(p=>(S.sf==='all' || p.role==='technician') && (!q || norm([p.full_name,p.username].join(' ')).includes(q)));
+  const list = people.filter(p=>(S.sf==='all' || p.role==='user') && (!q || norm([p.full_name,p.username].join(' ')).includes(q)));
   $('#staffList').innerHTML = list.map(p=>{
     const w = workOf(p.id), nm = p.full_name || p.username;
     const st = (n,l)=>`<div class="${n?'':'zero'}"><b>${n}</b><span>${l}</span></div>`;
@@ -1790,7 +1814,7 @@ function renderStaff(){
       <span class="pstats">${st(w.inst.length,'Lắp đặt phụ trách')}${st(w.lead.length,'Sửa chữa phụ trách')}${st(w.part.length,'Sửa chữa tham gia')}${st(w.maint.length,'Bảo trì chờ làm')}</span>
       <span class="pflags">${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}${w.soon?`<span class="chip warn">${w.soon} sắp đến hạn</span>`:''}${w.doneMonth?`<span class="chip ok">${w.doneMonth} xong trong tháng</span>`:''}${!w.total?'<span class="chip ok">Sẵn sàng nhận việc</span>':''}</span>
     </button>`;
-  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có kỹ thuật nào. Super Admin thêm thành viên với vai trò Kỹ thuật ở mục Thành viên.</div>';
+  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có nhân viên nào. Super Admin thêm thành viên với vai trò User ở mục Thành viên.</div>';
   $$('#staffList [data-uid]').forEach(el=>el.onclick=()=>openStaffDetail(el.dataset.uid));
 }
 function openStaffDetail(uid){
@@ -1815,7 +1839,7 @@ async function renderMembers(){
   const {data, error} = await sb.from('svc_members').select('user_id,role,created_at').order('created_at');
   if(error) return fail(error);
   S.members = data;
-  const order = {super_admin:0, ceo:1, cto_coo:2, technician:3};
+  const order = {super_admin:0, ceo:1, manager:2, user:3};
   const rows = data.slice().sort((a,b)=>(order[a.role]-order[b.role]) || staffName(a.user_id).localeCompare(staffName(b.user_id)));
   $('#mCount').textContent = `${rows.length} thành viên`;
   $('#memberList').innerHTML = rows.map(m=>{
@@ -1851,7 +1875,7 @@ async function openAddMember(){
   modal('Phân quyền T-Alexios', 'Thêm thành viên', `
     <form class="grid2">
       <label class="full">Tài khoản *<select name="uid" required><option value="">— Chọn tài khoản —</option>${(data||[]).map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)} (@${esc(p.username||'')})</option>`).join('')}</select></label>
-      <label class="full">Vai trò *<select name="role" required>${svcRoleOptions('technician')}</select></label>
+      <label class="full">Vai trò *<select name="role" required>${svcRoleOptions('user')}</select></label>
       <p class="hint full">${(data||[]).length ? 'Danh sách là các tài khoản đã có trên Alexios nhưng chưa vào T-Alexios.' : 'Tất cả tài khoản đã là thành viên. Tạo tài khoản mới trên Alexios trước rồi thêm vào đây.'}</p>
       <div class="acts full"><button type="submit" class="btn primary">Thêm</button></div>
     </form>`, (w, close)=>{
@@ -1871,7 +1895,7 @@ async function openAddMember(){
 /* ===== Xuất CSV (sửa chữa) ===== */
 function exportCSV(){
   const rows = filteredRepairs();
-  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Người phụ trách','Kỹ thuật tham gia','Người tạo','Vấn đề','Khắc phục','Vấn đề còn lại','Hướng giải quyết tiếp theo','Deadline','Trạng thái','Trong BH'];
+  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Người phụ trách','Người tham gia','Người tạo','Vấn đề','Khắc phục','Vấn đề còn lại','Hướng giải quyết tiếp theo','Deadline','Trạng thái','Trong BH'];
   const q = s => '"' + String(s ?? '').replace(/"/g,'""') + '"';
   const lines = rows.map(v=>{
     const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
