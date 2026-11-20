@@ -230,6 +230,10 @@ body:not(.is-owner) .need-owner{display:none!important}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(12px);opacity:0;pointer-events:none;z-index:60;background:var(--ink);color:var(--on-ink);padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);transition:opacity .2s ease,transform .2s ease;max-width:calc(100% - 32px)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{background:var(--red);color:#fff}
+.hlist{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px}
+.hlist li{padding:10px 0 10px 14px;border-left:2px solid var(--sc-orange)}
+.hlist p{margin:2px 0}.hlist .ttl{font-weight:600}
+.hlist .sub{font-size:13px;color:var(--muted)}
 [aria-invalid="true"]{border-color:var(--red)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
 
 /* Đăng nhập: trái là khối thương hiệu, phải là form */
@@ -861,17 +865,18 @@ function ssGet(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} 
 function ssSet(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }
 
 async function loadAll(){
-  const [st,c,e,v,i,m] = await Promise.all([
+  const [st,c,e,v,i,m,h] = await Promise.all([
     sb.rpc('svc_staff'),
     sb.from('svc_customers').select('*').order('name'),
     sb.from('svc_equipment').select('*').order('name'),
     sb.from('svc_visits').select('*').order('visit_date',{ascending:false}).order('created_at',{ascending:false}).limit(2000),
     sb.from('svc_installations').select('*').order('created_at',{ascending:false}),
-    sb.from('svc_maintenance').select('*').order('due_date')
+    sb.from('svc_maintenance').select('*').order('due_date'),
+    sb.from('svc_handovers').select('*').order('created_at')
   ]);
   const err = c.error||e.error||v.error||i.error||m.error; if(err) return fail(err);
   S.staff = st.error ? [{id:S.me.id, full_name:S.me.full_name, username:S.me.username, role:S.me.role}] : (st.data||[]);
-  S.customers=c.data; S.equipment=e.data; S.visits=v.data; S.installs=i.data; S.maint=m.data;
+  S.customers=c.data; S.equipment=e.data; S.visits=v.data; S.installs=i.data; S.maint=m.data; S.handovers=h.error?[]:(h.data||[]);
   const cur = $('#vTech').value;
   $('#vTech').innerHTML = '<option value="">Tất cả</option>' + S.staff.map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('');
   $('#vTech').value = cur;
@@ -1491,20 +1496,32 @@ function openHandover(v){
       <label class="full">Deadline mới (nếu đổi)<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
       <label class="full">Vấn đề còn lại<textarea name="remaining">${esc(v.remaining)}</textarea></label>
       <label class="full">Hướng giải quyết tiếp theo<textarea name="next_action">${esc(v.next_action)}</textarea></label>
+      <label class="full">Lý do bàn giao<textarea name="note" placeholder="VD: Bình đi công tác, Huy tiếp nhận xử lý tiếp"></textarea></label>
+      <p class="hint full">Lần bàn giao này được lưu vào lịch sử của phiếu.</p>
       <div class="acts full"><button type="submit" class="btn primary">Bàn giao</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     f.onsubmit = async ev=>{
       ev.preventDefault();
       const to = val(f,'to'); if(!to) return toast('Chọn người nhận bàn giao', true);
-      const parts = [...new Set([...(v.participant_ids||[]), cur].filter(id=>id && id!==to))];
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
-      const {error} = await sb.from('svc_visits').update({assignee_id:to, assignee_name:staffName(to), participant_ids:parts, deadline:val(f,'deadline'), remaining:val(f,'remaining'), next_action:val(f,'next_action')}).eq('id', v.id).select().single();
+      const {error} = await sb.rpc('svc_handover', {p_visit:v.id, p_to:to, p_deadline:val(f,'deadline'), p_remaining:val(f,'remaining'), p_next:val(f,'next_action'), p_note:val(f,'note')});
       busy(btn,false);
       if(error) return fail(error);
       close(); await loadAll(); toast('Đã bàn giao cho '+staffName(to));
     };
   });
+}
+function handoverHistory(vid){
+  const hs = (S.handovers||[]).filter(h=>h.visit_id===vid);
+  if(!hs.length) return '';
+  const fmtTime = t=>{ const d=new Date(t); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} ${fmtDate(t.slice(0,10))}`; };
+  return `<div class="panel"><h2>Lịch sử bàn giao (${hs.length})</h2><ol class="hlist">${hs.slice().reverse().map(h=>`<li>
+    <p class="ttl"><b>${esc(staffName(h.from_id, h.from_name)||'—')}</b> → <b>${esc(staffName(h.to_id, h.to_name)||'—')}</b></p>
+    <p class="sub">${fmtTime(h.created_at)} · bởi ${esc(staffName(h.by_id, h.by_name)||'—')}${h.new_deadline!==h.old_deadline?` · Deadline ${fmtDate(h.old_deadline)||'—'} → ${fmtDate(h.new_deadline)||'—'}`:''}</p>
+    ${h.note?`<p>Lý do: ${esc(h.note)}</p>`:''}
+    ${h.remaining?`<p class="sub">Việc còn lại khi bàn giao: ${esc(h.remaining)}</p>`:''}
+  </li>`).join('')}</ol></div>`;
 }
 function openVisitDetail(id){
   const v = S.visits.find(x=>x.id===id); if(!v) return;
@@ -1529,6 +1546,7 @@ function openVisitDetail(id){
       <div><dt>Deadline</dt><dd>${fmtDate(v.deadline)||'—'}</dd></div>
     </dl></div>
     ${sec('Vấn đề', v.problem || v.cause)}${sec('Khắc phục', v.solution || v.action)}${sec('Vấn đề còn lại', v.remaining, true)}${sec('Hướng giải quyết tiếp theo', v.next_action, true)}
+    ${handoverHistory(v.id)}
     <div class="acts">${v.locked_at&&isLead()?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)&&isLead()?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>`,
   (w, close)=>{
     w.querySelectorAll('[data-goto]').forEach(a=>a.onclick=ev=>{ ev.preventDefault(); close(); openVisitDetail(a.dataset.goto); });
