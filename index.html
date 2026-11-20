@@ -230,6 +230,7 @@ body:not(.is-owner) .need-owner{display:none!important}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(12px);opacity:0;pointer-events:none;z-index:60;background:var(--ink);color:var(--on-ink);padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);transition:opacity .2s ease,transform .2s ease;max-width:calc(100% - 32px)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{background:var(--red);color:#fff}
+[aria-invalid="true"]{border-color:var(--red)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 18%,transparent)}
 
 /* Đăng nhập: trái là khối thương hiệu, phải là form */
 .login{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--bg)}
@@ -1019,6 +1020,8 @@ function renderOverview(){
 }
 
 /* ===== LẮP ĐẶT ===== */
+const S1_FIELDS = [['customer_id','Khách hàng'],['machine_name','Tên máy'],['brand','Hãng'],['model','Model'],['serial','Số serial'],['contract_no','Số hợp đồng'],['planned_date','Ngày dự kiến lắp đặt'],['maint_duration_months','Thời gian bảo trì'],['maint_interval_months','Bảo trì mỗi']];
+function s1Missing(x){ return S1_FIELDS.filter(([k])=> k==='maint_duration_months' ? x[k]==null : !x[k]); }
 function s1Done(x){ return !!(x.customer_id && x.machine_name && x.brand && x.model && x.planned_date && x.serial && x.contract_no && x.maint_duration_months!=null && x.maint_interval_months); }
 function s2Done(x){ return !!x.handover_date; }
 function s3Done(x){ return (x.tests||[]).every(t=>x.test_dates?.[t]) && !!x.acceptance_date && x.warranty_months!=null; }
@@ -1111,6 +1114,7 @@ function openInstallForm(x){
         contract_no:val(f,'contract_no'), planned_date:val(f,'planned_date'), maint_duration_months:num(f,'maint_duration_months'), maint_interval_months:num(f,'maint_interval_months'),
         tests:t, handover_date:val(f,'handover_date'), test_dates:dates, acceptance_date:val(f,'acceptance_date'), warranty_months:num(f,'warranty_months'), notes:val(f,'notes')};
     };
+    let tried = !isNew;
     const refresh = ()=>{
       const d = collect();
       const st = installStage(d);
@@ -1119,7 +1123,10 @@ function openInstallForm(x){
       w.querySelectorAll('[data-tdl]').forEach(l=>l.hidden = !d.tests.includes(l.dataset.tdl));
       w.querySelector('[data-tdates]').hidden = !d.tests.length;
       w.querySelector('[data-wnote]').textContent = d.acceptance_date && d.warranty_months!=null ? `Bảo hành đến ${fmtDate(addMonths(d.acceptance_date, d.warranty_months))}` : '';
-      w.querySelector('[data-hint]').textContent = st===1 ? 'Điền đủ Đợt 1 để mở Đợt 2' : st===2 ? 'Nhập ngày giao nhận để mở Đợt 3' : st===3 ? 'Điền đủ Đợt 3 để hoàn tất' : 'Đã đủ thông tin 3 đợt';
+      const miss = s1Missing(d);
+      f.querySelectorAll('[aria-invalid]').forEach(i=>i.removeAttribute('aria-invalid'));
+      if(tried) miss.forEach(([k])=>{ const i=f.querySelector(`[name=${k}]`); if(i) i.setAttribute('aria-invalid','true'); });
+      w.querySelector('[data-hint]').textContent = st===1 ? 'Còn thiếu: ' + miss.map(m=>m[1]).join(', ') : st===2 ? 'Nhập ngày giao nhận để mở Đợt 3' : st===3 ? 'Điền đủ Đợt 3 để hoàn tất' : 'Đã đủ thông tin 3 đợt';
     };
     w.querySelector('[data-tests]').addEventListener('click', ev=>{ const b=ev.target.closest('.tbox'); if(!b) return; const on=b.getAttribute('aria-pressed')!=='true'; b.setAttribute('aria-pressed', on); b.querySelector('.bx').textContent = on?'✓':''; refresh(); });
     f.addEventListener('input', refresh); f.addEventListener('change', refresh);
@@ -1129,7 +1136,7 @@ function openInstallForm(x){
       ev.preventDefault();
       const d = collect();
       if(!d.customer_id || !d.machine_name) return toast('Chọn khách hàng và nhập tên máy', true);
-      if(!s1Done(d)) toast('Đã lưu nháp Đợt 1. Điền đủ các mục có dấu * để sang Đợt 2.');
+      if(!s1Done(d)){ tried = true; refresh(); toast('Đã lưu nháp. Còn thiếu: ' + s1Missing(d).map(m=>m[1]).join(', ') + '.'); }
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       let res;
       if(isLead()){ d.owner_id = f.owner_id.value; d.owner_name = staffName(d.owner_id); d.participant_ids = getParts(); }
