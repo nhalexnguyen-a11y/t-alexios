@@ -12,6 +12,192 @@
 /* Theme dùng chung với Alexios: localStorage "qlcv_theme" + data-theme trên <html> */
 (function(){ var t = "light"; try { t = localStorage.getItem("qlcv_theme") === "dark" ? "dark" : "light"; } catch (e) {} document.documentElement.setAttribute("data-theme", t); })();
 </script>
+<script>
+/* ===== Ngôn ngữ: VI (gốc) / EN. Dịch chữ giao diện trên màn hình; dữ liệu người dùng giữ nguyên. ===== */
+const LANG = (()=>{ try { return localStorage.getItem('talex_lang')==='en' ? 'en' : 'vi'; } catch(e){ return 'vi'; } })();
+document.documentElement.lang = LANG;
+const LOCALE = LANG==='en' ? 'en-GB' : 'vi-VN';
+function setLang(l){ try { localStorage.setItem('talex_lang', l); } catch(e){} location.reload(); }
+const I18N_EN = {
+// Điều hướng, chung
+'Tổng quan':'Overview','Lắp đặt':'Installation','Sửa chữa':'Repair','Bảo trì':'Maintenance','Máy đã lắp':'Installed equipment','Máy đã lắp đặt':'Installed equipment','Khách hàng':'Customers','Nhân sự':'Team','Thành viên':'Members','Về Alexios':'Back to Alexios','Khác':'More','Mục khác':'More sections','Điều hướng':'Navigation','Điều hướng nhanh':'Quick navigation',
+'Đăng xuất':'Sign out','Đăng nhập':'Sign in','Đóng':'Close','Lưu':'Save','Sửa':'Edit','Xoá':'Delete','Thêm':'Add','Hiện':'Show','Ẩn':'Hide','Có':'Yes','Không':'No','Bạn':'You','Lỗi':'Error','Tất cả':'All','Hôm nay':'Today','Trước':'Previous','Sau':'Next','Tuần':'Week','Tháng':'Month','Lịch':'Calendar','Danh sách':'List','Bộ lọc':'Filters','Xoá lọc':'Clear filters','Xuất CSV':'Export CSV','Xem tất cả':'View all','×':'×',
+'Sáng / Tối':'Light / Dark','Đổi giao diện sáng hoặc tối':'Switch light or dark theme','Đổi giao diện sáng / tối':'Switch light / dark theme',
+'T-Alexios · Nhật ký dịch vụ kỹ thuật SatiCus · dùng chung tài khoản Alexios':'T-Alexios · SatiCus technical service log · shares the Alexios account',
+'© 2026 Nguyễn Huỳnh Anh (Alex Nguyen). Thuộc bộ công cụ Alexios.':'© 2026 Nguyễn Huỳnh Anh (Alex Nguyen). Part of the Alexios toolkit.',
+// Đăng nhập
+'Tên đăng nhập':'Username','Mật khẩu':'Password','Quên mật khẩu':'Forgot password','Quên mật khẩu? Khôi phục trên Alexios':'Forgot password? Recover on Alexios','Khôi phục trên Alexios':'Recover on Alexios',
+'Dùng tên đăng nhập và mật khẩu của Alexios.':'Use your Alexios username and password.','Nhập tên đăng nhập và mật khẩu.':'Enter your username and password.','Sai tên đăng nhập hoặc mật khẩu.':'Incorrect username or password.',
+'Chào bạn trở lại.':'Welcome back.','Nhật ký công tác':'Field service log','Nhật ký kỹ thuật · by Alex Nguyen':'Technical log · by Alex Nguyen','Giới thiệu':'About',
+'Kỹ thuật viên ghi nhật ký lắp đặt, bảo trì, sửa chữa ngay tại hiện trường. Lịch sử từng máy và hạn bảo hành luôn sẵn cho cả đội.':'Technicians log installation, maintenance and repair work on site. Every machine’s history and warranty are always at hand for the whole team.',
+'Dùng chung đăng nhập và phân quyền':'Shared sign-in and permissions','Ghi nhanh trên điện thoại':'Quick logging on your phone','Lịch sử máy':'Machine history',
+'Chưa có quyền truy cập':'No access yet','Sắp xong rồi, chỉ còn bước cấp quyền.':'Almost there, you just need access.','T-Alexios có phân quyền riêng. Tài khoản':'T-Alexios has its own permissions. The account',
+'đăng nhập được nhưng chưa được Super Admin thêm vào danh sách thành viên. Hãy liên hệ Super Admin để được cấp quyền.':'can sign in but has not been added as a member by a Super Admin yet. Please contact a Super Admin to get access.',
+'Không kiểm tra được quyền truy cập':'Could not check access','Tài khoản chưa có hồ sơ trong Alexios.':'This account has no profile in Alexios.',
+// Lời chào / hero
+'Chào ngày mới.':'Good day.','Công việc thuận lợi.':'Smooth work ahead.','Theo dõi tiến độ.':'Track progress.','Lắp đặt chuẩn chỉnh.':'Installations done right.','Bàn giao trọn vẹn.':'Complete handovers.','Xử lý nhanh gọn.':'Quick resolution.','Khách hàng an tâm.':'Customers at ease.','Chăm sóc định kỳ.':'Regular care.','Máy bền, khách vui.':'Durable machines, happy customers.','Mỗi thiết bị một hành trình.':'Every machine has its journey.','Luôn được chăm sóc chu đáo.':'Always well looked after.','Khách hàng là đối tác.':'Customers are partners.','Luôn sẵn sàng đồng hành.':'Always ready to support.','Một đội ngũ vững vàng.':'A solid team.','Mỗi người một thế mạnh.':'Everyone has a strength.','Chào đón thành viên.':'Welcome, members.','Phân quyền rõ, làm việc trơn tru.':'Clear roles, smooth work.','Cùng giữ mọi thiết bị vận hành tốt.':'Keeping every machine running well.',
+// Tổng quan
+'Tháng này':'This month','lượt sửa chữa của cả đội':'repairs by the whole team','Tôi phụ trách':'My work','việc đang mở':'open tasks','Quá hạn':'Overdue','việc đã qua deadline':'tasks past deadline','Sắp hết BH':'Warranty ending','máy trong 60 ngày tới':'machines in the next 60 days','Hết BH trong 60 ngày':'Warranty ends within 60 days','Việc chưa hoàn thành':'Unfinished work',
+'Mọi lắp đặt đã hoàn tất.':'All installations are complete.','Tuyệt vời, không còn phiếu sửa chữa nào tồn đọng.':'Great, no repair tickets are pending.','Bảo trì đã được thực hiện đầy đủ.':'All maintenance is up to date.',
+'Mọi thứ trong tầm kiểm soát: không có lần bảo trì nào cần làm trong 14 ngày tới.':'Everything is under control: no maintenance due in the next 14 days.',
+// Lắp đặt
+'Hồ sơ lắp đặt':'Installation record','Hồ sơ lắp đặt mới':'New installation record','+ Lắp đặt mới':'+ New installation','Cập nhật lắp đặt':'Update installation','Sửa hồ sơ':'Edit record','Tìm lắp đặt':'Search installations','Lọc theo đợt':'Filter by stage','Tìm khách hàng, máy, hãng, serial, số hợp đồng…':'Search customer, machine, brand, serial, contract no.…',
+'Đợt':'Stage','Đợt 1':'Stage 1','Đợt 2':'Stage 2','Đợt 3':'Stage 3','Hoàn tất':'Complete','Đợt 1 · Thông tin lắp đặt':'Stage 1 · Installation details','Đợt 2 · Giao nhận':'Stage 2 · Handover','Đợt 3 · Nghiệm thu':'Stage 3 · Acceptance',
+'Tên máy':'Machine name','Tên máy *':'Machine name *','Hãng':'Brand','Hãng *':'Brand *','Model':'Model','Model *':'Model *','Số serial':'Serial no.','Số serial *':'Serial no. *','Số hợp đồng':'Contract no.','HĐ':'Contract','Ngày dự kiến lắp đặt':'Planned installation date','Ngày dự kiến':'Planned date','Ngày dự kiến *':'Planned date *','Lắp đặt dự kiến':'Planned installation',
+'Thời gian bảo trì (tháng)':'Maintenance period (months)','Bảo trì mỗi (tháng/lần)':'Maintenance every (months)','Thực hiện':'Tests','Ghi chú':'Notes','Ngày ký biên bản giao nhận *':'Handover signing date *','Ngày ký biên bản nghiệm thu *':'Acceptance signing date *','Ký biên bản giao nhận':'Handover signed','Ký biên bản nghiệm thu':'Acceptance signed','Thời hạn bảo hành (tháng) *':'Warranty period (months) *','Thời hạn bảo hành':'Warranty period','Ngày hoàn thành':'Completion date',
+'Giao nhận':'Handover','Nghiệm thu':'Acceptance','Chờ ký biên bản giao nhận':'Awaiting handover signing','Chờ nghiệm thu':'Awaiting acceptance','· chờ nghiệm thu':'· awaiting acceptance','Bổ sung thông tin Đợt 1':'Complete Stage 1 details','Đã nghiệm thu':'Accepted','phép thử':'tests',
+'Nhập ngày giao nhận để mở Đợt 3':'Enter the handover date to open Stage 3','Điền đủ Đợt 3 để hoàn tất':'Fill in Stage 3 to finish','Đã đủ thông tin 3 đợt':'All 3 stages complete','Còn thiếu':'Missing',
+'Chốt hoàn thành được khi hồ sơ đủ 3 đợt.':'The record can be locked once all 3 stages are complete.','Theo hồ sơ lắp đặt: bảo trì':'From the installation record: maintenance',
+'Đã lưu hồ sơ lắp đặt':'Installation record saved','Đã xoá hồ sơ lắp đặt (máy vẫn giữ trong danh sách Máy đã lắp)':'Installation record deleted (the machine stays in Installed equipment)','Đã chốt hoàn thành hồ sơ lắp đặt':'Installation record locked as complete','Chọn khách hàng và nhập tên máy':'Choose a customer and enter the machine name','Bạn không có quyền sửa hồ sơ này.':'You do not have permission to edit this record.',
+'Chưa có hồ sơ lắp đặt. Bấm':'No installation records yet. Click','để bắt đầu.':'to start.','Chưa có hồ sơ lắp đặt. Bấm "+ Lắp đặt mới" để bắt đầu.':'No installation records yet. Click "+ New installation" to start.',
+// Sửa chữa
+'Phiếu sửa chữa':'Repair ticket','Phiếu sửa chữa mới':'New repair ticket','+ Ghi sửa chữa':'+ Log repair','Cập nhật sửa chữa':'Update repair','Cập nhật tiến độ':'Update progress','Tìm sửa chữa':'Search repairs','Tìm khách hàng, máy, serial, nội dung…':'Search customer, machine, serial, content…','Lọc theo trạng thái':'Filter by status',
+'Liên quan tôi':'Involving me','Đang mở':'Open','Chưa xong':'Not done','Chờ linh kiện':'Waiting for parts','Theo dõi thêm':'Monitoring','Hoàn thành':'Completed','Đã chốt':'Locked','🔒 Đã chốt':'🔒 Locked','(đã chốt)':'(locked)',
+'Ngày':'Date','Ngày *':'Date *','Máy':'Machine','Máy *':'Machine *','Khách hàng *':'Customer *','— Chọn khách hàng —':'— Choose a customer —','— Chọn máy —':'— Choose a machine —','— Chọn —':'— Choose —','+ Mới':'+ New','Trong bảo hành':'Under warranty','Còn bảo hành':'Under warranty',
+'Người phụ trách':'Owner','Người phụ trách chính':'Main owner','Người phụ trách chính *':'Main owner *','Phụ trách chính':'Main owner','Người tham gia':'Participants','Phụ trách':'Owner','Tạo bởi':'Created by','Người tạo':'Created by','Chỉ Manager, CEO, Super Admin đổi người được giao.':'Only a Manager, CEO or Super Admin can change who is assigned.',
+'Đợt 1 · Nội dung xử lý':'Stage 1 · Work details','Đợt 2 · Deadline':'Stage 2 · Deadline','Vấn đề':'Problem','Vấn đề *':'Problem *','Khắc phục':'Fix','Vấn đề còn lại':'Remaining issue','Hướng giải quyết tiếp theo':'Next steps','Trạng thái':'Status','Trạng thái *':'Status *','Deadline':'Deadline','Kết quả':'Result',
+'Hiện tượng, lỗi khách báo, lỗi ghi nhận':'Symptoms, issues reported by the customer, errors found','Đã xử lý thế nào':'What was done','Những gì chưa xử lý xong':'What is still unresolved','Ai làm tiếp, cần chuẩn bị gì':'Who continues and what to prepare','Tra theo serial, linh kiện đã thay':'Look up by serial, parts replaced',
+'Chuỗi xử lý':'Ticket chain','Tiếp nối':'Follow-up','Bản ghi tiếp nối':'Follow-up record','+ Tạo bản ghi tiếp nối':'+ Create follow-up record','Tiếp nối phiếu ngày':'Follow-up of the ticket dated','(đã chốt). Phiếu cũ giữ nguyên, không bị thay đổi.':'(locked). The old ticket stays unchanged.',
+'Hoàn thành & chốt':'Complete & lock','Hoàn thành &amp; chốt':'Complete & lock','Bấm lần nữa để chốt (không hoàn tác được)':'Click again to lock (cannot be undone)','🔒 Đã chốt hoàn thành bởi':'🔒 Locked as complete by','lúc':'at','. Thông tin đã khoá, không sửa hoặc xoá được.':'. The information is locked and cannot be edited or deleted.',
+'Bàn giao':'Hand over','Chuyển người phụ trách':'Change owner','Đang phụ trách:':'Current owner:','. Người cũ được giữ trong danh sách tham gia để theo dõi tiếp.':'. The previous owner stays on as a participant to keep following.','Người nhận bàn giao *':'Hand over to *','Deadline mới (nếu đổi)':'New deadline (if changed)','Lý do bàn giao':'Reason for handover','Lần bàn giao này được lưu vào lịch sử của phiếu.':'This handover is saved in the ticket history.','VD: Bình đi công tác, Huy tiếp nhận xử lý tiếp':'E.g. Binh is travelling, Huy takes over',
+'Chọn người nhận bàn giao':'Choose who to hand over to','Lịch sử bàn giao':'Handover history','Việc còn lại khi bàn giao:':'Remaining at handover:','Lý do:':'Reason:','· bởi':'· by',
+'Đã lưu phiếu sửa chữa':'Repair ticket saved','Đã xoá phiếu sửa chữa':'Repair ticket deleted','Đã chốt hoàn thành phiếu sửa chữa':'Repair ticket locked as complete','Chọn khách hàng và máy':'Choose a customer and a machine','Nhập vấn đề':'Enter the problem','Bạn không có quyền sửa phiếu này.':'You do not have permission to edit this ticket.',
+'Chưa có phiếu sửa chữa phù hợp. Bấm':'No matching repair tickets. Click','Chưa có phiếu sửa chữa phù hợp. Bấm "+ Ghi sửa chữa" để bắt đầu.':'No matching repair tickets. Click "+ Log repair" to start.','Kỹ thuật viên liên quan':'Technician involved','Từ ngày':'From','Đến ngày':'To','· hiển thị 300 mới nhất':'· showing the latest 300','Deadline sửa chữa':'Repair deadline','Hạn hôm nay':'Due today','Chưa có deadline':'No deadline',
+'(không rõ khách hàng)':'(unknown customer)','(máy đã xoá)':'(machine deleted)','Đã xuất':'Exported',
+// Bảo trì
+'Lên lịch bảo trì':'Schedule maintenance','+ Lên lịch bảo trì':'+ Schedule maintenance','+ Lên lịch':'+ Schedule','Sửa lịch bảo trì':'Edit maintenance schedule','Ghi nhận đã bảo trì':'Record maintenance done','Đã bảo trì':'Maintenance done','Lọc lịch bảo trì':'Filter maintenance','Cần làm':'To do','Theo lịch':'Scheduled','Tất cả lịch chưa làm':'All pending schedules','Chờ làm':'To do','Đã làm':'Done',
+'Manager lên lịch bảo trì và giao người phụ trách cho từng máy. App nhắc khi còn 14 ngày đến hạn và khi quá hạn.':'Managers schedule maintenance and assign an owner for each machine. The app reminds you 14 days before it is due and when it is overdue.',
+'Ngày bảo trì dự kiến *':'Planned maintenance dates *','+ Thêm ngày':'+ Add date','Bỏ ngày':'Remove date','Nội dung dự kiến':'Planned work','Hạng mục bảo trì, vật tư cần mang theo':'Maintenance items, materials to bring','Lưu lịch':'Save schedule','Xoá lịch':'Delete schedule','Ngày thực hiện *':'Date done *','Ngày đã làm':'Date done','Ghi chú khi làm':'Notes from the visit','Kế hoạch:':'Plan:','Lịch bảo trì':'Maintenance schedule','Chưa có lịch bảo trì.':'No maintenance scheduled.','Chưa có lịch.':'Nothing scheduled.',
+'Nhập ít nhất một ngày bảo trì':'Enter at least one maintenance date','Nhập ngày dự kiến':'Enter the planned date','Chọn máy':'Choose a machine','Máy này đã có lịch bảo trì vào một trong các ngày đã chọn.':'This machine already has maintenance on one of the chosen dates.','Máy này đã có lịch vào ngày đó.':'This machine is already scheduled on that date.',
+'Đã lưu lịch bảo trì':'Maintenance schedule saved','Đã xoá lịch bảo trì':'Maintenance schedule deleted','Đã ghi nhận bảo trì':'Maintenance recorded','Đã lên':'Scheduled',
+// Máy, khách hàng
+'Tìm máy':'Search machines','Tìm tên máy, hãng, model, serial, khách hàng…':'Search machine name, brand, model, serial, customer…','Lọc theo bảo hành':'Filter by warranty','+ Thêm máy':'+ Add machine','Thêm máy':'Add machine','Sửa thông tin máy':'Edit machine details','Lưu máy':'Save machine','Vị trí':'Location','Vị trí đặt máy':'Machine location','Phòng QC, xưởng 2…':'QC room, workshop 2…','VD: Máy đo độ hòa tan':'E.g. Dissolution tester','Ngày lắp đặt':'Installation date','Hết bảo hành':'Warranty ends','Chưa có hạn BH':'No warranty date','Hết BH':'Warranty ended','Lịch sử sửa chữa':'Repair history','Sửa chữa gần nhất':'Latest repair','Lần đến gần nhất':'Latest visit','Chưa có lần sửa chữa nào.':'No repairs yet.','cho máy lắp từ trước.':'for machines installed earlier.','để thêm.':'to add.',
+'Chưa có máy.':'No machines yet.','Chưa có máy. Máy được thêm tự động khi tạo hồ sơ lắp đặt, hoặc bấm':'No machines yet. Machines are added automatically when an installation record is created, or click',
+'Đã lưu máy':'Machine saved','Đã xoá máy':'Machine deleted','Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được.':'This machine has installation or repair records and cannot be deleted.','Serial này của hãng đã có trong danh sách máy.':'This brand serial is already in the machine list.','Serial này của hãng đã tồn tại.':'This brand serial already exists.',
+'Tìm khách hàng':'Search customers','Tìm tên, địa chỉ, người liên hệ…':'Search name, address, contact…','+ Thêm khách hàng':'+ Add customer','Thêm khách hàng':'Add customer','Sửa khách hàng':'Edit customer','Lưu khách hàng':'Save customer','Tên khách hàng *':'Customer name *','Địa chỉ':'Address','Người liên hệ':'Contact person','Liên hệ':'Contact','Điện thoại':'Phone','Chưa có địa chỉ':'No address','Chưa có khách hàng.':'No customers yet.','Nhập tên khách hàng':'Enter the customer name',
+'Đã lưu khách hàng':'Customer saved','Đã xoá khách hàng':'Customer deleted','Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được.':'This customer still has machines or installation records and cannot be deleted.','Bấm lần nữa để xoá':'Click again to delete',
+// Nhân sự
+'Tìm nhân sự':'Search team','Tìm theo tên…':'Search by name…','Lọc nhân sự':'Filter team','Tất cả thành viên':'All members','User':'User','Đang rảnh':'Available','Sắp rảnh trong 7 ngày':'Free within 7 days','Không có việc nào chưa xong, có thể giao việc mới.':'No unfinished work, ready for new tasks.','Mọi người đều đang có việc.':'Everyone is busy.','Theo deadline muộn nhất của các việc đang làm.':'Based on the latest deadline of current tasks.','Chưa có ai.':'Nobody yet.',
+'Tình trạng':'Status','Việc gấp nhất':'Most urgent task','Dự kiến xong hết':'Expected all done','Không có việc đang làm':'No current tasks','Chưa rõ':'Unknown','Chưa rõ ngày xong':'Finish date unknown','việc chưa có deadline':'tasks without a deadline','Đang rảnh, có thể giao việc mới':'Available for new tasks','Việc đang làm':'Current tasks','Đã xong trong 30 ngày':'Done in the last 30 days','Vai trò':'Role','Việc':'Task','Ngày xong':'Date done','Không có việc nào chưa xong.':'No unfinished work.','Chưa có việc hoàn thành trong 30 ngày qua.':'Nothing completed in the last 30 days.',
+'Tính các việc chưa xong người đó phụ trách chính hoặc tham gia (lắp đặt, sửa chữa, bảo trì). Dự kiến xong hết = deadline muộn nhất trong các việc đang có. Bấm vào một người để xem chi tiết.':'Counts unfinished work the person owns or takes part in (installation, repair, maintenance). Expected all done = the latest deadline among current tasks. Click a person for details.',
+'Chưa có nhân viên nào. Super Admin thêm thành viên với vai trò User ở mục Thành viên.':'No staff yet. A Super Admin can add members with the User role under Members.',
+'Gạch ngang':'Strikethrough','= đã xong':'= done','&nbsp;= đã xong':'= done','Không có việc trong ngày này.':'Nothing on this day.','Th 2':'Mon','Th 3':'Tue','Th 4':'Wed','Th 5':'Thu','Th 6':'Fri','Th 7':'Sat','CN':'Sun','Ký giao nhận':'Handover signed','Đã bảo trì ':'Maintenance done',
+// Thành viên
+'Phân quyền T-Alexios':'T-Alexios permissions','+ Thêm thành viên':'+ Add member','Thêm thành viên':'Add member','Tài khoản *':'Account *','Tài khoản Alexios':'Alexios account','— Chọn tài khoản —':'— Choose an account —','Chọn tài khoản':'Choose an account','Vai trò *':'Role *','Gỡ quyền':'Remove access','Bấm lần nữa để gỡ':'Click again to remove','(tài khoản)':'(account)','Chưa có thành viên.':'No members yet.',
+'Danh sách là các tài khoản đã có trên Alexios nhưng chưa vào T-Alexios.':'The list shows accounts that exist on Alexios but are not in T-Alexios yet.','Tất cả tài khoản đã là thành viên. Tạo tài khoản mới trên Alexios trước rồi thêm vào đây.':'All accounts are already members. Create a new account on Alexios first, then add it here.',
+'Phân quyền này tách riêng với Alexios. Tài khoản đăng nhập vẫn dùng chung; tạo tài khoản mới trên Alexios rồi thêm vào đây.':'These permissions are separate from Alexios. Sign-in accounts are shared; create new accounts on Alexios, then add them here.',
+'Toàn quyền (gồm chốt hoàn thành), quản lý thành viên':'Full access (including locking), manages members','Như Manager, thêm quyền bấm':'Same as Manager, plus can click','để khoá hồ sơ':'to lock records','Như Manager, thêm quyền bấm "Hoàn thành & chốt" để khoá hồ sơ':'Same as Manager, plus can click "Complete & lock" to lock records',
+'Tạo lệnh lắp đặt, sửa chữa, bảo trì; giao người phụ trách chính và người tham gia; sửa, bàn giao, xoá hồ sơ chưa chốt; xem mục Nhân sự':'Creates installation, repair and maintenance orders; assigns the main owner and participants; edits, hands over and deletes unlocked records; sees Team',
+'Xem toàn bộ; cập nhật tiến độ các lệnh mình phụ trách chính hoặc tham gia':'Sees everything; updates progress on orders they own or take part in',
+'Đã thêm thành viên':'Member added','Đã đổi vai trò':'Role changed','Đã gỡ quyền truy cập':'Access removed',
+// Lỗi từ DB
+'Chỉ Manager, CEO, Super Admin được bàn giao':'Only a Manager, CEO or Super Admin can hand over','Không tìm thấy phiếu':'Ticket not found','Phiếu đã chốt, không bàn giao được':'The ticket is locked and cannot be handed over','Chọn người nhận bàn giao khác người đang phụ trách':'Choose someone other than the current owner',
+// Đơn vị lẻ
+'Tham gia':'Participant','Chưa có':'None','Bấm':'Click','chờ nghiệm thu':'awaiting acceptance','Trong BH':'Under warranty','Serial':'Serial','Tìm':'Search','Ngôn ngữ / Language':'Language / Ngôn ngữ',
+'Dự kiến':'Planned','Hạn':'Due','Còn':'Left','ngày':'days','tháng':'months','tháng/lần':'months each','việc':'tasks','máy':'machines','khách hàng':'customers','thành viên':'members','quá hạn':'overdue','hồ sơ lắp đặt':'installation records','phiếu sửa chữa':'repair tickets','lần sửa chữa':'repairs','lần bảo trì':'maintenance visits','lịch bảo trì':'maintenance schedules','Bảo hành đến':'Warranty until'
+};
+const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WD_EN = {'Thứ Hai':'Monday','Thứ Ba':'Tuesday','Thứ Tư':'Wednesday','Thứ Năm':'Thursday','Thứ Sáu':'Friday','Thứ Bảy':'Saturday','Chủ Nhật':'Sunday','Chủ nhật':'Sunday'};
+const D = '(\\d{2}\\/\\d{2}\\/\\d{4})';
+const pl = (n, one, many) => `${n} ${Number(n)===1?one:many}`;
+const NOUN_EN = {'việc':['task','tasks'],'máy':['machine','machines'],'khách hàng':['customer','customers'],'thành viên':['member','members'],'hồ sơ lắp đặt':['installation record','installation records'],'phiếu sửa chữa':['repair ticket','repair tickets'],'lần sửa chữa':['repair','repairs'],'lần bảo trì':['maintenance visit','maintenance visits'],'lịch bảo trì':['maintenance schedule','maintenance schedules'],'việc đang làm':['current task','current tasks'],'việc đang mở':['open task','open tasks'],'việc chưa có deadline':['task without a deadline','tasks without a deadline'],'việc đang có':['current task','current tasks'],'ngày':['day','days'],'tháng':['month','months']};
+const I18N_RULES = [
+  [new RegExp('^(\\d+) ('+Object.keys(NOUN_EN).join('|')+')$'), (m,n,k)=>pl(n, ...NOUN_EN[k])],
+  [/^\+(\d+) việc chưa có deadline$/, (m,n)=>`+${pl(n,'task','tasks')} without a deadline`],
+  [/^(\d+) quá hạn$/, (m,n)=>`${n} overdue`],
+  [/^(\d+) sắp đến hạn$/, (m,n)=>`${n} due soon`],
+  [/^(\d+) xong trong tháng$/, (m,n)=>`${n} done this month`],
+  [/^(\d+) việc xong trong tháng$/, (m,n)=>`${pl(n,'task','tasks')} done this month`],
+  [/^Còn (\d+) ngày$/i, (m,n)=>`${pl(n,'day','days')} left`],
+  [new RegExp('^Quá hạn (\\d+) ngày( \\('+D+'\\))?$','i'), (m,n,r)=>`Overdue by ${pl(n,'day','days')}${r||''}`],
+  [/^Còn BH (\d+) ngày$/, (m,n)=>`Warranty: ${pl(n,'day','days')} left`],
+  [new RegExp('^BH đến '+D+'$'), (m,d)=>`Warranty until ${d}`],
+  [new RegExp('^Bảo hành đến '+D+'$'), (m,d)=>`Warranty until ${d}`],
+  [new RegExp('^Hết BH '+D+'$'), (m,d)=>`Warranty ended ${d}`],
+  [new RegExp('^Hạn '+D+'$'), (m,d)=>`Due ${d}`],
+  [new RegExp('^Dự kiến '+D+'$'), (m,d)=>`Planned ${d}`],
+  [new RegExp('^Giao nhận '+D+'$'), (m,d)=>`Handed over ${d}`],
+  [new RegExp('^Nghiệm thu '+D+'$'), (m,d)=>`Accepted ${d}`],
+  [new RegExp('^Đã làm '+D+'$'), (m,d)=>`Done ${d}`],
+  [new RegExp('^thêm ngày '+D+'$'), (m,d)=>`added ${d}`],
+  [new RegExp('^Dự kiến xong hết '+D+'$'), (m,d)=>`Expected all done ${d}`],
+  [new RegExp('^Deadline '+D+' → '+D+'$'), (m,a,b)=>`Deadline ${a} → ${b}`],
+  [/^còn (\d+) ngày$/, (m,n)=>`${pl(n,'day','days')} left`],
+  [/^(\d+) tháng, (\d+) tháng\/lần$/, (m,a,b)=>`${pl(a,'month','months')}, every ${pl(b,'month','months')}`],
+  [/^(\d+) tháng$/, (m,n)=>pl(n,'month','months')],
+  [/^(\d+) tháng\/lần$/, (m,n)=>`every ${pl(n,'month','months')}`],
+  [new RegExp('^đến '+D+'$'), (m,d)=>`until ${d}`],
+  [/^(\d+)\/(\d+) phép thử$/, (m,a,b)=>`${a}/${b} tests`],
+  [/^(\d+) việc đang làm$/, (m,n)=>`${pl(n,'current task','current tasks')}`],
+  [/^Cập nhật Đợt (\d)$/, (m,n)=>`Update Stage ${n}`],
+  [/^Đang ở Đợt (\d)$/, (m,n)=>`At Stage ${n}`],
+  [/^Đợt (\d)$/, (m,n)=>`Stage ${n}`],
+  [/^Điền đủ Đợt 1 để mở Đợt 2$/, ()=>'Fill in Stage 1 to open Stage 2'],
+  [/^HĐ (.+)$/, (m,x)=>`Contract ${x}`],
+  [/^Hoàn thành (IQ|OQ|PQ|FAT|SAT)$/, (m,t)=>`${t} completed`],
+  [/^Ngày hoàn thành (IQ|OQ|PQ|FAT|SAT) \*$/, (m,t)=>`${t} completion date *`],
+  [/^(IQ|OQ|PQ|FAT|SAT) \(dự kiến\)$/, (m,t)=>`${t} (planned)`],
+  [/^(.+) \(dự kiến\)$/, (m,x)=>`${trCore(x)??x} (planned)`],
+  [/^Còn thiếu: (.+?)(\.?)$/, (m,x,dot)=>'Missing: '+x.split(', ').map(s=>trCore(s)??s).join(', ')+dot],
+  [/^Đã lưu nháp\. Còn thiếu: (.+)\.$/, (m,x)=>'Draft saved. Missing: '+x.split(', ').map(s=>trCore(s)??s).join(', ')+'.'],
+  [/^Theo hồ sơ lắp đặt: bảo trì (\S+) tháng, (\S+) tháng\/lần(?:, nghiệm thu (\S+))?\.?$/, (m,a,b,c)=>`From the installation record: maintenance ${a} months, every ${b} months${c?`, accepted ${c}`:''}.`],
+  [new RegExp('^lịch ngày '+D+'$'), (m,d)=>`scheduled ${d}`],
+  [/^· (.+)$/, (m,x)=>{ const t = trCore(x); return t==null ? null : '· '+t; }],
+  [/^Kế hoạch: (.+)$/, (m,x)=>`Plan: ${x}`],
+  [/^Lý do: (.+)$/, (m,x)=>`Reason: ${x}`],
+  [/^Việc còn lại khi bàn giao: (.+)$/, (m,x)=>`Remaining at handover: ${x}`],
+  [/^Phụ trách (.+)$/, (m,x)=>`Owner ${x}`],
+  [/^Tạo bởi (.+)$/, (m,x)=>`Created by ${x}`],
+  [/^Tham gia (.+)$/, (m,x)=>`With ${x}`],
+  [/^bởi (.+)$/, (m,x)=>`by ${x}`],
+  [/^Xem lịch của (.+)$/, (m,x)=>`${x}’s calendar`],
+  [/^Đã bàn giao cho (.+)$/, (m,x)=>`Handed over to ${x}`],
+  [/^Đã xuất (\d+) phiếu sửa chữa$/, (m,n)=>`Exported ${pl(n,'repair ticket','repair tickets')}`],
+  [/^xong (\d{2}\/\d{2})$/, (m,d)=>`done ${d}`],
+  [/^Lịch bảo trì \((\d+)\/(\d+) lần\)$/, (m,a,b)=>`Maintenance schedule (${a}/${b} visits)`],
+  [/^Tháng (\d{1,2})$/, (m,n)=>MONTHS_EN[n-1]||m],
+  [/^Th(\d{1,2})$/, (m,n)=>(MONTHS_EN[n-1]||'').slice(0,3)||null],
+  [/^Th(\d{1,2})\/(\d{2})$/, (m,n,y)=>`${(MONTHS_EN[n-1]||'').slice(0,3)} ${y}`],
+  [new RegExp('^(Thứ Hai|Thứ Ba|Thứ Tư|Thứ Năm|Thứ Sáu|Thứ Bảy|Chủ [Nn]hật), '+D+'$'), (m,w,d)=>`${WD_EN[w]}, ${d}`],
+  [/^← Tiếp nối từ phiếu (\S+)(.*)$/, (m,d,r)=>`← Follow-up of ticket ${d}${r.replace('(đã chốt)','(locked)')}`],
+  [/^→ Bản ghi tiếp nối (.+)$/, (m,x)=>'→ Follow-up record '+x.split(' · ').map(s=>trCore(s)??s).join(' · ').replace('(đã chốt)','(locked)')],
+  [/^(.+?) \((\d+)\)$/, (m,x,n)=>{ const t = trCore(x); return t==null ? null : `${t} (${n})`; }],
+  [/^(.+?) \($/, (m,x)=>{ const t = trCore(x); return t==null ? null : `${t} (`; }],
+];
+function trCore(c){
+  if(!c) return null;
+  if(Object.prototype.hasOwnProperty.call(I18N_EN, c)) return I18N_EN[c];
+  for(const [re, fn] of I18N_RULES){ const m = c.match(re); if(m){ const r = fn(...m); if(r!=null) return r; } }
+  if(c.includes(' · ')){ let changed = false; const out = c.split(' · ').map(p=>{ const t = trCore(p.trim()); if(t!=null){ changed = true; return t; } return p; }); if(changed) return out.join(' · '); }
+  return null;
+}
+function trText(t){
+  const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(t); if(!m || !m[2]) return t;
+  const r = trCore(m[2]); return r==null ? t : m[1]+r+m[3];
+}
+function tr(t){ return LANG==='en' ? trText(String(t)) : t; }
+const I18N_ATTRS = ['placeholder','aria-label','title','alt'];
+function trTree(root){
+  if(root.nodeType===3){ const p = root.parentElement; if(p && !p.closest('script,style,textarea,[data-noi18n]')){ const v = trText(root.nodeValue); if(v!==root.nodeValue) root.nodeValue = v; } return; }
+  if(root.nodeType!==1 || root.closest?.('script,style,[data-noi18n]')) return;
+  const els = [root, ...root.querySelectorAll('*')];
+  for(const el of els) for(const a of I18N_ATTRS){ const v = el.getAttribute(a); if(v){ const t = trText(v); if(t!==v) el.setAttribute(a, t); } }
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n; const list = [];
+  while((n = w.nextNode())) list.push(n);
+  list.forEach(trTree);
+}
+if(LANG==='en'){
+  const start = ()=>{
+    trTree(document.body);
+    new MutationObserver(ms=>{ for(const m of ms){
+      if(m.type==='characterData') trTree(m.target);
+      else if(m.type==='attributes') trTree(m.target.nodeType===1 ? m.target : m.target.parentElement);
+      else m.addedNodes.forEach(trTree);
+    } }).observe(document.body, {subtree:true, childList:true, characterData:true, attributes:true, attributeFilter:I18N_ATTRS});
+  };
+  if(document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+}
+</script>
 <style>
 /* Ngôn ngữ thiết kế Alexios: xanh SatiCus + điểm nhấn cam, font hệ thống, sidebar xanh gradient, theme sáng/tối. */
 :root{
@@ -512,7 +698,7 @@ button.srow:hover{background:var(--card-2)}button.srow:focus-visible{outline:2px
     <span class="lg-watermark" aria-hidden="true">T</span>
   </aside>
   <div class="lg-main">
-    <div class="lg-top"><button class="btn sm icon theme-btn" type="button" title="Sáng / Tối" aria-label="Đổi giao diện sáng hoặc tối">☾</button></div>
+    <div class="lg-top"><button class="btn sm" type="button" data-lang data-noi18n title="Ngôn ngữ / Language">EN</button><button class="btn sm icon theme-btn" type="button" title="Sáng / Tối" aria-label="Đổi giao diện sáng hoặc tối">☾</button></div>
     <div class="lg-box" id="noAccess" hidden>
       <div class="lg-head"><p class="eyebrow">Chưa có quyền truy cập</p><h2 class="lg-title">Sắp xong rồi, chỉ còn bước cấp quyền.</h2>
         <p class="lg-sub">T-Alexios có phân quyền riêng. Tài khoản <b id="naUser"></b> đăng nhập được nhưng chưa được Super Admin thêm vào danh sách thành viên. Hãy liên hệ Super Admin để được cấp quyền.</p></div>
@@ -552,6 +738,7 @@ button.srow:hover{background:var(--card-2)}button.srow:focus-visible{outline:2px
     <div class="me"><b id="meName">…</b><span class="badge" id="meRole" hidden></span></div>
     <div class="foot-row">
       <button class="btn sm" type="button" data-act="logout">Đăng xuất</button>
+      <button class="btn sm" type="button" data-lang data-noi18n title="Ngôn ngữ / Language">EN</button>
       <button class="btn sm icon theme-btn" type="button" title="Sáng / Tối" aria-label="Đổi giao diện sáng hoặc tối">☾</button>
     </div>
   </div>
@@ -727,6 +914,7 @@ button.srow:hover{background:var(--card-2)}button.srow:focus-visible{outline:2px
     <button class="btn need-owner" type="button" data-tab="members">Thành viên</button>
     <a class="btn" href="https://alex-workspace.pages.dev/app">Về Alexios</a>
     <button class="btn theme-btn" type="button">Đổi giao diện sáng / tối</button>
+    <button class="btn" type="button" data-lang data-noi18n>English</button>
     <button class="btn" type="button" data-act="logout">Đăng xuất</button>
     <button class="btn" type="button" data-act="closeSheet">Đóng</button>
   </div>
@@ -809,7 +997,7 @@ function bindPicker(w, ownerName, locked){
 }
 function canLock(){ return ['ceo','super_admin'].includes(S.me?.role); }
 function lockChip(x){ return x.locked_at ? '<span class="chip lock">🔒 Đã chốt</span>' : ''; }
-function lockBanner(x){ return x.locked_at ? `<div class="lockbar">🔒 Đã chốt hoàn thành bởi <b>${esc(staffName(x.locked_by, x.locked_by_name)||'—')}</b> lúc ${new Date(x.locked_at).toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}. Thông tin đã khoá, không sửa hoặc xoá được.</div>` : ''; }
+function lockBanner(x){ return x.locked_at ? `<div class="lockbar">🔒 Đã chốt hoàn thành bởi <b>${esc(staffName(x.locked_by, x.locked_by_name)||'—')}</b> lúc ${new Date(x.locked_at).toLocaleString(LOCALE,{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}. Thông tin đã khoá, không sửa hoặc xoá được.</div>` : ''; }
 function lockButton(btn, table, id, label){
   btn.onclick = async ()=>{
     if(btn.dataset.sure!=='1'){ btn.dataset.sure='1'; btn.textContent='Bấm lần nữa để chốt (không hoàn tác được)'; return; }
@@ -828,6 +1016,7 @@ function repairs(){ return S.visits.filter(v=>v.work_type!=='lap_dat'); }
 
 /* ===== Theme ===== */
 function themeNow(){ return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+$$('[data-lang]').forEach(b=>{ b.textContent = LANG==='en' ? (b.classList.contains('sm')?'VI':'Tiếng Việt') : (b.classList.contains('sm')?'EN':'English'); b.addEventListener('click', ()=>setLang(LANG==='en'?'vi':'en')); });
 function paintThemeBtns(){ $$('.theme-btn.icon').forEach(b => b.textContent = themeNow() === 'dark' ? '☀' : '☾'); }
 $$('.theme-btn').forEach(b => b.addEventListener('click', ()=>{
   const t = themeNow() === 'dark' ? 'light' : 'dark';
@@ -880,7 +1069,7 @@ async function boot(){
   $('#meName').textContent = name;
   $('#meRole').textContent = ROLE_LABEL[svcRole] || svcRole; $('#meRole').hidden = false;
   $('#sheetMe').textContent = name + ' · ' + (ROLE_LABEL[svcRole] || svcRole);
-  $('#todayPill').textContent = new Date().toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
+  $('#todayPill').textContent = new Date().toLocaleDateString(LOCALE, {weekday:'long', day:'2-digit', month:'2-digit', year:'numeric'});
   $('#loginView').hidden = true; $('#appView').hidden = false;
   await loadAll();
   showTab(ssGet('tab') || 'overview');
@@ -1831,7 +2020,7 @@ function renderCalendar(){
 }
 function openDayList(day, list){
   const names = {install:'Lắp đặt', repair:'Sửa chữa', maint:'Bảo trì', dead:'Deadline'};
-  modal('Lịch', new Date(day+'T00:00:00Z').toLocaleDateString('vi-VN',{weekday:'long', day:'2-digit', month:'2-digit', year:'numeric', timeZone:'UTC'}), `
+  modal('Lịch', new Date(day+'T00:00:00Z').toLocaleDateString(LOCALE,{weekday:'long', day:'2-digit', month:'2-digit', year:'numeric', timeZone:'UTC'}), `
     <div class="dlist">${list.map((e,i)=>`<button type="button" class="kcard" data-i="${i}">
       <span class="kt"><p class="ttl">${esc(e.cust)}</p><span class="chips-row"><span class="chip"><i class="dot t-${e.type}" style="margin-right:6px"></i>${esc(names[e.type])}</span>${e.done?'<span class="chip ok">Xong</span>':''}</span></span>
       <p class="sub">${esc(e.kind)}${e.sub?' · '+esc(e.sub):''}</p>
@@ -1996,13 +2185,13 @@ async function openAddMember(){
 /* ===== Xuất CSV (sửa chữa) ===== */
 function exportCSV(){
   const rows = filteredRepairs();
-  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Người phụ trách','Người tham gia','Người tạo','Vấn đề','Khắc phục','Vấn đề còn lại','Hướng giải quyết tiếp theo','Deadline','Trạng thái','Trong BH'];
+  const head = ['Ngày','Khách hàng','Tên máy','Hãng','Model','Serial','Người phụ trách','Người tham gia','Người tạo','Vấn đề','Khắc phục','Vấn đề còn lại','Hướng giải quyết tiếp theo','Deadline','Trạng thái','Trong BH'].map(tr);
   const q = s => '"' + String(s ?? '').replace(/"/g,'""') + '"';
   const lines = rows.map(v=>{
     const e = eqById(v.equipment_id), c = e && custById(e.customer_id);
     return [fmtDate(v.visit_date), c?.name, e?.name, e?.brand, e?.model, e?.serial,
       staffName(v.assignee_id, v.assignee_name), participantNames(v).join(', '), staffName(v.technician_id, v.technician_name),
-      v.problem||v.cause, v.solution||v.action, v.remaining, v.next_action, fmtDate(v.deadline), (RESULTS[v.result]||[v.result])[0], v.under_warranty?'Có':''].map(q).join(',');
+      v.problem||v.cause, v.solution||v.action, v.remaining, v.next_action, fmtDate(v.deadline), tr((RESULTS[v.result]||[v.result])[0]), v.under_warranty?tr('Có'):''].map(q).join(',');
   });
   const blob = new Blob(['﻿' + [head.map(q).join(','), ...lines].join('\r\n')], {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `sua-chua-${today()}.csv`; a.click();
