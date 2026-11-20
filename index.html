@@ -352,6 +352,28 @@ body:not(.is-owner) .need-owner{display:none!important}
 .chain{display:flex;flex-direction:column;gap:6px}
 .chain a{font-size:14px}
 body:not(.is-lead) .need-lead{display:none!important}
+.freebox{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.freebox .panel h2{margin:0 0 4px;font-size:15px}.freebox .panel p.sub{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.fchips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card-2);font-size:13.5px;font-weight:600}
+.fchip:hover{outline:1px solid var(--btn-border)}.fchip small{font-weight:500;color:var(--muted)}
+.fchip:focus-visible{outline:2px solid var(--ink)}
+.slist-wrap{padding:6px 0}
+.srow{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(150px,1fr) minmax(200px,1.6fr) minmax(130px,.8fr);gap:14px;align-items:center;padding:12px 20px}
+.srow.shead{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-top:8px;padding-bottom:8px}
+button.srow{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(150px,1fr) minmax(200px,1.6fr) minmax(130px,.8fr);gap:14px;align-items:center;padding:12px 20px;width:100%;cursor:pointer;border-top:1px solid var(--line, rgba(0,0,0,.06))}
+button.srow:hover{background:var(--card-2)}button.srow:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.srow .spn{display:flex;flex-wrap:nowrap;align-items:center;gap:10px;min-width:0}.srow .spn b{display:block;font-weight:700}.srow .spn small{display:block;color:var(--muted);font-size:12.5px}
+.srow .nx{min-width:0}.srow .nx b{display:block;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.srow .nx small{color:var(--muted);font-size:12.5px}
+.srow .fin b{font-weight:700;font-variant-numeric:tabular-nums}.srow .fin small{display:block;color:var(--muted);font-size:12px}
+.srow .stt{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:860px){ .srow.shead{display:none} button.srow{grid-template-columns:1fr auto;row-gap:6px;padding:12px 16px} button.srow .nx{grid-column:1/-1} button.srow .fin{grid-column:1/-1} button.srow .fin:not(:empty)::before{content:'Dự kiến xong hết: ';color:var(--muted);font-size:12.5px} button.srow .stt{justify-content:flex-end} }
+.wtable{width:100%;border-collapse:collapse;font-size:14px}
+.wtable th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px}
+.wtable td{padding:10px;border-top:1px solid var(--line, rgba(0,0,0,.06));vertical-align:top}
+.wtable tr[data-k]{cursor:pointer}.wtable tr[data-k]:hover td{background:var(--card-2)}
+.wtable td small{display:block;color:var(--muted);font-size:12.5px}
+@media (max-width:700px){ .wtable thead{display:none} .wtable tr{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line, rgba(0,0,0,.06))} .wtable td{border:0;padding:6px 10px} .wtable td:first-child{grid-column:1/-1} }
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
 .pcard{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:1px solid transparent;border-radius:18px;padding:18px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,border-color .2s ease}
 .pcard:hover{transform:translateY(-2px);border-color:var(--btn-border)}
@@ -424,7 +446,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   .cal.week{overflow-x:auto}
   .cal.week .dow,.cal.week .wk{min-width:840px}
 }
-.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
 .bcol{background:var(--card);border-radius:18px;box-shadow:var(--shadow-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--ink)}
 .bcol:nth-child(2){border-top-color:var(--sc-orange)}
 .bcol:nth-child(3){border-top-color:var(--green)}
@@ -443,6 +465,7 @@ body:not(.is-lead) .need-lead{display:none!important}
 .kcard .sub{margin:0;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
 .kcard .kf{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .bcol .empty{padding:20px 12px;font-size:13.5px}
+.blist{flex:1}.blist>.empty:only-child{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
 @media (max-width:1100px){ .board{grid-template-columns:repeat(3,minmax(280px,1fr));overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px} .bcol{scroll-snap-align:start} }
 @media (max-width:860px){ .board{grid-template-columns:repeat(3,85%)} .blist{max-height:none} }
 .nav .cnt,.tabbar .cnt{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--sc-orange);color:#1a1a1a;font-size:11px;font-weight:800;display:inline-grid;place-items:center}
@@ -637,7 +660,7 @@ body:not(.is-lead) .need-lead{display:none!important}
   <section class="view" data-view="staff" hidden>
     <header class="phead">
       <div><p class="eyebrow">Nhân sự</p><h1 class="hero">Một đội ngũ vững vàng. <span class="dim">Mỗi người một thế mạnh.</span></h1></div>
-      <div class="seg" id="sMode" role="tablist"><button type="button" data-m="cards" aria-pressed="true">Thẻ nhân sự</button><button type="button" data-m="cal" aria-pressed="false">Lịch</button></div>
+      <div class="seg" id="sMode" role="tablist"><button type="button" data-m="cards" aria-pressed="true">Danh sách</button><button type="button" data-m="cal" aria-pressed="false">Lịch</button></div>
     </header>
     <div id="calWrap" hidden>
       <div class="calbar">
@@ -657,8 +680,9 @@ body:not(.is-lead) .need-lead{display:none!important}
         <input id="sSearch" type="search" placeholder="Tìm theo tên…" aria-label="Tìm nhân sự"></label>
     </div>
     <div class="filters"><div class="chips" id="sFilter" role="group" aria-label="Lọc nhân sự"></div></div>
-    <p class="hint">Lắp đặt: hồ sơ chưa hoàn tất người đó phụ trách. Sửa chữa: phiếu chưa hoàn thành người đó phụ trách hoặc tham gia. Bảo trì: lịch chưa làm do người đó lên lịch.</p>
-    <div class="pgrid" id="staffList"></div>
+    <div id="freeBox"></div>
+    <div class="panel slist-wrap"><div class="srow shead"><span>Nhân sự</span><span>Tình trạng</span><span>Việc gấp nhất</span><span>Dự kiến xong hết</span></div><div id="staffList"></div></div>
+    <p class="hint">Tính các việc chưa xong người đó phụ trách chính hoặc tham gia (lắp đặt, sửa chữa, bảo trì). Dự kiến xong hết = deadline muộn nhất trong các việc đang có. Bấm vào một người để xem chi tiết.</p>
     </div>
   </section>
 
@@ -1831,29 +1855,81 @@ function renderStaff(){
   chipGroup($('#sFilter'), [['user','User',n('user')],['all','Tất cả thành viên',n('all')]], S.sf, k=>{S.sf=k; renderStaff();});
   const q = norm($('#sSearch').value);
   const list = people.filter(p=>(S.sf==='all' || p.role==='user') && (!q || norm([p.full_name,p.username].join(' ')).includes(q)));
-  $('#staffList').innerHTML = list.map(p=>{
-    const w = workOf(p.id), nm = p.full_name || p.username;
-    const st = (n,l)=>`<div class="${n?'':'zero'}"><b>${n}</b><span>${l}</span></div>`;
-    return `<button type="button" class="pcard" data-uid="${p.id}">
-      <span class="ph"><span class="avatar">${esc(nm.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</span><span><p class="ttl">${esc(nm)}</p><p class="sub">${esc(ROLE_LABEL[p.role]||p.role)} · ${w.total} việc đang có</p></span></span>
-      <span class="pstats">${st(w.inst.length,'Lắp đặt phụ trách')}${st(w.lead.length,'Sửa chữa phụ trách')}${st(w.part.length,'Sửa chữa tham gia')}${st(w.maint.length,'Bảo trì chờ làm')}</span>
-      <span class="pflags">${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}${w.soon?`<span class="chip warn">${w.soon} sắp đến hạn</span>`:''}${w.doneMonth?`<span class="chip ok">${w.doneMonth} xong trong tháng</span>`:''}${!w.total?'<span class="chip ok">Sẵn sàng nhận việc</span>':''}</span>
+  const rows = list.map(p=>({p, w:personWork(p.id)}));
+  const free = rows.filter(r=>!r.w.open.length);
+  const soonLimit = addDays(today(), 7);
+  const soon = rows.filter(r=>r.w.open.length && r.w.finish && r.w.finish<=soonLimit).sort((a,b)=>a.w.finish.localeCompare(b.w.finish));
+  const chip = (r, extra)=>`<button type="button" class="fchip" data-uid="${r.p.id}">${esc(r.p.full_name||r.p.username)}${extra?` <small>${extra}</small>`:''}</button>`;
+  $('#freeBox').innerHTML = `<div class="freebox">
+    <div class="panel"><h2>Đang rảnh (${free.length})</h2><p class="sub">Không có việc nào chưa xong, có thể giao việc mới.</p><div class="fchips">${free.map(r=>chip(r, ROLE_LABEL[r.p.role])).join('') || '<span class="sub">Mọi người đều đang có việc.</span>'}</div></div>
+    <div class="panel"><h2>Sắp rảnh trong 7 ngày (${soon.length})</h2><p class="sub">Theo deadline muộn nhất của các việc đang làm.</p><div class="fchips">${soon.map(r=>chip(r, 'xong '+fmtDate(r.w.finish).slice(0,5))).join('') || '<span class="sub">Chưa có ai.</span>'}</div></div>
+  </div>`;
+  rows.sort((a,b)=>rank(a.w)-rank(b.w) || String(a.w.finish||'9999').localeCompare(String(b.w.finish||'9999')) || (a.p.full_name||a.p.username).localeCompare(b.p.full_name||b.p.username));
+  $('#staffList').innerHTML = rows.map(({p,w})=>{
+    const nm = p.full_name || p.username, nx = w.open[0];
+    const stt = !w.open.length ? '<span class="chip ok">Đang rảnh</span>'
+      : `<span class="chip blue">${w.open.length} việc</span>${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}`;
+    const fin = !w.open.length ? '<b>—</b>' : w.finish ? `<b>${fmtDate(w.finish)}</b>${w.noDue?`<small>+${w.noDue} việc chưa có deadline</small>`:''}` : `<b>Chưa rõ</b><small>${w.noDue} việc chưa có deadline</small>`;
+    return `<button type="button" class="srow" data-uid="${p.id}">
+      <span class="spn"><span class="avatar">${esc(nm.trim().split(/\s+/).pop().charAt(0).toUpperCase())}</span><span><b>${esc(nm)}</b><small>${esc(ROLE_LABEL[p.role]||p.role)}</small></span></span>
+      <span class="stt">${stt}</span>
+      <span class="nx">${nx?`<b>${esc(nx.typeLabel)} · ${esc(nx.title)}</b><small>${nx.due?esc(dueText(nx.due)):'Chưa có deadline'} · ${esc(nx.status)}</small>`:'<small>Không có việc đang làm</small>'}</span>
+      <span class="fin">${fin}</span>
     </button>`;
-  }).join('') || '<div class="empty" style="grid-column:1/-1">Chưa có nhân viên nào. Super Admin thêm thành viên với vai trò User ở mục Thành viên.</div>';
-  $$('#staffList [data-uid]').forEach(el=>el.onclick=()=>openStaffDetail(el.dataset.uid));
+  }).join('') || '<div class="empty">Chưa có nhân viên nào. Super Admin thêm thành viên với vai trò User ở mục Thành viên.</div>';
+  $$('#staffList [data-uid], #freeBox [data-uid]').forEach(el=>el.onclick=()=>openStaffDetail(el.dataset.uid));
+}
+function addDays(d, n){ const x = new Date(d+'T00:00:00'); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); }
+function dueText(d){ const left = daysBetween(today(), d); return left<0 ? `Quá hạn ${-left} ngày (${fmtDate(d)})` : left===0 ? 'Hạn hôm nay' : `Hạn ${fmtDate(d)} · còn ${left} ngày`; }
+function rank(w){ return !w.open.length ? 2 : w.over ? 0 : 1; }
+function personWork(uid){
+  const open = [], done = [];
+  const custOf = id => custById(id)?.name || '—';
+  for(const x of S.installs){
+    if(!instInvolved(x, uid)) continue;
+    const st = installStage(x);
+    const it = {type:'install', typeLabel:'Lắp đặt', title:custOf(x.customer_id), sub:[x.machine_name, x.brand, x.model].filter(Boolean).join(' · '), role: x.owner_id===uid?'Phụ trách':'Tham gia', open:()=>openInstallDetail(x.id)};
+    if(st==='done'){ if(x.acceptance_date) done.push({...it, doneDate:x.acceptance_date, status:'Đã nghiệm thu'}); }
+    else open.push({...it, due: st===1 ? x.planned_date : (x.acceptance_date || null), status:`Đang ở Đợt ${st}`});
+  }
+  for(const v of repairs()){
+    if(!(v.assignee_id===uid || (v.participant_ids||[]).includes(uid))) continue;
+    const e = eqById(v.equipment_id);
+    const it = {type:'repair', typeLabel:'Sửa chữa', title: e ? custOf(e.customer_id) : '—', sub:eqLabel(e), role: v.assignee_id===uid?'Phụ trách':'Tham gia', open:()=>openVisitDetail(v.id), status:(RESULTS[v.result]||[v.result||'—'])[0]};
+    if(isOpen(v)) open.push({...it, due:v.deadline||null});
+    else done.push({...it, doneDate:String(v.locked_at||v.updated_at||v.visit_date).slice(0,10)});
+  }
+  for(const sI of maintItems()){
+    const m = sI.rec;
+    if(!(maintInvolved(m, uid) || (!m.assignee_id && m.created_by===uid))) continue;
+    const it = {type:'maint', typeLabel:'Bảo trì', title: sI.eq ? custOf(sI.eq.customer_id) : '—', sub:eqLabel(sI.eq), role: (m.assignee_id||m.created_by)===uid?'Phụ trách':'Tham gia', open:()=>openEquipmentDetail(m.equipment_id)};
+    if(sI.done) done.push({...it, doneDate:m.done_date, status:'Đã bảo trì'});
+    else open.push({...it, due:m.due_date, status:'Chờ làm'});
+  }
+  open.sort((a,b)=>String(a.due||'9999').localeCompare(String(b.due||'9999')));
+  const since = addDays(today(), -30);
+  const recent = done.filter(d=>d.doneDate && d.doneDate>=since).sort((a,b)=>b.doneDate.localeCompare(a.doneDate));
+  const dues = open.map(i=>i.due).filter(Boolean).sort();
+  const noDue = open.filter(i=>!i.due).length;
+  return {open, recent, over: open.filter(i=>i.due && i.due<today()).length, noDue, finish: dues.length ? dues[dues.length-1] : null};
 }
 function openStaffDetail(uid){
   const p = S.staff.find(x=>x.id===uid); if(!p) return;
-  const w = workOf(uid), nm = p.full_name || p.username;
-  const col = (title, n, items, empty)=>`<section class="bcol"><div class="bhead"><h2>${title}</h2><span class="bn">${n}</span></div><div class="blist">${items || `<div class="empty">${empty}</div>`}</div></section>`;
-  const close = modal(ROLE_LABEL[p.role]||'Nhân sự', nm, `
-    <div class="chips-row">${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}${w.soon?`<span class="chip warn">${w.soon} sắp đến hạn</span>`:''}${w.doneMonth?`<span class="chip ok">${w.doneMonth} việc xong trong tháng</span>`:''}<span class="chip blue">${w.total} việc đang có</span></div>
-    <div class="board in-dlg">
-      ${col('Lắp đặt', w.inst.length, w.inst.map(kInstall).join(''), 'Không phụ trách lắp đặt nào đang dở.')}
-      ${col('Sửa chữa', w.lead.length + w.part.length, (w.lead.length?'<p class="eyebrow" style="margin:2px 2px 0">Phụ trách</p>'+w.lead.map(kRepair).join(''):'') + (w.part.length?'<p class="eyebrow" style="margin:8px 2px 0">Tham gia</p>'+w.part.map(kRepair).join(''):''), 'Không có phiếu sửa chữa đang mở.')}
-      ${col('Bảo trì', w.maint.length, w.maint.map(kMaint).join(''), 'Không có lịch bảo trì chờ làm.')}
-    </div>
-    <div class="acts"><button class="btn" type="button" data-cal-person>Xem lịch của ${esc(nm)}</button></div>`, (wr, close)=>{ wr.querySelector('.box').classList.add('wide'); bindK(wr, close);
+  const w = personWork(uid), nm = p.full_name || p.username;
+  const tchip = t => `<span class="chip ${t.type==='install'?'blue':t.type==='repair'?'warn':'ok'}">${esc(t.typeLabel)}</span>`;
+  const dueCell = i => !i.due ? '<span class="sub">Chưa có deadline</span>' : `<b>${fmtDate(i.due)}</b><small>${(()=>{const l=daysBetween(today(), i.due); return l<0?`<span style="color:var(--red)">Quá hạn ${-l} ngày</span>`:l===0?'Hôm nay':`Còn ${l} ngày`;})()}</small>`;
+  const summary = !w.open.length ? `<span class="chip ok">Đang rảnh, có thể giao việc mới</span>`
+    : `<span class="chip blue">${w.open.length} việc đang làm</span>${w.over?`<span class="chip bad">${w.over} quá hạn</span>`:''}<span class="chip">${w.finish?'Dự kiến xong hết '+fmtDate(w.finish):'Chưa rõ ngày xong'}${w.noDue?` · ${w.noDue} việc chưa có deadline`:''}</span>`;
+  const openRows = w.open.map((i,k)=>`<tr data-k="o${k}"><td>${tchip(i)} <b>${esc(i.title)}</b><small>${esc(i.sub||'')}</small></td><td>${esc(i.role)}</td><td>${esc(i.status)}</td><td>${dueCell(i)}</td></tr>`).join('');
+  const doneRows = w.recent.map((i,k)=>`<tr data-k="d${k}"><td>${tchip(i)} <b>${esc(i.title)}</b><small>${esc(i.sub||'')}</small></td><td>${esc(i.role)}</td><td>${esc(i.status)}</td><td><b>${fmtDate(i.doneDate)}</b></td></tr>`).join('');
+  modal(ROLE_LABEL[p.role]||'Nhân sự', nm, `
+    <div class="chips-row">${summary}</div>
+    <div class="panel"><h2>Việc đang làm (${w.open.length})</h2>
+      ${w.open.length?`<table class="wtable"><thead><tr><th>Việc</th><th>Vai trò</th><th>Tình trạng</th><th>Deadline</th></tr></thead><tbody>${openRows}</tbody></table>`:'<div class="empty">Không có việc nào chưa xong.</div>'}</div>
+    <div class="panel"><h2>Đã xong trong 30 ngày (${w.recent.length})</h2>
+      ${w.recent.length?`<table class="wtable"><thead><tr><th>Việc</th><th>Vai trò</th><th>Kết quả</th><th>Ngày xong</th></tr></thead><tbody>${doneRows}</tbody></table>`:'<div class="empty">Chưa có việc hoàn thành trong 30 ngày qua.</div>'}</div>
+    <div class="acts"><button class="btn" type="button" data-cal-person>Xem lịch của ${esc(nm)}</button></div>`, (wr, close)=>{ wr.querySelector('.box').classList.add('wide');
+      wr.querySelectorAll('tr[data-k]').forEach(tr=>tr.onclick=()=>{ const k=tr.dataset.k; const it = k[0]==='o' ? w.open[+k.slice(1)] : w.recent[+k.slice(1)]; close(); it.open(); });
       wr.querySelector('[data-cal-person]').onclick = ()=>{ close(); S.smode='cal'; renderStaff(); $('#calWho').value = uid; renderCalendar(); window.scrollTo(0,0); }; });
 }
 
