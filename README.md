@@ -33,5 +33,6 @@ Mô hình giao lệnh (`supabase/007_manager_giao_lenh.sql`): Manager tạo lệ
 
 Mỗi lần đổi người phụ trách phiếu sửa chữa, DB tự ghi một dòng vào `svc_handovers` (người cũ, người mới, người bàn giao, deadline, lý do). Lịch sử chỉ đọc, không ai sửa hay xoá được (`supabase/008_lich_su_ban_giao.sql`).
 | Chốt hoàn thành (khoá hồ sơ) | ✓ | ✓ | | |
+| Xoá hồ sơ đã chốt | ✓ | ✓ | | |
 | Xem mục Nhân sự | ✓ | ✓ | ✓ | |
 | Thêm, gỡ thành viên, đổi vai trò | ✓ | | | |

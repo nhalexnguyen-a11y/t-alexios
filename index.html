@@ -93,7 +93,7 @@ const I18N_EN = {
 // Lỗi từ DB
 'Chỉ Manager, CEO, Super Admin được bàn giao':'Only a Manager, CEO or Super Admin can hand over','Không tìm thấy phiếu':'Ticket not found','Phiếu đã chốt, không bàn giao được':'The ticket is locked and cannot be handed over','Chọn người nhận bàn giao khác người đang phụ trách':'Choose someone other than the current owner',
 // Đơn vị lẻ
-'Tham gia':'Participant','Chưa có':'None','Bấm':'Click','chờ nghiệm thu':'awaiting acceptance','Trong BH':'Under warranty','Serial':'Serial','Tìm':'Search','Ngôn ngữ / Language':'Language / Ngôn ngữ',
+'Tham gia':'Participant','Chưa có':'None','Phiếu này có bản ghi tiếp nối. Xoá bản ghi tiếp nối trước.':'This ticket has follow-up records. Delete the follow-ups first.','Bản ghi đã chốt, chỉ CEO hoặc Super Admin được xoá':'This record is locked. Only a CEO or Super Admin can delete it.','Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.':'This machine has installation or repair records and cannot be deleted. Delete those records first.','Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được. Xoá các máy và hồ sơ đó trước.':'This customer still has machines or installation records and cannot be deleted. Delete those first.','Bấm':'Click','chờ nghiệm thu':'awaiting acceptance','Trong BH':'Under warranty','Serial':'Serial','Tìm':'Search','Ngôn ngữ / Language':'Language / Ngôn ngữ',
 'Dự kiến':'Planned','Hạn':'Due','Còn':'Left','ngày':'days','tháng':'months','tháng/lần':'months each','việc':'tasks','máy':'machines','khách hàng':'customers','thành viên':'members','quá hạn':'overdue','hồ sơ lắp đặt':'installation records','phiếu sửa chữa':'repair tickets','lần sửa chữa':'repairs','lần bảo trì':'maintenance visits','lịch bảo trì':'maintenance schedules','Bảo hành đến':'Warranty until'
 };
 const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -996,6 +996,17 @@ function bindPicker(w, ownerName, locked){
   return ()=>[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==owner());
 }
 function canLock(){ return ['ceo','super_admin'].includes(S.me?.role); }
+function canDelete(rec){ return isLead() && (!rec?.locked_at || canLock()); }
+const DEL_BTN = '<button type="button" class="btn ghost danger" data-delrec>Xoá</button>';
+function bindDelete(w, close, table, id, okMsg, fkMsg, pre){
+  const b = w.querySelector('[data-delrec]'); if(!b) return;
+  delButton(b, async ()=>{
+    if(pre){ const why = pre(); if(why) return toast(why, true); }
+    const {error} = await sb.from(table).delete().eq(table==='svc_members'?'user_id':'id', id);
+    if(error) return fail(error.code==='23503' && fkMsg ? {message:fkMsg} : error);
+    close(); $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast(okMsg);
+  });
+}
 function lockChip(x){ return x.locked_at ? '<span class="chip lock">🔒 Đã chốt</span>' : ''; }
 function lockBanner(x){ return x.locked_at ? `<div class="lockbar">🔒 Đã chốt hoàn thành bởi <b>${esc(staffName(x.locked_by, x.locked_by_name)||'—')}</b> lúc ${new Date(x.locked_at).toLocaleString(LOCALE,{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'})}. Thông tin đã khoá, không sửa hoặc xoá được.</div>` : ''; }
 function lockButton(btn, table, id, label){
@@ -1415,10 +1426,11 @@ function openInstallDetail(id){
     </dl></div>`:''}
     ${x.equipment_id?schedPanel(x.equipment_id, isLead()):''}
     ${x.notes?`<div class="panel"><div class="sec"><h3>Ghi chú</h3><p>${esc(x.notes)}</p></div></div>`:''}
-    <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>
+    <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}${canDelete(x)?DEL_BTN:''}</div>
     ${!x.locked_at&&st!=='done'&&canLock()?'<p class="hint" style="text-align:right">Chốt hoàn thành được khi hồ sơ đủ 3 đợt.</p>':''}`,
   (w, close)=>{
     const lk = w.querySelector('[data-lock]'); if(lk) lockButton(lk, 'svc_installations', x.id, 'Đã chốt hoàn thành hồ sơ lắp đặt');
+    bindDelete(w, close, 'svc_installations', x.id, 'Đã xoá hồ sơ lắp đặt (máy vẫn giữ trong danh sách Máy đã lắp)');
     const a = w.querySelector('[data-eq]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openEquipmentDetail(e.id); };
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openInstallForm(x); };
     const am = w.querySelector('[data-addmaint]'); if(am) am.onclick = ()=>{ close(); openMaintForm({equipment_id:am.dataset.addmaint}); };
@@ -1650,7 +1662,7 @@ function openRepairForm(v){
           <label class="checkrow full"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
         </div>
       </div>
-      <div class="acts" style="margin-top:16px">${!isNew&&!v.locked_at&&isLead()&&!S.visits.some(x=>x.parent_id===v.id)?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
+      <div class="acts" style="margin-top:16px">${!isNew&&!v.locked_at&&isLead()?'<button type="button" class="btn ghost danger left" data-del>Xoá</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     const getParts = bindPicker(w, 'assignee_id', !isLead());
@@ -1694,6 +1706,7 @@ function openRepairForm(v){
     };
     const del = w.querySelector('[data-del]');
     if(del) delButton(del, async ()=>{
+      if(S.visits.some(x=>x.parent_id===v.id)) return toast('Phiếu này có bản ghi tiếp nối. Xoá bản ghi tiếp nối trước.', true);
       const {error} = await sb.from('svc_visits').delete().eq('id', v.id);
       if(error) return fail(error);
       close(); await loadAll(); toast('Đã xoá phiếu sửa chữa');
@@ -1760,11 +1773,12 @@ function openVisitDetail(id){
     </dl></div>
     ${sec('Vấn đề', v.problem || v.cause)}${sec('Khắc phục', v.solution || v.action)}${sec('Vấn đề còn lại', v.remaining, true)}${sec('Hướng giải quyết tiếp theo', v.next_action, true)}
     ${handoverHistory(v.id)}
-    <div class="acts">${v.locked_at&&isLead()?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)&&isLead()?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}</div>`,
+    <div class="acts">${v.locked_at&&isLead()?'<button class="btn primary" data-follow>+ Tạo bản ghi tiếp nối</button>':''}${canEdit&&isOpen(v)&&isLead()?'<button class="btn" data-hand>Bàn giao</button>':''}${canEdit?'<button class="btn" data-edit>Cập nhật tiến độ</button>':''}${!v.locked_at&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}${canDelete(v)?DEL_BTN:''}</div>`,
   (w, close)=>{
     w.querySelectorAll('[data-goto]').forEach(a=>a.onclick=ev=>{ ev.preventDefault(); close(); openVisitDetail(a.dataset.goto); });
     const fl = w.querySelector('[data-follow]'); if(fl) fl.onclick = ()=>{ close(); openRepairForm({parent_id:v.id, equipment_id:v.equipment_id, assignee_id:v.assignee_id, participant_ids:v.participant_ids, problem:[v.remaining, v.next_action].filter(Boolean).join('\n')}); };
     const lk = w.querySelector('[data-lock]'); if(lk) lockButton(lk, 'svc_visits', v.id, 'Đã chốt hoàn thành phiếu sửa chữa');
+    bindDelete(w, close, 'svc_visits', v.id, 'Đã xoá phiếu sửa chữa', null, ()=> S.visits.some(x=>x.parent_id===v.id) ? 'Phiếu này có bản ghi tiếp nối. Xoá bản ghi tiếp nối trước.' : '');
     w.querySelector('[data-eq]').onclick = ev=>{ ev.preventDefault(); close(); if(e) openEquipmentDetail(e.id); };
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openRepairForm(v); };
     const hd = w.querySelector('[data-hand]'); if(hd) hd.onclick = ()=>{ close(); openHandover(v); };
@@ -1860,10 +1874,11 @@ function openEquipmentDetail(id){
         <span class="ttl">${fmtDate(v.visit_date)} ${v.locked_at?lockChip(v):resultChip(v.result)}${v.parent_id?' <span class="chip blue">Tiếp nối</span>':''}</span>
         <span class="sub">Phụ trách ${esc(staffName(v.assignee_id, v.assignee_name)||'—')}${v.deadline?' · deadline '+fmtDate(v.deadline):''}</span>
         ${(v.problem||v.cause)?`<span class="desc">${esc(v.problem||v.cause)}</span>`:''}</button>`).join('') || '<div class="empty">Chưa có lần sửa chữa nào.</div>'}</div></div>
-    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa thông tin máy</button>':''}</div>`,
+    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa thông tin máy</button>'+DEL_BTN:''}</div>`,
   (wr, close)=>{
     bindVisitCards(wr);
     const ed = wr.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openEquipmentForm(e); };
+    bindDelete(wr, close, 'svc_equipment', id, 'Đã xoá máy', 'Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.');
     const lg = wr.querySelector('[data-log]'); if(lg) lg.onclick = ()=>{ close(); openRepairForm({equipment_id:id}); };
     const a = wr.querySelector('[data-inst]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openInstallDetail(inst.id); };
     const am = wr.querySelector('[data-addmaint]'); if(am) am.onclick = ()=>{ close(); openMaintForm({equipment_id:id}); };
@@ -1931,10 +1946,11 @@ function openCustomerDetail(id){
     </dl></div>
     <div class="panel"><div class="h2row"><h2>Máy (${eqs.length})</h2>${isLead()?'<button class="btn sm" type="button" data-addeq>+ Thêm máy</button>':''}</div>
       <div class="list" data-eqs>${eqs.map(equipCard).join('')||'<div class="empty">Chưa có máy.</div>'}</div></div>
-    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa khách hàng</button>':''}</div>`,
+    <div class="acts">${isLead()?'<button class="btn" data-edit>Sửa khách hàng</button>'+DEL_BTN:''}</div>`,
   (w, close)=>{
     bindEquipCards(w.querySelector('[data-eqs]'));
     const ed = w.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openCustomerForm(c); };
+    bindDelete(w, close, 'svc_customers', id, 'Đã xoá khách hàng', 'Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được. Xoá các máy và hồ sơ đó trước.');
     const ae = w.querySelector('[data-addeq]'); if(ae) ae.onclick = ()=>{ close(); openEquipmentForm({customer_id:id}); };
   });
 }
