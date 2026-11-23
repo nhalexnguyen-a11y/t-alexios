@@ -93,7 +93,7 @@ const I18N_EN = {
 // Lỗi từ DB
 'Chỉ Manager, CEO, Super Admin được bàn giao':'Only a Manager, CEO or Super Admin can hand over','Không tìm thấy phiếu':'Ticket not found','Phiếu đã chốt, không bàn giao được':'The ticket is locked and cannot be handed over','Chọn người nhận bàn giao khác người đang phụ trách':'Choose someone other than the current owner',
 // Đơn vị lẻ
-'Tham gia':'Participant','Chưa có':'None','Phiếu này có bản ghi tiếp nối. Xoá bản ghi tiếp nối trước.':'This ticket has follow-up records. Delete the follow-ups first.','Bản ghi đã chốt, chỉ CEO hoặc Super Admin được xoá':'This record is locked. Only a CEO or Super Admin can delete it.','Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.':'This machine has installation or repair records and cannot be deleted. Delete those records first.','Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được. Xoá các máy và hồ sơ đó trước.':'This customer still has machines or installation records and cannot be deleted. Delete those first.','Bấm':'Click','chờ nghiệm thu':'awaiting acceptance','Trong BH':'Under warranty','Serial':'Serial','Tìm':'Search','Ngôn ngữ / Language':'Language / Ngôn ngữ',
+'Tham gia':'Participant','Chưa có':'None','Ngày ký biên bản giao nhận':'Handover signing date','Ngày ký biên bản nghiệm thu':'Acceptance signing date','Ngày thực hiện không được sau hôm nay':'The date done cannot be after today','Ngày đã làm không được sau hôm nay':'The date done cannot be after today','Nhập deadline cho phiếu chưa hoàn thành':'Enter a deadline for an unfinished ticket','Deadline không được trước ngày ghi phiếu':'The deadline cannot be before the ticket date','Deadline *':'Deadline *','Máy đã có lần bảo trì đã làm, không xoá được để giữ lịch sử.':'This machine has completed maintenance and cannot be deleted, to keep its history.','Bản ghi đã chốt, không sửa được':'This record is locked and cannot be edited','Chưa đủ điều kiện chốt: cần ngày nghiệm thu và ngày này không được sau hôm nay':'Cannot lock yet: an acceptance date is required and it cannot be after today','Phiếu này có bản ghi tiếp nối. Xoá bản ghi tiếp nối trước.':'This ticket has follow-up records. Delete the follow-ups first.','Bản ghi đã chốt, chỉ CEO hoặc Super Admin được xoá':'This record is locked. Only a CEO or Super Admin can delete it.','Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.':'This machine has installation or repair records and cannot be deleted. Delete those records first.','Khách hàng còn máy hoặc hồ sơ lắp đặt, không xoá được. Xoá các máy và hồ sơ đó trước.':'This customer still has machines or installation records and cannot be deleted. Delete those first.','Bấm':'Click','chờ nghiệm thu':'awaiting acceptance','Trong BH':'Under warranty','Serial':'Serial','Tìm':'Search','Ngôn ngữ / Language':'Language / Ngôn ngữ',
 'Dự kiến':'Planned','Hạn':'Due','Còn':'Left','ngày':'days','tháng':'months','tháng/lần':'months each','việc':'tasks','máy':'machines','khách hàng':'customers','thành viên':'members','quá hạn':'overdue','hồ sơ lắp đặt':'installation records','phiếu sửa chữa':'repair tickets','lần sửa chữa':'repairs','lần bảo trì':'maintenance visits','lịch bảo trì':'maintenance schedules','Bảo hành đến':'Warranty until'
 };
 const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -143,6 +143,10 @@ const I18N_RULES = [
   [/^Theo hồ sơ lắp đặt: bảo trì (\S+) tháng, (\S+) tháng\/lần(?:, nghiệm thu (\S+))?\.?$/, (m,a,b,c)=>`From the installation record: maintenance ${a} months, every ${b} months${c?`, accepted ${c}`:''}.`],
   [new RegExp('^lịch ngày '+D+'$'), (m,d)=>`scheduled ${d}`],
   [/^· (.+)$/, (m,x)=>{ const t = trCore(x); return t==null ? null : '· '+t; }],
+  [/^Ngày chưa tới: (.+)\. Chỉ ghi các ngày này khi việc đã diễn ra\.$/, (m,x)=>'Dates not reached yet: '+x.split(', ').map(t=>trCore(t)??t).join(', ')+'. Only enter these dates once the work has happened.'],
+  [/^Chưa chốt được: (.+) chưa tới\.$/, (m,x)=>'Cannot lock yet: '+x.split(', ').map(t=>trCore(t)??t).join(', ')+' not reached yet.'],
+  [/^Gợi ý (\d+) lần theo chu kỳ trong hồ sơ lắp đặt\. Sửa hoặc bỏ ngày nếu cần, rồi bấm Lưu lịch\.$/, (m,n)=>`Suggested ${pl(n,'visit','visits')} based on the cycle in the installation record. Edit or remove dates if needed, then click Save schedule.`],
+  [/^Ngày hoàn thành (IQ|OQ|PQ|FAT|SAT)$/, (m,t)=>`${t} completion date`],
   [/^Kế hoạch: (.+)$/, (m,x)=>`Plan: ${x}`],
   [/^Lý do: (.+)$/, (m,x)=>`Reason: ${x}`],
   [/^Việc còn lại khi bàn giao: (.+)$/, (m,x)=>`Remaining at handover: ${x}`],
@@ -938,7 +942,7 @@ const WARRANTY_F = {in:'Còn bảo hành', soon:'Hết BH trong 60 ngày', out:'
 const REMIND_DAYS = 14;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
-const S = {me:null, staff:[], members:[], sf:'user', smode:'cards', calView:'month', calDate:null, customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
+const S = {me:null, staff:[], members:[], sf:'all', smode:'cards', calView:'month', calDate:null, customers:[], equipment:[], visits:[], installs:[], maint:[], f:{result:'', warranty:'', stage:'', maint:'due'}};
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
@@ -996,6 +1000,20 @@ function bindPicker(w, ownerName, locked){
   return ()=>[...pick.querySelectorAll('.tchip[aria-pressed="true"]')].map(b=>b.dataset.id).filter(id=>id!==owner());
 }
 function canLock(){ return ['ceo','super_admin'].includes(S.me?.role); }
+// Ngày của việc đã diễn ra (giao nhận, phép thử, nghiệm thu) không được sau hôm nay
+function futureDone(d){
+  const t = today(), bad = [];
+  if(d.handover_date && d.handover_date > t) bad.push('Ngày ký biên bản giao nhận');
+  (d.tests||[]).forEach(k=>{ if(d.test_dates?.[k] && d.test_dates[k] > t) bad.push('Ngày hoàn thành '+k); });
+  if(d.acceptance_date && d.acceptance_date > t) bad.push('Ngày ký biên bản nghiệm thu');
+  return bad;
+}
+// Gợi ý ngày bảo trì: từ ngày nghiệm thu (hoặc giao nhận), mỗi chu kỳ một lần trong thời gian bảo trì
+function maintSuggest(x){
+  const base = x?.acceptance_date || x?.handover_date, dur = x?.maint_duration_months, iv = x?.maint_interval_months;
+  if(!base || !dur || !iv) return [];
+  const out = []; for(let k = iv; k <= dur; k += iv) out.push(addMonths(base, k)); return out;
+}
 function canDelete(rec){ return isLead() && (!rec?.locked_at || canLock()); }
 const DEL_BTN = '<button type="button" class="btn ghost danger" data-delrec>Xoá</button>';
 function bindDelete(w, close, table, id, okMsg, fkMsg, pre){
@@ -1174,10 +1192,19 @@ function delButton(btn, run){
 }
 
 /* ===== Render chung ===== */
+function instDue(x){ return installStage(x)===1 ? x.planned_date : null; }
+function overdueAll(){
+  const t = today();
+  return S.installs.filter(x=>installStage(x)!=='done' && instDue(x) && instDue(x) < t).length
+    + repairs().filter(v=>isOpen(v) && v.deadline && v.deadline < t).length
+    + maintItems().filter(s=>s.state==='over').length;
+}
 function renderAll(){ renderOverview(); renderInstalls(); renderRepairs(); renderMaint(); renderEquipment(); renderCustomers(); if(isLead()) renderStaff(); updateBadges(); }
 function updateBadges(){
-  setCount('#cntInstall', S.installs.filter(x=>installStage(x)!=='done').length);
-  setCount('#cntRepair', repairs().filter(v=>isOpen(v) && deadlineState(v)?.key==='over').length);
+  // Số trên thanh bên = việc cần chú ý: quá hạn hoặc sắp đến hạn
+  const soon3 = addDays(today(), 3);
+  setCount('#cntInstall', S.installs.filter(x=>installStage(x)!=='done' && instDue(x) && instDue(x) <= soon3).length);
+  setCount('#cntRepair', repairs().filter(v=>isOpen(v) && ['over','today','soon'].includes(deadlineState(v)?.key)).length);
   const due = maintItems().filter(x=>x.state==='over' || x.state==='soon').length;
   setCount('#cntMaint', due); setCount('#cntMaintM', due);
 }
@@ -1228,8 +1255,8 @@ function renderOverview(){
   const open = rp.filter(isOpen).sort(byUrgency);
   const soon = S.equipment.filter(e=>warrantyState(e).key==='soon');
   $('#stMonth').textContent = month.length;
-  $('#stMine').textContent = open.filter(v=>v.assignee_id===S.me.id).length;
-  $('#stOverdue').textContent = open.filter(v=>deadlineState(v)?.key==='over').length;
+  $('#stMine').textContent = personWork(S.me.id).open.length;
+  $('#stOverdue').textContent = overdueAll();
   $('#stWarranty').textContent = soon.length;
 
   // Lắp đặt chưa hoàn tất: đợt thấp trước, rồi ngày dự kiến gần nhất
@@ -1299,7 +1326,7 @@ function openInstallForm(x){
   const td = x.test_dates || {};
   const brands = [...new Set([...S.equipment.map(e=>e.brand), ...S.installs.map(i=>i.brand)].filter(Boolean))];
   modal('Lắp đặt', isNew ? 'Hồ sơ lắp đặt mới' : (custById(x.customer_id)?.name || 'Cập nhật lắp đặt'), `
-    <form>
+    <form novalidate>
       <div class="stage-box" data-stage="1">
         <div class="h"><b>Đợt 1 · Thông tin lắp đặt</b></div>
         <div class="grid2">
@@ -1319,13 +1346,13 @@ function openInstallForm(x){
       </div>
       <div class="stage-box" data-stage="2" style="margin-top:14px">
         <div class="h"><b>Đợt 2 · Giao nhận</b></div>
-        <div class="grid2"><label>Ngày ký biên bản giao nhận *<input type="date" name="handover_date" value="${esc(x.handover_date)}"></label></div>
+        <div class="grid2"><label>Ngày ký biên bản giao nhận *<input type="date" name="handover_date" max="${today()}" value="${esc(x.handover_date)}"></label></div>
       </div>
       <div class="stage-box" data-stage="3" style="margin-top:14px">
         <div class="h"><b>Đợt 3 · Nghiệm thu</b></div>
-        <div class="tgrid" data-tdates>${TESTS.map(t=>`<label data-tdl="${t}">Ngày hoàn thành ${t} *<input type="date" data-td="${t}" value="${esc(td[t])}"></label>`).join('')}</div>
+        <div class="tgrid" data-tdates>${TESTS.map(t=>`<label data-tdl="${t}">Ngày hoàn thành ${t} *<input type="date" data-td="${t}" max="${today()}" value="${esc(td[t])}"></label>`).join('')}</div>
         <div class="grid2">
-          <label>Ngày ký biên bản nghiệm thu *<input type="date" name="acceptance_date" value="${esc(x.acceptance_date)}"></label>
+          <label>Ngày ký biên bản nghiệm thu *<input type="date" name="acceptance_date" max="${today()}" value="${esc(x.acceptance_date)}"></label>
           <label>Thời hạn bảo hành (tháng) *<input type="number" min="0" name="warranty_months" value="${esc(x.warranty_months)}" placeholder="VD: 12"></label>
           <p class="hint full" data-wnote></p>
         </div>
@@ -1365,6 +1392,8 @@ function openInstallForm(x){
       ev.preventDefault();
       const d = collect();
       if(!d.customer_id || !d.machine_name) return toast('Chọn khách hàng và nhập tên máy', true);
+      const fut = futureDone(d);
+      if(fut.length) return toast('Ngày chưa tới: ' + fut.join(', ') + '. Chỉ ghi các ngày này khi việc đã diễn ra.', true);
       if(!s1Done(d)){ tried = true; refresh(); toast('Đã lưu nháp. Còn thiếu: ' + s1Missing(d).map(m=>m[1]).join(', ') + '.'); }
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       let res;
@@ -1374,7 +1403,9 @@ function openInstallForm(x){
       busy(btn,false);
       if(res.error) return fail(res.error.code==='23505' ? {message:'Serial này của hãng đã có trong danh sách máy.'} : (res.error.code==='PGRST116' ? {message:'Bạn không có quyền sửa hồ sơ này.'} : res.error));
       close(); await loadAll(); if(s1Done(d)) toast('Đã lưu hồ sơ lắp đặt');
-      openInstallDetail(res.data.id);
+      const saved = res.data;
+      if(isLead() && saved.equipment_id && !S.maint.some(m=>m.equipment_id===saved.equipment_id) && maintSuggest(saved).length) openMaintForm({equipment_id:saved.equipment_id});
+      else openInstallDetail(saved.id);
     };
     const del = w.querySelector('[data-del]');
     if(del) delButton(del, async ()=>{
@@ -1426,8 +1457,9 @@ function openInstallDetail(id){
     </dl></div>`:''}
     ${x.equipment_id?schedPanel(x.equipment_id, isLead()):''}
     ${x.notes?`<div class="panel"><div class="sec"><h3>Ghi chú</h3><p>${esc(x.notes)}</p></div></div>`:''}
-    <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}${canDelete(x)?DEL_BTN:''}</div>
-    ${!x.locked_at&&st!=='done'&&canLock()?'<p class="hint" style="text-align:right">Chốt hoàn thành được khi hồ sơ đủ 3 đợt.</p>':''}`,
+    <div class="acts">${canEdit?`<button class="btn ${st==='done'&&canLock()?'':'primary'}" data-edit>${st==='done'?'Sửa hồ sơ':'Cập nhật Đợt '+st}</button>`:''}${!x.locked_at&&st==='done'&&canLock()&&!futureDone(x).length?'<button class="btn primary" data-lock>Hoàn thành &amp; chốt</button>':''}${canDelete(x)?DEL_BTN:''}</div>
+    ${!x.locked_at&&st!=='done'&&canLock()?'<p class="hint" style="text-align:right">Chốt hoàn thành được khi hồ sơ đủ 3 đợt.</p>':''}
+    ${!x.locked_at&&st==='done'&&canLock()&&futureDone(x).length?`<p class="hint" style="text-align:right">Chưa chốt được: ${esc(futureDone(x).join(', '))} chưa tới.</p>`:''}`,
   (w, close)=>{
     const lk = w.querySelector('[data-lock]'); if(lk) lockButton(lk, 'svc_installations', x.id, 'Đã chốt hoàn thành hồ sơ lắp đặt');
     bindDelete(w, close, 'svc_installations', x.id, 'Đã xoá hồ sơ lắp đặt (máy vẫn giữ trong danh sách Máy đã lắp)');
@@ -1482,17 +1514,27 @@ function openMaintForm(pre){
       <label class="full">Máy *<select name="equipment_id" required><option value="">— Chọn máy —</option>${equipOptions(pre.equipment_id)}</select></label>
       <p class="hint full" data-ref></p>
       ${pickBlock('Người phụ trách chính', 'assignee_id', S.me.id, [], false)}
-      <div class="fieldset full">Ngày bảo trì dự kiến *<div class="parts" data-dates>${dateRow()}</div><button type="button" class="btn sm" data-addd style="align-self:flex-start">+ Thêm ngày</button></div>
+      <div class="fieldset full">Ngày bảo trì dự kiến *<div class="parts" data-dates>${dateRow()}</div><span class="hint" data-sugg></span><button type="button" class="btn sm" data-addd style="align-self:flex-start">+ Thêm ngày</button></div>
       <label class="full">Nội dung dự kiến<textarea name="plan_notes" style="min-height:60px" placeholder="Hạng mục bảo trì, vật tư cần mang theo"></textarea></label>
       <div class="acts full"><button type="submit" class="btn primary">Lưu lịch</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form'), box = w.querySelector('[data-dates]');
     const getParts = bindPicker(w, 'assignee_id', false);
+    const fillSuggest = ()=>{
+      const eq = f.equipment_id.value, i = S.installs.find(x=>x.equipment_id===eq);
+      const empty = [...box.querySelectorAll('[data-due]')].every(inp=>!inp.value);
+      const taken = new Set(S.maint.filter(m=>m.equipment_id===eq).map(m=>m.due_date));
+      const sug = maintSuggest(i).filter(d=>!taken.has(d));
+      if(empty && sug.length && !S.maint.some(m=>m.equipment_id===eq)){
+        box.innerHTML = sug.map(d=>dateRow(d)).join('');
+        w.querySelector('[data-sugg]').textContent = `Gợi ý ${sug.length} lần theo chu kỳ trong hồ sơ lắp đặt. Sửa hoặc bỏ ngày nếu cần, rồi bấm Lưu lịch.`;
+      } else w.querySelector('[data-sugg]').textContent = '';
+    };
     const ref = ()=>{
       const i = S.installs.find(x=>x.equipment_id===f.equipment_id.value);
       w.querySelector('[data-ref]').textContent = i && (i.maint_duration_months!=null || i.maint_interval_months) ? `Theo hồ sơ lắp đặt: bảo trì ${i.maint_duration_months??'—'} tháng, ${i.maint_interval_months??'—'} tháng/lần${i.acceptance_date?', nghiệm thu '+fmtDate(i.acceptance_date):''}.` : '';
     };
-    f.equipment_id.addEventListener('change', ref); ref();
+    f.equipment_id.addEventListener('change', ()=>{ ref(); fillSuggest(); }); ref(); fillSuggest();
     w.querySelector('[data-addd]').onclick = ()=>box.insertAdjacentHTML('beforeend', dateRow());
     box.addEventListener('click', ev=>{ const b=ev.target.closest('[data-rmd]'); if(b && box.querySelectorAll('[data-drow]').length>1) b.parentElement.remove(); });
     f.onsubmit = async ev=>{
@@ -1516,13 +1558,14 @@ function openMaintDone(id){
   modal('Bảo trì', 'Ghi nhận đã bảo trì', `
     <form class="grid2">
       <p class="hint full">${esc(custById(e?.customer_id)?.name||'')} · ${esc(eqLabel(e))} · lịch ngày ${fmtDate(m.due_date)}</p>
-      <label>Ngày thực hiện *<input type="date" name="done_date" required value="${today()}"></label>
+      <label>Ngày thực hiện *<input type="date" name="done_date" required max="${today()}" value="${today()}"></label>
       <label class="full">Ghi chú<textarea name="notes" placeholder="Hạng mục đã làm, tình trạng máy, đề xuất"></textarea></label>
       <div class="acts full"><button type="submit" class="btn primary">Lưu</button></div>
     </form>`, (w, close)=>{
     const f = w.querySelector('form');
     f.onsubmit = async ev=>{
       ev.preventDefault();
+      if((val(f,'done_date')||'') > today()) return toast('Ngày thực hiện không được sau hôm nay', true);
       const btn=f.querySelector('[type=submit]'); busy(btn,true);
       const {error} = await sb.from('svc_maintenance').update({done_date:val(f,'done_date')||today(), done_by:S.me.id, done_by_name:S.me.full_name||S.me.username, notes:val(f,'notes')}).eq('id', id).select().single();
       busy(btn,false);
@@ -1540,7 +1583,7 @@ function openMaintEdit(id){
       <p class="hint full">${esc(custById(e?.customer_id)?.name||'')} · ${esc(eqLabel(e))}</p>
       ${pickBlock('Người phụ trách chính', 'assignee_id', m.assignee_id || m.created_by, m.participant_ids, false)}
       <label>Ngày dự kiến *<input type="date" name="due_date" required value="${esc(m.due_date)}"></label>
-      <label>Ngày đã làm<input type="date" name="done_date" value="${esc(m.done_date)}"></label>
+      <label>Ngày đã làm<input type="date" name="done_date" max="${today()}" value="${esc(m.done_date)}"></label>
       <label class="full">Nội dung dự kiến<textarea name="plan_notes" style="min-height:60px">${esc(m.plan_notes)}</textarea></label>
       <label class="full">Ghi chú khi làm<textarea name="notes" style="min-height:60px">${esc(m.notes)}</textarea></label>
       <div class="acts full">${canDel?'<button type="button" class="btn ghost danger left" data-del>Xoá lịch</button>':''}<button type="submit" class="btn primary">Lưu</button></div>
@@ -1551,6 +1594,7 @@ function openMaintEdit(id){
       ev.preventDefault();
       if(!val(f,'due_date')) return toast('Nhập ngày dự kiến', true);
       const done = val(f,'done_date');
+      if(done && done > today()) return toast('Ngày đã làm không được sau hôm nay', true);
       const asg = f.assignee_id.value;
       const row = {due_date:val(f,'due_date'), done_date:done, plan_notes:val(f,'plan_notes'), notes:val(f,'notes'), assignee_id:asg, assignee_name:staffName(asg), participant_ids:getParts()};
       if(done && !m.done_date){ row.done_by = S.me.id; row.done_by_name = S.me.full_name||S.me.username; }
@@ -1657,7 +1701,7 @@ function openRepairForm(v){
       <div class="stage-box" data-s2 style="margin-top:14px">
         <div class="h"><b>Đợt 2 · Deadline</b></div>
         <div class="grid2">
-          <label>Deadline<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
+          <label>Deadline *<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
           <label>Trạng thái *<select name="result" required>${opts(RESULTS, v.result || 'chua_xong')}</select></label>
           <label class="checkrow full"><input type="checkbox" name="under_warranty" ${v.under_warranty?'checked':''}> Trong bảo hành</label>
         </div>
@@ -1689,6 +1733,8 @@ function openRepairForm(v){
       ev.preventDefault();
       if(!val(f,'equipment_id')) return toast('Chọn khách hàng và máy', true);
       if(!val(f,'problem')) return toast('Nhập vấn đề', true);
+      if(val(f,'result')!=='hoan_thanh' && !val(f,'deadline')) return toast('Nhập deadline cho phiếu chưa hoàn thành', true);
+      if(val(f,'deadline') && val(f,'deadline') < val(f,'visit_date')) return toast('Deadline không được trước ngày ghi phiếu', true);
       const row = {visit_date:val(f,'visit_date'), work_type:'sua_chua',
         problem:val(f,'problem'), solution:val(f,'solution'), remaining:val(f,'remaining'), next_action:val(f,'next_action'),
         deadline:val(f,'deadline'), result:val(f,'result'), under_warranty:val(f,'under_warranty')};
@@ -1719,7 +1765,7 @@ function openHandover(v){
     <form class="grid2">
       <p class="hint full">Đang phụ trách: <b>${esc(staffName(cur, v.assignee_name)||'—')}</b>. Người cũ được giữ trong danh sách tham gia để theo dõi tiếp.</p>
       <label class="full">Người nhận bàn giao *<select name="to" required><option value="">— Chọn —</option>${S.staff.filter(p=>p.id!==cur).map(p=>`<option value="${p.id}">${esc(p.full_name||p.username)}</option>`).join('')}</select></label>
-      <label class="full">Deadline mới (nếu đổi)<input type="date" name="deadline" value="${esc(v.deadline)}"></label>
+      <label class="full">Deadline *<input type="date" name="deadline" required min="${esc(v.visit_date||'')}" value="${esc(v.deadline)}"></label>
       <label class="full">Vấn đề còn lại<textarea name="remaining">${esc(v.remaining)}</textarea></label>
       <label class="full">Hướng giải quyết tiếp theo<textarea name="next_action">${esc(v.next_action)}</textarea></label>
       <label class="full">Lý do bàn giao<textarea name="note" placeholder="VD: Bình đi công tác, Huy tiếp nhận xử lý tiếp"></textarea></label>
@@ -1845,6 +1891,7 @@ function openEquipmentForm(e, onSaved){
     };
     const del = w.querySelector('[data-del]');
     if(del) delButton(del, async ()=>{
+      if(S.maint.some(m=>m.equipment_id===e.id && m.done_date)) return toast('Máy đã có lần bảo trì đã làm, không xoá được để giữ lịch sử.', true);
       const {error} = await sb.from('svc_equipment').delete().eq('id',e.id);
       if(error) return fail(error.code==='23503'?{message:'Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được.'}:error);
       $$('.dlg').forEach(m=>m.remove()); await loadAll(); toast('Đã xoá máy');
@@ -1878,7 +1925,7 @@ function openEquipmentDetail(id){
   (wr, close)=>{
     bindVisitCards(wr);
     const ed = wr.querySelector('[data-edit]'); if(ed) ed.onclick = ()=>{ close(); openEquipmentForm(e); };
-    bindDelete(wr, close, 'svc_equipment', id, 'Đã xoá máy', 'Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.');
+    bindDelete(wr, close, 'svc_equipment', id, 'Đã xoá máy', 'Máy đã có hồ sơ lắp đặt hoặc sửa chữa, không xoá được. Xoá các hồ sơ đó trước.', ()=> S.maint.some(m=>m.equipment_id===id && m.done_date) ? 'Máy đã có lần bảo trì đã làm, không xoá được để giữ lịch sử.' : '');
     const lg = wr.querySelector('[data-log]'); if(lg) lg.onclick = ()=>{ close(); openRepairForm({equipment_id:id}); };
     const a = wr.querySelector('[data-inst]'); if(a) a.onclick = ev=>{ ev.preventDefault(); close(); openInstallDetail(inst.id); };
     const am = wr.querySelector('[data-addmaint]'); if(am) am.onclick = ()=>{ close(); openMaintForm({equipment_id:id}); };
@@ -2084,7 +2131,7 @@ function renderStaff(){
   }).join('') || '<div class="empty">Chưa có nhân viên nào. Super Admin thêm thành viên với vai trò User ở mục Thành viên.</div>';
   $$('#staffList [data-uid], #freeBox [data-uid]').forEach(el=>el.onclick=()=>openStaffDetail(el.dataset.uid));
 }
-function addDays(d, n){ const x = new Date(d+'T00:00:00'); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); }
+function addDays(d, n){ const x = new Date(d+'T00:00:00Z'); x.setUTCDate(x.getUTCDate()+n); return x.toISOString().slice(0,10); }
 function dueText(d){ const left = daysBetween(today(), d); return left<0 ? `Quá hạn ${-left} ngày (${fmtDate(d)})` : left===0 ? 'Hạn hôm nay' : `Hạn ${fmtDate(d)} · còn ${left} ngày`; }
 function rank(w){ return !w.open.length ? 2 : w.over ? 0 : 1; }
 function personWork(uid){
