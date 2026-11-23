@@ -29,7 +29,7 @@ jobs:
           # Logo dùng chung với Alexios: lấy bản mới nhất mỗi lần triển khai
           curl -fsSL --retry 3 https://alex-workspace.pages.dev/alexios-logo.png -o _site/alexios-logo.png
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
       - id: deployment
